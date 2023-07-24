@@ -1,0 +1,7 @@
+django
+python-decouple
+django-bootstrap-v5
+django-ckeditor
+python-dotenv
+mysql
+mysqlclient

@@ -11,4 +11,7 @@ class SETTINGS_KEYS:
     empw = config('EMAIL_PASSWORD')
     embe = config('EMAIL_BACKEND_SMTP')
     empt = config('EMAIL_PORT')
-    emtst = config('TESTERS')
+    emtr = config('TEST_RECEIVE')
+    sntr = config('TEST_SEND')
+    rptr = config('REPLYER')
+    trpw = config('TEST_RECEIVE_PASSWORD')

@@ -2,7 +2,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 import os
 from decouple import config
-from .env.injector import SETTINGS_KEYS
+from .env.app_Logic.KeyPass import SETTINGS_KEYS
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -56,8 +56,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'site_app',
     'blog',
-    'managment',
+    'management',
     'gallery',
     'clients',
     'bootstrap5',
