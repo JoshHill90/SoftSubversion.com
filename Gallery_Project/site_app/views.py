@@ -12,8 +12,15 @@ from Gallery_Project.env.app_Logic.MailerDJ import AutoReply
 
 EMAIL = AutoReply()
 
-def IndexView(request):
-    return render(request, template_name='index.html')
+def index_page(request):
+
+    return render(request, 'index.html')
+
+def about_page(request):
+    return render(request, 'about.html')
+
+def social_page(request):
+    return render(request, 'social.html')
 
 class ContactView(FormView):
     model = Contact
@@ -29,4 +36,11 @@ class ContactView(FormView):
         EMAIL.contact_request(email, name)
         EMAIL.contact_alart(email, name, subject, body)
 
-        return redirect('contact-success')
+        return render(self.request, 'success/contact-success.html', {
+            'name': name, 
+            'email': email,
+            'subject': subject,
+        })
+    
+class ContactSuccess(TemplateView):
+    template_name = 'success/contact-success.html'

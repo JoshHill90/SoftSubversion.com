@@ -7,7 +7,7 @@ import os
 from dotenv import load_dotenv
 
 current_dir = Path(__file__).resolve().parent
-ven = current_dir / ".env"
+ven = current_dir / "../.env"
 load_dotenv(ven)
 
 print('stage-1')
@@ -26,22 +26,38 @@ class AutoReply:
     alart_email = os.getenv("REPLYER")
     receive_email = os.getenv("RECEIVE_EMAILS")
     
-
     #------------------------#
     # Contact form auto reply
     #------------------------#
 
     def contact_request(self, reciver, name):
+        print('preparing message')
 
-        contact_subject = "Thank You for Contacting Silk Thread Dev!"
+        contact_subject = "Thank You for Contacting Soft Subversion!"
 
-        contact_body = f""" Dear {name}, """
+        contact_body = f"""
+Hi {name},
+
+Thank you for reaching out! I've received your message regarding {contact_subject}, and I'll be sure to get back to you shortly.
+
+I'm excited to discuss your photography needs and collaborate with you to create stunning visuals that capture your unique style.
+
+In the meantime, please keep an eye on your inbox for my response. If you don't receive a follow-up email from me within 24 hours, please check your spam folder, just in case.
+
+Looking forward to connecting with you soon!
+
+Best regards,
+Carly
+
+
+SoftSubversion.com
+"""
 
 
 
         mailer = EmailMessage()
 
-        mailer['From'] = formataddr(("Silk Thread Blog", f"{self.send_from}"))
+        mailer['From'] = formataddr(("Soft Subversion", f"{self.send_from}"))
         mailer['To'] = reciver
         mailer['Subject'] = contact_subject
         mailer.set_content(contact_body)
