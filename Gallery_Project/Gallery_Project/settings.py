@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'clients',
     'bootstrap5',
     'ckeditor',
+    'phone_field',
 ]
 
 MIDDLEWARE = [

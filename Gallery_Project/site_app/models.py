@@ -10,6 +10,7 @@ class Contact(models.Model):
     name = models.CharField(max_length=50)
     email = models.EmailField(max_length=255)
     subject = models.CharField(max_length=255)
+    from_id = models.CharField(max_length=4, default='CONT')
 
     
     body = models.TextField(max_length=800)
