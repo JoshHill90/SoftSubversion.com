@@ -27,27 +27,70 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarNavDropdown">
-        <ul class="navbar-nav">
+        <div class="navbar-nav">
           <li class="nav-item">
             <a class="nav-link active" href="{% url 'index' %}">Home</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'contact' %}">Book</a>
+            <a class="nav-link p-p" href="{% url 'gallery' %}">Gallery</a>
           </li>
           <li class="nav-item">
-            <a class="nav-link" href="{% url 'about' %}">About</a>
+            <a class="nav-link p-p" href="{% url 'contact' %}">Book</a>
           </li>
-          <li class="nav-item dropdown">
-            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-              Dropdown link
-            </a>
-            <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-              <li><a class="dropdown-item" href="#">Action</a></li>
-              <li><a class="dropdown-item" href="#">Another action</a></li>
-              <li><a class="dropdown-item" href="#">Something else here</a></li>
-            </ul>
+          <li class="nav-item">
+            <a class="nav-link p-p" href="{% url 'about' %}">About</a>
           </li>
-        </ul>
+          <li class="nav-item">
+            <a class="nav-link p-p" href="{% url 'blogs' %}">Blog</a>
+          </li>
+
+          {% if user.is_authenticated %}
+
+            {% for group in user.groups.all %}
+              {% if group.name == 'client' %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Member Profile
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="#">Projects</a></li>
+                    <li><a class="dropdown-item" href="#">Billing</a></li>
+                    <div class="dropdown-divider"></div>
+                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                  </ul>
+                </li>
+                {% else %}
+                <li class="nav-item dropdown">
+                  <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                    Owners 
+                  </a>
+                  <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="#">Clients Panel</a></li>
+                    <li><a class="dropdown-item" href="#">Gallery Panel</a></li>
+                    <li><a class="dropdown-item" href="#">Billing Panel</a></li>
+                    <li><a class="dropdown-item" href="#">Management Panel</a></li>
+                    <div class="dropdown-divider"></div>
+                    <li><a class="dropdown-item" href="#">Logout</a></li>
+                    <li><a class="dropdown-item" href="#">Profile</a></li>
+                  </ul>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+          {% else  %} 
+               
+            <li class="nav-item dropdown">
+              <a class="nav-link dropdown-toggle p-p" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Members Portal
+              </a>
+              <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                <li><a class="dropdown-item" href="#">Login</a></li>
+                <li><a class="dropdown-item" href="#">Register</a></li>
+              </ul>
+            </li>
+          {% endif %}
+        </div>
       </div>
     </div>
   </nav>

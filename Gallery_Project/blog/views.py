@@ -24,6 +24,11 @@ class BlogDeleteView(DeleteView):
     template_name = 'blog/blog-delete.html'
     success_url = reverse_lazy('index')
 
+class BlogDetailView(DetailView):
+    model = Blog
+    template_name = 'blog/blog-detail.html'
+    success_url = reverse_lazy('index')
+
 def all_blogs(request):
     blog_list = Blog.objects.all()
     title_query = request.GET.get('title')

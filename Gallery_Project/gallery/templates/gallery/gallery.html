@@ -1,0 +1,29 @@
+
+{% extends 'scheme.html' %}
+{% block title %}Gallery{% endblock %}
+{% block content %}
+
+
+
+            <div class='gallery'>
+                <div class="gallery-container">
+                    {% for image in image_list %}
+                    
+                    <img class='gallery-item gallery-item-{{ forloop.counter }}' src="{{ image.image_link }}" data-index="{{ forloop.counter }}">
+
+                    {% endfor %}
+                </div>
+                <div class="gallery-controls">
+
+                </div>
+            </div>
+
+
+{% for print in print_list%}
+<br/>
+<h1 class='h1-1'> {{ print }}</h1>
+{% endfor %}
+
+<script src='#'></script>
+
+{% endblock %}
