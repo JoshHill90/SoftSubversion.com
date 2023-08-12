@@ -2,28 +2,148 @@
 {% extends 'scheme.html' %}
 {% block title %}Gallery{% endblock %}
 {% block content %}
-
-
-
-            <div class='gallery'>
-                <div class="gallery-container">
-                    {% for image in image_list %}
-                    
-                    <img class='gallery-item gallery-item-{{ forloop.counter }}' src="{{ image.image_link }}" data-index="{{ forloop.counter }}">
-
-                    {% endfor %}
-                </div>
-                <div class="gallery-controls">
-
+{% load static %}
+<div class='container'>
+    <div class='section-height'>
+        <div class='row'>
+            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+                <button class='card card-attrs'>
+                    <div class="card-body">
+                        {% for image in image_list %}
+                        {% if image.display == 'gallery1' %}
+                        <div class='card-shot'>
+                        <img class='img-fluid' src="{{ image.image_link }}">
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class='card-text'>
+                            <p class='p-p'>
+                                Model Gallery
+                            </p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+                <button class='card card-attrs'>
+                    <div class="card-body">
+                        {% for image in image_list %}
+                        {% if image.display == 'gallery2' %}
+                        <div class='card-shot'>
+                            <img class='img-fluid' src="{{ image.image_link }}">
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class='card-text'>
+                            <p class='p-p'>
+                                Wedding Gallery
+                            </p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+                <button class='card card-attrs'>
+                    <div class="card-body">
+                        {% for print in print_list %}
+                        {% if print.display == 'gallery1' %}
+                        <div class='card-shot'>
+                            <img class='img-fluid' src="{{ print.image_link }}">
+                        </div>
+                        {% endif %}
+                        {% endfor %}
+                        <div class='card-text'>
+                            <p class='p-p'>
+                                Print Gallery
+                            </p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+                <button class='card card-attrs'>
+                    <div class="card-body">
+                        {% for image in image_list %}
+                        {% if image.display == 'gallery3' %}
+                        <div class='card-shot'>
+                            <img class='img-fluid' src="{{ image.image_link }}">
+                        </div>   
+                        {% endif %}
+                        {% endfor %}
+                        <div class='card-text'>
+                            <p class='p-p'>
+                                Wedding Gallery
+                            </p>
+                        </div>
+                    </div>
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class='container'>
+    <div class='section-height'>
+        <hr class='hr-hr'>
+            <p class='p-p text-center'>
+                How the process works
+            </p>
+        <hr class='hr-hr'>
+        <div class="row">
+            <div class='timeline col-12 col-md-2 fade-in'>
+                <div class='time-box time-box-top'>
+                    <div class='time-text'>
+                        <h2 class='h2-2'>Connect</h2>
+                        <p class='p-p'>Book a session and spark the dance of notification joy. Our creative journey commences here.</p>
+                    </div>
                 </div>
             </div>
 
+            <div class='timeline col-12 col-md-2 fade-in'>
+                <div class='time-box time-box-bottum'>
+                    <div class='time-text'>
+                        <h2 class='h2-2'>Collaborate</h2>
+                        <p class='p-p'>Chat, call, or Skype; we're artisans crafting art. Scope, budget, vision, we're in sync.</p>
+                    </div>
+                </div>
+            </div>
 
-{% for print in print_list%}
-<br/>
-<h1 class='h1-1'> {{ print }}</h1>
-{% endfor %}
+            <div class='timeline col-12 col-md-2 fade-in'>
+                <div class='time-box time-box-top'>
+                    <div class='time-text'>
+                        <h2 class='h2-2'>Capture Magic</h2>
+                        <p class='p-p'>Meet at a scenic spot, you, me, lights, camera. Moments etched into memories.</p>
+                    </div>
+                </div>
+            </div>
 
-<script src='#'></script>
+            <div class='timeline col-12 col-md-2 fade-in'>
+                <div class='time-box time-box-bottum'>
+                    <div class='time-text'>
+                        <h2 class='h2-2'>Sneak Peek</h2>
+                        <p class='p-p'>Exclusive code unlocks your project preview gallery. Witness magic before the world.</p>
+                    </div>
+                </div>
+            </div>
+            <div class='timeline col-12 col-md-2 fade-in'>
+                <div class='time-box time-box-top'>
+                    <div class='time-text'>
+                        <h2 class='h2-2'>Unveil Splendor</h2>
+                        <p class='p-p'>Curated images emerge, feedback refines. We co-create your unique story.</p>
+                    </div>
+                </div>
+            </div>
+            <div class='timeline col-12 col-md-2 fade-in'>
+                <div class='time-box time-box-bottum'>
+                    <div class='time-text'>
+                        <h2 class='h2-2'>Embrace Memories</h2>
+                        <p class='p-p'>Payment done, personal gallery awaits. Cherished memories, one click away.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src={% static 'js/float_in.js' %}></script>
+
 
 {% endblock %}
