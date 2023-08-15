@@ -8,6 +8,7 @@ from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Image, Print, Project
 from .forms import ImageForms, PrintForms, ProjectForms
+from Gallery_Project.env.app_Logic.photo_layer import col3_col6_col3
 
 
 def gallery_hall(request):
@@ -17,6 +18,87 @@ def gallery_hall(request):
     return render(request, 'gallery/gallery.html', {
         'image_list': image_list,
         'print_list': print_list
+    })
+
+def model_gallery(request):
+    image_list = Image.objects.all()
+    image_inline = []
+    image_col1 = []
+    image_col2 = []
+    image_col3 = []
+
+    for image in image_list:
+        new_list = []
+        image_inline.append([image.id, image.aspect])
+
+    image_list1, image_list2, image_list3 = col3_col6_col3 (image_inline)
+    for image in image_list:
+        for image1 in image_list1:
+            if image.id in image1:
+                image_col1.append(image)
+                
+        for image2 in image_list2:
+            if image.id in image2:
+                image_col2.append(image)
+
+        for image3 in image_list3:
+            if image.id in image3:
+                image_col3.append(image)
+
+    len1 = len(image_col1)
+    len2 = len(image_col2)+len1
+    for listed_item in image_col1 + image_col2 + image_col3:
+        new_list.append(listed_item)
+
+    return render(request, 'gallery/model-gallery.html', {
+        'image_list': image_list,
+        'image_col1': image_col1,
+        'image_col2': image_col2,
+        'image_col3': image_col3,
+        'new_list': new_list,
+        'len1': len1,
+        'len2': len2,
+    })
+
+def prints_gallery(request):
+    print_list = Print.objects.all()
+    print_inline = []
+    print_col1 = []
+    print_col2 = []
+    print_col3 = []
+
+    for print in print_list:
+        new_list = []
+        print_inline.append([print.id, print.aspect])
+
+    print_list1, print_list2, print_list3 = col3_col6_col3 (print_inline)
+    for print in print_list:
+        for print1 in print_list1:
+            if print.id in print1:
+                print_col1.append(print)
+                
+        for print2 in print_list2:
+            if print.id in print2:
+                print_col2.append(print)
+
+        for print3 in print_list3:
+            if print.id in print3:
+                print_col3.append(print)
+
+    len1 = len(print_col1)
+    len2 = len(print_col2)+len1
+    for listed_item in print_col1 + print_col2 + print_col3:
+        new_list.append(listed_item)
+    
+
+    return render(request, 'gallery/prints-gallery.html', {
+        'print_list': print_list,
+        'print_col1': print_col1,
+        'print_col2': print_col2,
+        'print_col3': print_col3,
+        'new_list': new_list,
+        'len1': len1,
+        'len2': len2,
     })
 
 
@@ -110,3 +192,5 @@ class ProjectDetailView(DetailView):
     model = Project
     form_class = ProjectForms
     template_name = 'gallery/project/project-details.html'
+
+#---------------------------------------------------------------------------------------------------------#

@@ -7,7 +7,7 @@
     <div class='section-height'>
         <div class='row'>
             <div class='col-12 col-md-3 slide-up' id='slide-in'>
-                <button class='card card-attrs'>
+                <button class='card card-attrs' onclick="window.location.href='{% url 'model' %}'">
                     <div class="card-body">
                         {% for image in image_list %}
                         {% if image.display == 'gallery1' %}
@@ -46,9 +46,9 @@
                 <button class='card card-attrs'>
                     <div class="card-body">
                         {% for print in print_list %}
-                        {% if print.display == 'gallery1' %}
+                        {% if print.display == 'gallery4' %}
                         <div class='card-shot'>
-                            <img class='img-fluid' src="{{ print.image_link }}">
+                            <img class='img-fluid' src="{{ print.image_link }}" onclick="window.location.href='{% url 'prints' %}'">
                         </div>
                         {% endif %}
                         {% endfor %}
@@ -72,7 +72,7 @@
                         {% endfor %}
                         <div class='card-text'>
                             <p class='p-p'>
-                                Wedding Gallery
+                                Fameliy & Pets Gallery
                             </p>
                         </div>
                     </div>
@@ -89,60 +89,87 @@
             </p>
         <hr class='hr-hr'>
         <div class="row">
-            <div class='timeline col-12 col-md-2 fade-in'>
-                <div class='time-box time-box-top'>
-                    <div class='time-text'>
+            <div class='timeline col-12 col-md-2 slide-left' id='slide-in'>
+                <div class='time-box time-box-top slide-left' id='slide-in'>
+                    <div class='time-text fade-in'>
                         <h2 class='h2-2'>Connect</h2>
                         <p class='p-p'>Book a session and spark the dance of notification joy. Our creative journey commences here.</p>
                     </div>
+                    <i class="fa-solid fa-bell fa-2xl icons-gal icon-color"></i>
                 </div>
             </div>
 
-            <div class='timeline col-12 col-md-2 fade-in'>
-                <div class='time-box time-box-bottum'>
-                    <div class='time-text'>
+            <div class='timeline col-12 col-md-2 slide-left' id='slide-in'>
+                <div class='time-box time-box-bottum slide-left' id='slide-in'>
+                    <i class="fa-solid fa-mobile-screen-button fa-2xl icons-gal icon-color"></i>
+                    <div class='time-text fade-in'>
                         <h2 class='h2-2'>Collaborate</h2>
                         <p class='p-p'>Chat, call, or Skype; we're artisans crafting art. Scope, budget, vision, we're in sync.</p>
                     </div>
                 </div>
+                
             </div>
-
-            <div class='timeline col-12 col-md-2 fade-in'>
-                <div class='time-box time-box-top'>
-                    <div class='time-text'>
+ 
+            <div class='timeline col-12 col-md-2 slide-left' id='slide-in'>
+                <div class='time-box time-box-top slide-left' id='slide-in'>
+                    <div class='time-text fade-in'>
                         <h2 class='h2-2'>Capture Magic</h2>
                         <p class='p-p'>Meet at a scenic spot, you, me, lights, camera. Moments etched into memories.</p>
                     </div>
+                    <i class="fa-solid fa-wand-magic-sparkles fa-2xl icons-gal icon-color"></i>
                 </div>
             </div>
 
-            <div class='timeline col-12 col-md-2 fade-in'>
-                <div class='time-box time-box-bottum'>
-                    <div class='time-text'>
+            <div class='timeline col-12 col-md-2 slide-left' id='slide-in'>
+                <div class='time-box time-box-bottum slide-left' id='slide-in'>
+                    <div class='time-text fade-in'>
                         <h2 class='h2-2'>Sneak Peek</h2>
                         <p class='p-p'>Exclusive code unlocks your project preview gallery. Witness magic before the world.</p>
                     </div>
+                    <i class="fa-solid fa-eye-low-vision fa-2xl icons-gal icon-color"></i>
                 </div>
             </div>
-            <div class='timeline col-12 col-md-2 fade-in'>
-                <div class='time-box time-box-top'>
-                    <div class='time-text'>
+            <div class='timeline col-12 col-md-2 slide-left' id='slide-in'>
+                <div class='time-box time-box-top slide-left' id='slide-in'>
+                    <div class='time-text fade-in'>
                         <h2 class='h2-2'>Unveil Splendor</h2>
                         <p class='p-p'>Curated images emerge, feedback refines. We co-create your unique story.</p>
                     </div>
+                    <i class="fa-solid fa-photo-film fa-2xl icons-gal icon-color"></i>
                 </div>
             </div>
-            <div class='timeline col-12 col-md-2 fade-in'>
-                <div class='time-box time-box-bottum'>
-                    <div class='time-text'>
+            <div class='timeline col-12 col-md-2 slide-left' id='slide-in'>
+                <div class='time-box time-box-bottum slide-left' id='slide-in'>
+                    <div class='time-text fade-in'>
                         <h2 class='h2-2'>Embrace Memories</h2>
                         <p class='p-p'>Payment done, personal gallery awaits. Cherished memories, one click away.</p>
+                    </div>
+                    <i class="fa-solid fa-heart fa-2xl icons-gal icon-color"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class='container mt-4 mb-4'>
+    <div class='section-height sub-height'>
+        <div class='gall-back  h-100'>
+            <div class='row'>
+                <div class='col-12'>
+                    <div class='item-gal4'>
+                        <p class='p-2 shadow '>
+                            This isn't just a shoot – it's your unique spirit's visual symphony. We blend elegance and style to craft your vivid vision.
+                        </p>
+
+                        <button class="btn-cust btn-cust-color">Book</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <script src={% static 'js/float_in.js' %}></script>
 
 

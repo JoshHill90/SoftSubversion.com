@@ -1,0 +1,71 @@
+def col3_col6_col3(list_items):
+	col1 = []
+	col2 = []
+	col3 = []
+
+	balancer_1 = 0
+	balancer_2 = 0
+	balancer_3 = 0
+
+	port = 'portrait'
+	land = 'landscape'
+
+	port_list = []
+	land_list = []
+	print(list_items)
+	left_ratio = 0
+	right_ratio = 0 
+
+	for size in list_items:
+		if port in size:
+			port_list.append(size)
+			
+		elif land in size:
+			land_list.append(size)
+
+			
+	for item in list_items:
+
+		left_ratio = (balancer_2 - balancer_1) - left_ratio
+		right_ratio = (balancer_2 - balancer_3) - right_ratio
+		print(left_ratio, right_ratio, 'balance')
+		print(balancer_1, '1 \n', balancer_2, '2 \n', balancer_3, '3 \n')
+		if item in port_list:
+			if balancer_1 < balancer_3 and balancer_1 < balancer_2 or balancer_1 == 0:
+				balancer_1 += 2
+				col1.append(item)
+			elif balancer_3 <= balancer_2:
+				balancer_3 += 2
+				col3.append(item)
+			elif balancer_1 < left_ratio:
+				balancer_1 += 2
+				col1.append(item)
+			elif balancer_3 < right_ratio:
+				balancer_3 += 2
+				col3.append(item)
+			else: 
+				balancer_2 += 2
+				col2.append(item)				
+
+
+		elif item in land_list:
+			if balancer_1 < balancer_3 and balancer_1 < balancer_2 or balancer_1 == 0:
+				balancer_1 += 1
+				col1.append(item)
+			elif balancer_3 <= balancer_2:
+				balancer_3 += 1
+				col3.append(item)
+			elif balancer_1 < left_ratio:
+				balancer_1 += 1
+				col1.append(item)
+			elif balancer_3 > right_ratio:
+				balancer_3 += 1
+				col3.append(item)
+			else: 
+				balancer_2 += 2
+				col2.append(item)	
+
+	return col1, col2, col3 
+
+
+

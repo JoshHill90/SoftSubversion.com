@@ -5,6 +5,10 @@ from . import views
 
 urlpatterns = [
     path('gallery/', views.gallery_hall, name='gallery'),
+    path('gallery/models', views.model_gallery, name='model'),
+    path('gallery/prints', views.prints_gallery, name='prints'),
+
+
     path('image/', ImageListView.as_view(), name='images'),
     path('image/<int:pk>/details', ImageDetailView.as_view(), name='image-details'),
     path('image/create', ImageCreateView.as_view(), name='image-create'),
@@ -12,7 +16,7 @@ urlpatterns = [
     path('image/<int:pk>/delete', ImageDeleteView.as_view(), name='image-delete'),
     path('image/upload', image_upload, name='image-upload'),
 
-    path('print/', PrintListView.as_view(), name='prints'),
+    path('print/', PrintListView.as_view(), name='prints-all'),
     path('print/<int:pk>/details', PrintDetailView.as_view(), name='print-details'),
     path('print/create', PrintCreateView.as_view(), name='print-create'),
     path('print/<int:pk>/edit', PrintEditView.as_view(), name='print-edit'),

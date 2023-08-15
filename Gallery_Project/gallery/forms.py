@@ -5,7 +5,7 @@ class ImageForms(forms.ModelForm):
 
     class Meta:
         model = Image
-        fields = ('title','tag', 'private', 'display', 'client_id', 'project_id','cloudflare_id')
+        fields = ('title','tag', 'private', 'display', 'aspect', 'client_id', 'project_id','cloudflare_id')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title for the post'}),
             'tag': forms.TextInput(attrs={'class': 'form-control'}),
@@ -13,7 +13,8 @@ class ImageForms(forms.ModelForm):
                                                   'class': 'form-check-input',
                                                   'id': 'flexSwitchCheckChecked',
                                                   }),
-            'display': forms.Select(attrs={'class': 'form-control'}),                                      
+            'display': forms.Select(attrs={'class': 'form-control'}), 
+            'aspect': forms.Select(attrs={'class': 'form-control'}),                                       
             'client_id': forms.Select(attrs={'class': 'form-control'}),
             'project_id': forms.Select(attrs={'class': 'form-control'}),
             'cloudflare_id': forms.TextInput(attrs={'class': 'form-control'}),                              
@@ -22,7 +23,7 @@ class ImageForms(forms.ModelForm):
 class PrintForms(forms.ModelForm):
     class Meta:
         model = Print
-        fields = ('title','cost', 'details', 'status', 'display', 'cloudflare_id')
+        fields = ('title','cost', 'details', 'status', 'display', 'aspect', 'cloudflare_id')
         widgets = {
             'title': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title for the post'}),
             'cost': forms.NumberInput(attrs={'class': 'form-control'}),
@@ -30,7 +31,8 @@ class PrintForms(forms.ModelForm):
                                                   'class': 'form-check-input',
                                                   'id': 'flexSwitchCheckChecked',
                                                   }),
-            'display': forms.Select(attrs={'class': 'form-control'}),      
+            'display': forms.Select(attrs={'class': 'form-control'}),
+            'aspect': forms.Select(attrs={'class': 'form-control'}),      
             'cloudflare_id': forms.TextInput(attrs={'class': 'form-control'})                         
         }
 

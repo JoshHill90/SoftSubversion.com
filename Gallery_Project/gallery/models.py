@@ -14,6 +14,11 @@ DISPLAY_PEACE = [
     ('gallery4', 'gallery4'),
     ('project', 'project'),
     ('client', 'client',)]
+
+ASPECT_RATIO = [    
+    ('portrait', 'portrait'),
+    ('landscape', 'landscape'),
+]
     
 
 class Project(models.Model):
@@ -34,7 +39,8 @@ class Image(models.Model):
     date = models.DateField(auto_now_add=True)
     tag = models.CharField(max_length=255)
     private = models.BooleanField(default=False)
-    display = models.CharField(max_length=20, choices=DISPLAY_PEACE, default='none')
+    display = models.CharField(max_length=20, choices=DISPLAY_PEACE, default='portrait')
+    aspect = models.CharField(max_length=20, choices=ASPECT_RATIO, default='none')
     client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.CASCADE)
     project_id = models.ForeignKey(Project, null=True, on_delete=models.CASCADE)
     image_link = models.URLField(blank=True, default=' ')
@@ -54,6 +60,7 @@ class Print(models.Model):
     details = models.TextField(blank=True, null=True)
     status = models.BooleanField(default=False)
     display = models.CharField(max_length=20, choices=DISPLAY_PEACE, default='none')
+    aspect = models.CharField(max_length=20, choices=ASPECT_RATIO, default='none')
     image_link = models.URLField(blank=True, default=' ')
     cloudflare_id = models.CharField(max_length=255, blank=True)
     silk_id = models.CharField(max_length=50, default='CB01')
