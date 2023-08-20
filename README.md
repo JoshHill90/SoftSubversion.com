@@ -121,6 +121,7 @@ Soft Subversion currently includes:
 
 Integration with Cloudflare API for photo uploads and metadata updates.
 Customer and owner sections to handle client projects, images, and payment in progress.
+<div align="center">
 
  <img src="https://imagedelivery.net/4_y5kVkw2ENjgzV454LjcQ/8bdd3a14-00c1-4be4-d401-3f90897fd900/display" alt="application screenshot" width="600" height="auto">
 
@@ -130,7 +131,7 @@ Customer and owner sections to handle client projects, images, and payment in pr
 
   <img src="https://imagedelivery.net/4_y5kVkw2ENjgzV454LjcQ/84b8a042-909d-427d-8f6a-ff697337be00/display" alt="application screenshot" width="600" height="auto">
 
-  
+ </div> 
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 <!-- CONTRIBUTING -->
