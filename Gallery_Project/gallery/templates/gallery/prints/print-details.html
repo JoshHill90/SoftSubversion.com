@@ -1,0 +1,55 @@
+{% extends 'panel.html' %}
+{% block title %}{{image.title }} {% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+<div class='container'>
+	<div class='row '>
+		<div class=' gx-3 col-12 mt-4 col-md-6'>
+			<div class='section-image-data'>
+				<h1 class='h1-1'>{{print.title }}</h1>
+				<br>
+				<h1 class='h1-1'>cost: {{ print.cost}}</h1>
+			</div>
+		</div>
+
+		<div class=' gx-3 col-12 mt-4 col-md-6'>
+			<div class='section-image-data'>
+				<p class='p-p'>print Meta Tags: {{ print.tag }}</p>
+
+				<p class='p-p'>Private mode: {{ print.status }}</p>
+			
+				<button class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'print-edit' print.pk %}'">Edit</button>
+				<button class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'print-delete' print.pk %}'">delete</button>
+			</div>
+		</div>
+	</div>
+	<div class='row'>
+		<div class='col-12 mt-4'>
+			<div class='section-image'>
+				<img class='img-fluid' 
+				src="{{ print.image_link}}" 
+				alt="print Title: {{ print.title}}">
+			</div>
+		</div>
+	</div>
+	<div class='gal-roller'>
+		<div class='previous_image'>
+			{% if previous_image %}
+			<button 
+			class="btn-cust btn-cust-color" 
+			onclick="window.location.href='{% url 'print-details' previous_image %}'"
+			><i class="fa-solid fa-arrow-left left-i"></i>Previous</button>
+			{% endif %}
+		</div>
+		<div class='next_image'>
+			{% if next_image %}
+			<button 
+			class="btn-cust btn-cust-color" 
+			onclick="window.location.href='{% url 'print-details' next_image %}'"
+			>Next<i class="fa-solid fa-arrow-right right-i"></i></button>
+			{% endif %}
+		</div>
+	</div>
+</div>
+{% endif %}
+{% endblock %}

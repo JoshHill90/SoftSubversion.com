@@ -22,7 +22,7 @@
 <body class='body-main'>
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="{% url 'social' %}">Navbar</a>
+      <a class="navbar-brand">Soft Subveersion</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -66,10 +66,11 @@
                     Owners 
                   </a>
                   <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
+                    <li><a class="dropdown-item" href="{% url 'o_main' %}">Management Panel</a></li>
+                    <div class="dropdown-divider"></div>
                     <li><a class="dropdown-item" href="#">Clients Panel</a></li>
                     <li><a class="dropdown-item" href="#">Gallery Panel</a></li>
                     <li><a class="dropdown-item" href="#">Billing Panel</a></li>
-                    <li><a class="dropdown-item" href="#">Management Panel</a></li>
                     <div class="dropdown-divider"></div>
                     <li><a class="dropdown-item" href="#">Logout</a></li>
                     <li><a class="dropdown-item" href="#">Profile</a></li>
@@ -85,8 +86,8 @@
                 Members Portal
               </a>
               <ul class="dropdown-menu" aria-labelledby="navbarDropdownMenuLink">
-                <li><a class="dropdown-item" href="#">Login</a></li>
-                <li><a class="dropdown-item" href="#">Register</a></li>
+                <li><a class="dropdown-item" href="{% url 'login' %}">Login</a></li>
+                <li><a class="dropdown-item" href="{% url 'register' %}">Register</a></li>
               </ul>
             </li>
           {% endif %}
@@ -108,79 +109,46 @@
     <!------------------------------------------------>
     <!-- dynamic content block -->
     <!------------------------------------------------>  
-      <footer class="page-footer bg-dark text-white shadow">
-        <div class="d-flex flex-column mx-auto py-5" style="width: 80%">
-          <div class="d-flex flex-wrap justify-content-between">
-            <div>
-              <a href="/" class="d-flex align-items-center p-0 text-dark">
-                <img alt="logo" src="../img/logo.png" width="30px" />
-                <span class="ms-3 h5 font-weight-bold">Devwares</span>
-              </a>
-              <p class="my-3" style="width: 250px">
-                We are creating High Quality Resources and tools to Aid developers during the
-                developement of their projects
-              </p>
-              <span class="mt-4">
-                <button class="btn text-white btn-dark btn-flat p-2">
-                  <i class="fa fa-facebook"></i>
-                </button>
-                <button class="btn btn-dark btn-flat p-2">
-                  <i class="fa fa-twitter"></i>
-                </button>
-                <button class="btn btn-dark btn-flat p-2">
-                  <i class="fa fa-instagram"></i>
-                </button>
-              </span>
-            </div>
-            <div>
-              <p class="h5 mb-4" style="font-weight: 600">Devwares</p>
-              <ul class="p-0" style="list-style: none; cursor: pointer">
-                <li class="my-2">
-                  <a class="text-dark" href="/">Resources</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">About Us</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">Contact</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">Blog</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p class="h5 mb-4" style="font-weight: 600">Help</p>
-              <ul class="p-0" style="list-style: none; cursor: pointer">
-                <li class="my-2">
-                  <a class="text-dark" href="/">Support</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">Sign Up</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">Sign In</a>
-                </li>
-              </ul>
-            </div>
-            <div>
-              <p class="h5 mb-4" style="font-weight: 600">Help</p>
-              <ul class="p-0" style="list-style: none; cursor: pointer">
-                <li class="my-2">
-                  <a class="text-dark" href="/">Support</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">Sign Up</a>
-                </li>
-                <li class="my-2">
-                  <a class="text-dark" href="/">Sign In</a>
-                </li>
-              </ul>
+    <div class="container-fluid bg-dark">
+      <footer class="py-5">
+        <div class="row">
+          <div class="col-6 col-md-2 mb-3">
+            <h3 class='h3-3'>Soft Subversion</h3>
+            <ul class="nav flex-column">
+              <li class="nav-item mb-2"><a href="{% url 'gallery' %}#how" target="_blank" class="nav-link p-0 p-p text-body-secondary">How it Works</a></li>
+              <li class="nav-item mb-2"><a href="{% url 'contact' %}" class="nav-link p-0 p-p text-body-secondary">Contact</a></li>
+              <li class="nav-item mb-2"><a href="{% url 'gallery' %}" target="_blank" class="nav-link p-0 p-p text-body-secondary">Gallery</a></li>
+              <li class="nav-item mb-2"><a href="{% url 'about' %}" class="nav-link p-0 p-p text-body-secondary">About</a></li>
+            </ul>
+          </div>
+    
+          <div class="col-6 col-md-2 mb-3">
+            <h3 class='h3-3 text-center'>Follow Me</h3>
+            <div class="nav">
+            <ul>
+              <a  href='https://github.com/JoshHill90' target='bank'> <i class="fa-brands fa-instagram fa-2xl fa-space" style="color: #7933fc;"></i></a>
+            </ul>
             </div>
           </div>
-          <small class="text-center mt-5">&copy; Devwares, 2020. All rights reserved.</small>
+    
+          <div class="col-md-5 offset-md-3 mb-3 form-group">
+            <form autocomplete="off" method="POST" action="{% url 'index' %}">
+              <h3 class='h3-3'>Soft Subversion</h3>
+              <p class='p-p'>Book you next shoot today!</p>
+              <button type="submit" class="btn-cust btn-cust-color">Book</button>
+            </form>
+          </div>
         </div>
+        <hr class='p-p'>
+        <div class="row">
+          <p class='p-p text-center'>Created and maintained by <a class='footer-link p-p' href='https://silkthreaddev.com'>Silk Thread Dev</a></p>
+          
+          <p class='p-p text-center'>© 2022 <a class='footer-link p-p' href='https://softsubversion.com'>Soft Subversion </a>, Inc. All rights reserved. All data collected is kept private and safe</p>
+          <p class='p-p text-center'></p>
+        </div>
+        
       </footer>
+    </div>
       <script src="https://kit.fontawesome.com/00f4d71521.js" crossorigin="anonymous"></script>
 </body>
 </html>

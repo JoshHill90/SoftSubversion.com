@@ -8,10 +8,15 @@ DISPLAY_PEACE = [
     ('home2', 'home2'),
     ('home3', 'home3'),
     ('home4', 'home4'),
+    ('IOTM', 'IOTM'),
     ('gallery1', 'gallery1'),
     ('gallery2', 'gallery2'),
     ('gallery3', 'gallery3'),
     ('gallery4', 'gallery4'),
+    ('subgal1', 'subgal1'),
+    ('subgal2', 'subgal2'),
+    ('subgal3', 'subgal3'),
+    ('subgal4', 'subgal4'),
     ('project', 'project'),
     ('client', 'client',)]
 
@@ -51,7 +56,7 @@ class Image(models.Model):
         return str(self.client_id.name + ' | ' + self.title)
 
     def get_absolute_url(self):
-        return reverse("image-details", args=(str(self.id)))
+        return reverse("image-details", args=(self.id,))
     
 
 class Print(models.Model):
@@ -70,4 +75,4 @@ class Print(models.Model):
         return str(self.title)
 
     def get_absolute_url(self):
-        return reverse("print-details", args=(str(self.id)))
+        return reverse("print-details", args=(self.id,))

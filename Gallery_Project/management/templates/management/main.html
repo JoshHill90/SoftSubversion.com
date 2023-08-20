@@ -1,0 +1,107 @@
+
+{% extends 'panel.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+{% load static %}
+
+<div class="container"> 
+	<div class='row mt-4'>
+		<div class="col-12 col-md-3">
+			<div class="sections">
+				<div class="chart-container">
+					<canvas id="BreakDown"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-3">
+				<div class="sections">
+				<h1 class='h1-1'>Stored Image Break Down</h1>
+				<hr>
+				<p class="p-p">Site Images Stored: {{site_image |length }}</p>
+				<div id='sites' data-value='{{ image_list|length }}' hidden></div>
+
+				<p class="p-p">Site Images Stored: {{client_images |length }}</p>
+				<div id='clients' data-value='{{ client_images|length }}' hidden></div> 
+
+				<p class="p-p">Site Images Stored: {{print_list |length }}</p>
+				<div id='prints' data-value='{{ print_list|length }}' hidden></div>
+			</div>
+		</div>
+		<div class="col-12 col-md-3">
+			<div class="sections">
+				<div class="chart-container">
+					<canvas id="Totals"></canvas>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-3">
+			<div class="sections">
+				<h1 class='h1-1'> Total Images</h1>
+				<hr>
+				<p class='p-p'>{{ image_list|length }}/20000</p>
+				<div id='total' data-value='{{ image_list|length }}' hidden></div>
+			</div>
+		</div>
+	</div>
+
+	<div class='row mt-4'>
+		<div class="col-12 col-md-6">
+			<div class="sections">
+				<h1 class='h1-1'>Client Window</h1>
+				<hr>
+				<div class="overflow-auto scroll-menu">
+					<ul class="list-unstyled">
+					{% for client in client_list %}
+					<li><a href="#" class="nav-link px-0 p-p"> {{ client.name }}</a></li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+
+		</div>
+		<div class="col-12 col-md-6">
+			<div class="sections">
+				<h1 class='h1-1'>Project Window</h1>
+				<hr>
+				<div class="overflow-auto scroll-menu">
+					<ul class="list-unstyled">
+					{% for project in project_list %}
+					<li><a href="#" class="nav-link px-0 p-p"> {{ project.name }}</a></li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class='row mt-4'>
+		<div class="col-12 col-md-6">
+			<div class="sections">
+				<h1 class='h1-1'>Images</h1>
+				<hr>
+				<div class="overflow-auto scroll-menu">
+					<ul class="list-unstyled">
+					{% for image in image_list %}
+					<li><a href="{% url 'image-details' image.id %}" class="nav-link px-0 p-p"> {{ image.title }}</a></li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+		<div class="col-12 col-md-6">
+			<div class="sections">
+				<h1 class='h1-1'>Prints</h1>
+				<hr>
+				<div class="overflow-auto scroll-menu">
+					<ul class="list-unstyled">
+					{% for prints in print_list %}
+					<li><a href="{% url 'print-details' prints.id %}" class="nav-link px-0 p-p"> {{ prints.title }}</a></li>
+					{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+<script src={% static 'js/graphs.js' %}></script>
+
+{% endblock %}

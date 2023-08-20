@@ -1,0 +1,26 @@
+
+{% extends 'portal.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+
+<div class='container'>
+<div class='box'>
+    <h1 class='h1-1 text-center'>Register</h1>
+    <div class="form-group">
+        <form method=POST>
+            {% csrf_token %}
+            {{form.as_p}}
+            <button class="btn-cust btn-cust-color">Register</button>
+        </form>
+    </div>
+    <div class='header-box mt-4 mb-4'>
+        <h3 class='h3-3 text-center'>Already a member</h3>
+        <button class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'login' %}'">Login</button>
+    </div>
+    
+</div>
+</div>
+
+
+
+{% endblock %}

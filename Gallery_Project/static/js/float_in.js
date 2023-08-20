@@ -1,4 +1,5 @@
 const floaters = document.querySelectorAll('.float-in');
+const floaters2 = document.querySelectorAll('.float-in-sec');
 const sliders = document.querySelectorAll('#slide-in');
 const faders = document.querySelectorAll('.fade-in');
 
@@ -37,6 +38,11 @@ const appearOnScroll = new IntersectionObserver(
 floaters.forEach(floater => {
     appearOnScroll.observe(floater);
 });
+
+floaters2.forEach(floater2 => {
+  appearOnScroll.observe(floater2);
+});
+
 
 sliders.forEach(slider => {
     appearOnScroll.observe(slider);

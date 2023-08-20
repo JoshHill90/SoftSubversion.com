@@ -1,0 +1,37 @@
+{% extends 'panel.html' %}
+{% block title %}Upload Link{% endblock %}
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+<div class="sections p-p">
+    <h1>Set Image Details</h1>
+    <div class="nested-box">
+        heey {{ clfr_id }}
+        <div class="form-group">
+            <form method=POST enctype="multipart/form-data">
+                {% csrf_token %}
+                {{form.media}}
+                {{form.as_p}}
+                <button type ="submit" class="btn btn-primary">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+</div>
+    <script>
+        const currentUrl = window.location.href;
+        
+        const urlParts = currentUrl.split('/');
+        const cloudflareId = urlParts[urlParts.length - 1];
+        console.log(cloudflareId);
+        console.log(currentUrl);
+
+        const cloudflareIdField = document.getElementById('cloudflare_id');
+        cloudflareIdField.value = cloudflareId;
+    </script>
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,190 @@
+/*font import*/
+@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Cormorant+Garamond:wght@300;400;600;700&display=swap');
+
+/*variable*/
+:root{
+    --text-color:rgb(255, 255, 255);
+    --text-color-secondary:rgb(0, 0, 0);
+    --bg-color:rgb(24, 24, 24);
+    --bg-color-secondary:rgba(61, 61, 61);
+    --bg-color-opec:rgba(56, 56, 56, 0.534);  
+    --font-family-header:'Arvo', serif;
+    --font-family-body: 'Arvo', serif;
+    --h1: 26px;
+    --p: 16px;
+    --font-weights-norm: 400;
+    --font-weights-bold: 700;
+    --arvo-light: 300;
+    --arvo-norm: 400;
+    --arvo-simi: 600;
+    --arvo-bold: 700;
+
+}
+
+/* --------------------------------
+Topography
+--------------------------------*/
+html {
+  scroll-behavior: smooth;
+}
+
+.body-main {
+  display: block;
+  margin: none;
+  padding: 0;
+  font-family: var(--font-family-body);
+  font-display: swap;
+  background-color: var(--bg-color);
+  height: 100%;
+
+}
+
+@font-face {
+  font-family: "MyWebFont";
+  src: url(myfont.woff2) format("woff2"),
+        url(myfont.woff) format("woff");
+  font-display: swap;
+}
+
+.h1-1 {
+  font: var(--font-weights-norm) var(--h1) / var(--h1) var(--font-family-header);
+  color: var(--text-color);
+}
+.p-p {
+  font-size: var(--p);
+  font-weight: var(--font-weights-norm);
+  color: var(--text-color);
+}
+
+.p-2 {
+  font-size:var(--p);
+  font-weight: var(--font-weights-norm);
+  color: var(--text-color-secondary);
+}
+
+.ham{
+  color:36px!important;
+}
+
+.icon-color{
+  color:#fc3379;
+}
+
+hr {
+  color: #7933fc79;
+}
+
+/* --------------------------------
+button
+--------------------------------*/
+
+.btn-cust{
+font: var(--p);
+color: #fff;
+background-color: #0066CC;
+padding: 10px 21px;
+border: 2px solid #0066cc;
+box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+border-radius: 25px;
+transition : 777ms;
+align-items: center;
+margin: 5px;
+cursor: pointer;
+}
+
+.btn-cust:hover{
+transition : 777ms;
+padding: 10px 24px;
+background-color: #ffffff00;
+color: #0066cc;
+border: solid 2px #0066cc;
+}
+
+.right-i{
+  width:25px; 
+  margin-left:24px; 
+  margin-right:2px; 
+  flex-direction: row-reverse;
+}
+
+.left-i{
+  width:25px; 
+  margin-left:2px; 
+  margin-right:24px; 
+  flex-direction: row-reverse;
+}
+
+
+
+/* --------------------------------
+main
+--------------------------------*/
+
+.sections {
+  border: 2px solid #7933fc79 ;
+  background-color: #292929 ;
+  padding: 15px;
+  min-height: 28vh;
+  border-radius: 25px;
+}
+
+
+.chart-container{
+  background-color: #292929 ;
+  position: relative; 
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height:20vh; 
+  width:auto;
+  padding: 10px 10px;
+}
+
+.scroll-menu {
+  max-height: 18vh;
+}
+
+/* --------------------------------
+images and prints 
+--------------------------------*/
+.section-image-data {
+  border: 2px solid #7933fc79 ;
+  background-color: #292929 ;
+  padding: 15px;
+  min-height: 28vh;
+  border-radius: 25px;
+  
+}
+
+.section-image {
+  border-radius: 25px;
+  border: 2px solid #7933fc79 ;
+  background-color: #292929 ;
+  padding: 15px;
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  height: auto;
+}
+.section-image img{
+  border-radius: 12px;
+  height: 50vh;
+  box-shadow: 3px 3px 10px rgba(0, 0, 0, 0.486);
+}
+
+.gal-roller {
+  padding: 15px;
+  position: relative;
+}
+
+.next_image {
+  position: absolute;
+  right: 0;
+
+  
+}
+
+.previous_image {
+  position: absolute;
+  left: 0;
+}

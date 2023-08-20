@@ -159,19 +159,40 @@ class APICall:
         print(requests.get(url, headers=headers))
         print(response.text)
 
-    def image_update(self, meta_passed, cloudflare_id):
+    def image_update(self, meta_passed, cloudflare_id, type_image):
         print(meta_passed, cloudflare_id)
+        if type_image == 'image':
+            title, tag, private, display, aspect, client_id, project_id, cloudflare_id, silk_id  = meta_passed
 
-        file_name, client, project, client, private,  = meta_passed
+            metadata_packed = { 
+                            'title': title,
+                            'tag': tag,
+                            'private': private,
+                            'display': display,
+                            'aspect': aspect,
+                            'client_id': client_id,
+                            'project_id': project_id, 
+                            'cloudflare_id': cloudflare_id, 
+                            'silk_id': silk_id
 
-        metadata_packed = {
-           'title': title,
-           'author': author,
-           'meta_tag': meta_tag,
-           'client': client,
-           'category': category,
-           'group': group
-        }
+            }
+            
+            
+        elif type_image == 'print':
+            title, cost, details, status, display, aspect, cloudflare_id, silk_id  = meta_passed
+            cost = str(cost)
+            metadata_packed = { 
+                            'title': title,
+                            'cost': cost,
+                            'details': details,
+                            'status': status,
+                            'display': display,
+                            'aspect': aspect,
+                            'cloudflare_id': cloudflare_id, 
+                            'silk_id': silk_id
+
+            }
+            private = status
 
         url = f'https://api.cloudflare.com/client/v4/accounts/{account_ID}/images/v1/{cloudflare_id}'
         print(url)

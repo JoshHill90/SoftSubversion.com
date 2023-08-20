@@ -1,5 +1,5 @@
 /*font import*/
-@import url('https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=Quattrocento+Sans:wght@400;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Cormorant+Garamond:wght@300;400;600;700&display=swap');
 
 /*variable*/
 :root{
@@ -7,15 +7,19 @@
     --text-color-secondary:rgb(0, 0, 0);
     --bg-color:rgb(24, 24, 24);
     --bg-color-secondary:rgba(61, 61, 61);
-    --bg-color-opec:rgba(56, 56, 56, 0.534);
-    --font-family-body: 'Quattrocento Sans', sans-serif;
-    --font-family-header: 'DM Serif Display', serif;
+    --bg-color-opec:rgba(56, 56, 56, 0.534);  
+    --font-family-header:'Cormorant Garamond', serif;
+    --font-family-body: 'Arvo', serif;
     --h1: 48px;
-    --h2: 26px;
-    --h3: 20px;
-    --p:18;
+    --h2: 42px;
+    --h3: 28px;
+    --p:16px;
     --font-weights-norm: 400;
     --font-weights-bold: 700;
+    --arvo-light: 300;
+    --arvo-norm: 400;
+    --arvo-simi: 600;
+    --arvo-bold: 700;
 
 }
 
@@ -85,6 +89,7 @@ html {
   font-size: var(--h1);
   font-family: var(--font-family-header);
   color: var(--text-color);
+  font-weight: 300;
   padding: var(--h1) var(--h1);
 }
 
@@ -93,7 +98,7 @@ html {
   letter-spacing: 1px;
   font-family: var(--font-family-header)!important;
   color:var(--text-color);
-  padding: 15px 15px;
+  padding: 15px 0;
 }
 
 .h3-3 {
@@ -111,7 +116,7 @@ html {
 
 .p-2 {
   font-size:var(--p);
-  font-weight: var(--font-weights-bold);
+  font-weight: var(--font-weights-norm);
   color: var(--text-color-secondary);
 }
 
@@ -247,13 +252,14 @@ button
   text-align: center;
   text-transform: uppercase;
   transition: 0.85s;
-  font-size: 24px;
+  font-size: var(--p);
   font-family: var(--font-family-header);
-  letter-spacing: 2px;
+  letter-spacing: 1px;
   color: var(--text-color);
-  font-weight: var(--font-weights-bold);
+  font-weight: var(--font-weights-norm);
   background-size: 200% auto;
   text-shadow: 1px 1px 10px rgba(0,0,0,0.2);
+  border: 0;
   border-radius: 6px;
  }
 
@@ -264,6 +270,29 @@ button
 .btn-cust-color:after {
   background-position: right center;
 }
+
+.btn-cust-2 {
+  background-color: #00000069;
+  margin: 10px;
+  padding: .5rem 1rem;
+  text-align: center;
+  text-transform: uppercase;
+  font-size: var(--p);
+  color: var(--text-color);
+  font-family: var(--font-family-header);
+  letter-spacing: 2px;
+  font-weight: var(--font-weights-norm);
+  background-size: 200% auto;
+  border:2px none #7d4af3;
+  border-radius: 6px;
+ }
+
+.btn-cust-2:hover,
+.btn-cust-2:after {
+  background-color: #000000be;
+  border: 2px solid #7d4af3;
+}
+
 /* --------------------------------
 Gallery 
 --------------------------------*/
@@ -290,6 +319,8 @@ Gallery
   object-fit: cover;
   z-index: 1;
   object-position: center;
+  transform: scale(1);
+  transition:transform 1.2s ease-in-out !important;
 }
 
 .card-attrs p{
@@ -298,8 +329,8 @@ Gallery
 
 
 .card-shot:hover img{
-  transition:transform 700ms ease-in-out;
-  transform: scale(1.1);
+
+  transform: scale(1.08);
 }
 
 .hr-hr {
@@ -463,8 +494,90 @@ Gallery
 sub gallery view 
 
 /-------------------------------*/
+.gal-hero {
+  position: relative;
+  overflow: hidden;
+}
+
+.gal-hero-image{
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: cover;
+  position: relative;
+  height: 80vh;
+  transform: scale(1);
+  transition:transform 1.2s ease-in-out !important;
+}
+
+.gal-hero-image:hover{
+
+  transform: scale(1.08);
+}
+
+.gal-hero-box {
+  top: 35%;
+  left: 65%;
+  position: absolute;
+  padding: 5px 5px;
+  background-color: #181324b0;
+  width: 30%;
+}
+
+.gal-hero-box::after {
+  content: '';
+  top: 25%;
+  right: 25%;
+  position: absolute;
+  background-color: #f156d8;
+  width: 78%;
+  height: 1px;
+  z-index: 0;
+}
+.gal-hero-text{
+  z-index: 3;
+}
+.gal-hero-text::after {
+  content: '';
+  top: 15%;
+  right:28%;
+  position: absolute;
+  background-color: #f1a9e5;
+  width: 1px;
+  height: 90%;
+  z-index: -1;
+}
+
+
+@media (max-width:774px) and (orientation: portrait) {
+  .gal-hero-box {
+    top: 55%;
+    left: 0;
+    width: 100%;
+    margin: auto;
+  }
+}
+
+.gal-roller {
+  background-color: #71717250;
+  position: relative;
+
+}
+
+.gal-inner {
+  width: 65%;
+  position: relative;
+  object-position: center;
+  margin: auto;
+}
+
+.gal-inner button{
+  width: 90%;
+}
+
+
+
 .sub-gal-img{
-  max-height: 60vh;
+  max-height: 50vh;
   cursor: pointer;
   width: auto;
   object-fit: cover;
@@ -525,6 +638,8 @@ sub gallery view
   border-radius: 3px 0 0 3px;
 }
 
+
+
 /*-------------------------------/
 
 Animation effects 
@@ -538,6 +653,17 @@ Animation effects
 
 .float-in.appear {
   opacity: 1;
+}
+
+.float-in-sec {
+  opacity: .2;
+  transition: opacity 2300ms ease-in, transform 3000ms;
+  transform: translate3d(-50px, -50px, 0);
+}
+
+.float-in-sec.appear {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
 }
 
 .fade-in {
