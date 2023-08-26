@@ -1,13 +1,32 @@
 from django.forms.models import BaseModelForm
-from django.http import HttpResponse
+from django.http import JsonResponse
 from django.views import generic
 from django.shortcuts import render
 from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.db.models import Q
+from django.conf import settings
+from pathlib import Path
 from .forms import RegForm, ProfileForm, LoginForm
 from gallery.models import Image, Print, Project
 from clients.models import Client
+import os
+import json
+import requests
+
+def clientJsonData(request, client_images_list):
+
+    json_filename = 'clientData.json'
+    
+    for static_dir in settings.STATICFILES_DIRS:
+        json_path = os.path.join(static_dir, 'json', json_filename)
+        json_directory = os.path.dirname(json_path)
+        
+        Path(json_directory).mkdir(parents=True, exist_ok=True)
+    
+    with open(json_path, "w") as json_writer:
+        json.dump(client_images_list, json_writer) 
+
 
 
 #-------------------------------------------------------------------------------------------------------#
@@ -54,8 +73,21 @@ def o_main(request):
     gal2 = Image.objects.filter(Q(display="subgal2") | Q(display="gallery2"))
     gal4 = Image.objects.filter(Q(display="subgal4") | Q(display="gallery4"))
     site_image = Image.objects.filter(Q(client_id="1"))
-    client_images = Image.objects.exclude(Q(client_id=1))
-    
+    client_images = Image.objects.exclude(Q(client_id="1"))
+    client_images_list = {}
+    for client in client_list:
+        client_images_count = 0
+        for image in image_list:
+            if image.client_id == client:
+                client_images_count +=1
+        client_images_list[client.id] = {
+            "name": client.name,
+            "count": client_images_count
+            }
+    print(client_images_list)
+    clientJsonData(request, client_images_list)
+
+
     
 
     return render(request, 'management/main.html', {
@@ -67,5 +99,6 @@ def o_main(request):
         'gal2': gal2,
         'gal4': gal4,
         'site_image': site_image,
-        'client_images':client_images
+        'client_images':client_images,
     })
+    

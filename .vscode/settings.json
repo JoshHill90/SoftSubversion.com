@@ -1,0 +1,11 @@
+{
+	"folder-path-color.folders": [
+		{ "path": "Gallery_Project/blog", "color": "red"},
+		{ "path": "Gallery_Project/clients", "color": "green"},
+		{ "path": "Gallery_Project/gallery", "color": "blue"},
+		{ "path": "Gallery_Project/management", "color": "magenta"},
+		{ "path": "Gallery_Project/site_app", "color": "cyan"},
+		{ "path": "Gallery_Project/static", "color": "yellow"},
+		{ "path": "blog", "color": "red"}
+	]
+}

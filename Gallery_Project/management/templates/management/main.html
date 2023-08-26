@@ -4,15 +4,35 @@
 {% block content %}
 {% load static %}
 
+
+
+
+
+{{ forloop.counter }}
 <div class="container"> 
 	<div class='row mt-4'>
-		<div class="col-12 col-md-3">
+
+		<div class="col-12">
 			<div class="sections">
 				<div class="chart-container">
+					<h1 class='h1-1'>Stored Image Break Down</h1>
 					<canvas id="BreakDown"></canvas>
+				</div>
+
+				<div class="chart-container">
+					<h1 class='h1-1'> Total Images</h1>
+					<canvas id="Totals"></canvas>
 				</div>
 			</div>
 		</div>
+
+		<div class="col-12 mt-2 mb-4">
+			<div class="sections">
+				<canvas id="clientImageChart1"></canvas>
+
+			</div>
+		</div>
+
 		<div class="col-12 col-md-3">
 				<div class="sections">
 				<h1 class='h1-1'>Stored Image Break Down</h1>
@@ -27,13 +47,13 @@
 				<div id='prints' data-value='{{ print_list|length }}' hidden></div>
 			</div>
 		</div>
+
 		<div class="col-12 col-md-3">
 			<div class="sections">
-				<div class="chart-container">
-					<canvas id="Totals"></canvas>
-				</div>
+				<canvas id="myChart"></canvas>
 			</div>
 		</div>
+
 		<div class="col-12 col-md-3">
 			<div class="sections">
 				<h1 class='h1-1'> Total Images</h1>
@@ -42,6 +62,7 @@
 				<div id='total' data-value='{{ image_list|length }}' hidden></div>
 			</div>
 		</div>
+
 	</div>
 
 	<div class='row mt-4'>
@@ -57,8 +78,8 @@
 					</ul>
 				</div>
 			</div>
-
 		</div>
+
 		<div class="col-12 col-md-6">
 			<div class="sections">
 				<h1 class='h1-1'>Project Window</h1>
@@ -73,6 +94,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class='row mt-4'>
 		<div class="col-12 col-md-6">
 			<div class="sections">
@@ -87,6 +109,7 @@
 				</div>
 			</div>
 		</div>
+
 		<div class="col-12 col-md-6">
 			<div class="sections">
 				<h1 class='h1-1'>Prints</h1>
@@ -100,8 +123,9 @@
 				</div>
 			</div>
 		</div>
+
 	</div>
 </div>
-<script src={% static 'js/graphs.js' %}></script>
+<script type="module" src={% static 'js/graphs.js' %}></script>
 
 {% endblock %}
