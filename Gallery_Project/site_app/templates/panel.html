@@ -12,7 +12,6 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel='stylesheet' href="{% static 'css/panel.css' %}">
     <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
-	<script type="module" src="{% static 'js/json_data_fetch.js' %}"></script>
 
     <title>    
         {% block title %}
@@ -82,7 +81,7 @@
 								<i class="fa-solid fa-file-invoice-dollar fa-xs"></i> <span class="ms-1 d-none d-sm-inline">Coupon/Sales</span></a>
 						</li>
 						<li>
-							<a href="#" class="nav-link px-0 align-middle p-p">
+							<a href="{% url 'billing' %}" class="nav-link px-0 align-middle p-p">
 								<i class="fa-solid fa-money-bill-wave fa-xs"></i> <span class="ms-1 d-none d-sm-inline">Billing</span></a>
 						</li>
 					</ul>

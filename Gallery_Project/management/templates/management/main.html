@@ -10,26 +10,32 @@
 
 {{ forloop.counter }}
 <div class="container"> 
-	<div class='row mt-4'>
-
-		<div class="col-12">
-			<div class="sections">
+	<div class="sections">
+		<div class='row mt-4'>
+			<div class="col-6">
+				<h1 class='h1-1'>Stored Image Break Down</h1>
 				<div class="chart-container">
-					<h1 class='h1-1'>Stored Image Break Down</h1>
+					
 					<canvas id="BreakDown"></canvas>
 				</div>
-
+			</div>
+			<div class="col-6">
+				<h1 class='h1-1'> Total Images</h1>
 				<div class="chart-container">
-					<h1 class='h1-1'> Total Images</h1>
 					<canvas id="Totals"></canvas>
 				</div>
 			</div>
 		</div>
+	</div>
 
+	<div class='row mt-4'>
 		<div class="col-12 mt-2 mb-4">
-			<div class="sections">
-				<canvas id="clientImageChart1"></canvas>
 
+			<div class="sections">
+				<h1 class='h1-1'> Client Images</h1>
+				<div class='chart-container2'>
+					<canvas id="clientImageChart1"></canvas>
+				</div>
 			</div>
 		</div>
 
@@ -38,13 +44,10 @@
 				<h1 class='h1-1'>Stored Image Break Down</h1>
 				<hr>
 				<p class="p-p">Site Images Stored: {{site_image |length }}</p>
-				<div id='sites' data-value='{{ image_list|length }}' hidden></div>
 
 				<p class="p-p">Site Images Stored: {{client_images |length }}</p>
-				<div id='clients' data-value='{{ client_images|length }}' hidden></div> 
 
 				<p class="p-p">Site Images Stored: {{print_list |length }}</p>
-				<div id='prints' data-value='{{ print_list|length }}' hidden></div>
 			</div>
 		</div>
 
@@ -58,7 +61,7 @@
 			<div class="sections">
 				<h1 class='h1-1'> Total Images</h1>
 				<hr>
-				<p class='p-p'>{{ image_list|length }}/20000</p>
+				<p class='nums'>{{ image_list|length }}/20000</p>
 				<div id='total' data-value='{{ image_list|length }}' hidden></div>
 			</div>
 		</div>
@@ -123,9 +126,21 @@
 				</div>
 			</div>
 		</div>
-
+	</div>
+	<div class='sections-small mt-4 mb-4'>
+		<div class='row text-center'>
+			<div class='col-4'>
+				<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'project-create' %}'">Add a Client</button>
+			</div>
+			<div class='col-4'>
+				<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'project-create' %}'">Create a Project</button>
+			</div>
+			<div class='col-4'>
+				<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'billing-create' %}'">Create a invoice</button>
+			</div>
+		</div>
 	</div>
 </div>
-<script type="module" src={% static 'js/graphs.js' %}></script>
+<script src={% static 'js/graphs.js' %}></script>
 
 {% endblock %}

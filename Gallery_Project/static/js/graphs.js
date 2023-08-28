@@ -1,121 +1,120 @@
-
-
-const site = document.getElementById('sites').dataset.value;
-const client = document.getElementById('clients').dataset.value;
-const prints = document.getElementById('prints').dataset.value;
-const total = document.getElementById('total').dataset.value;
-
 const clientNameList = [];
 const clientcountList = [];
+var y2Values = [];
+var y1Values = [];
 
-var y2Values = [parseInt(site), parseInt(client), parseInt(prints)];
-var y1Values = [20000 - parseInt(total), parseInt(total)];
-
-fetch("/static/json/clientData.json", {
-	methiod: "GET"
-})
-	.then(response  => {
-		if (response .ok) {
-			return response.json();
-		} else {
-			console.log("Error in retrieval");
-		}
-	})
-	.then(data => {
-		exportData(data);
-		
-		if (window.fetchedData) {
-			for (const id in window.fetchedData) {
-                const clientId = window.fetchedData[id];
-                const clientName = clientId.name;
-				clientNameList.push(clientName);
-                const clientCount = clientId.count;
-				clientcountList.push(clientCount);
-                
-                console.log(`Name: ${clientName}, Count: ${clientCount}`);
-			}
+async function fetchDataAndCreateCharts() {
+    try {
+        const response = await fetch("/static/json/clientData.json");
+        if (response.ok) {
+            const data = await response.json();
+            exportData(data);
+            
+            if (window.fetchedData) {
+                for (const id in window.fetchedData['clientImageList']) {
+                    const clientId = window.fetchedData.clientImageList[id];
+                    const clientName = clientId.clientsName;
+                    clientNameList.push(clientName);
+                    const clientCount = clientId.clientsCount;
+                    clientcountList.push(clientCount);
+                }
+                const prints = window.fetchedData.print_Image_data.printImageCount;
+                const site = window.fetchedData.site_Image_data.siteImageCount;
+                const client = window.fetchedData.client_Image_data.clientImageCount;
+                const total = window.fetchedData.total_Image_data.totalImageCount;
+                y2Values.push(site, client, prints);
+                y1Values.push(20000 - total, total);
+				
+                createCharts();
+            } else {
+                console.log("No data available yet.");
+            }
         } else {
-            console.log("No data available yet.");
+            console.log("Error in retrieval");
         }
-	})
-    .catch(error => {
+    } catch (error) {
         console.log("ERROR:", error);
-	});
+    }
+}
 
 function exportData(data) {
-	window.fetchedData = data;
-};
+    window.fetchedData = data;
+}
 
+function createCharts() {
     
-new Chart("BreakDown", {
+	new Chart("BreakDown", {
+		type: "doughnut",
+		data: {
+		  labels: ["Site", "Client", "Prints"],
+		  datasets: [
+			{
+			  backgroundColor: ["#7933FC", "#B6FC33", "#33FCDD"],
+			  data: y2Values,
+			},
+		  ],
+		},
+		options: {
+		  elements: {
+			arc: {
+			  borderWidth: 0, 
+			},
+		  },
+		  cutout: "80%",
+		  plugins: {
+			legend: {
+			  display: true,
+			},
+		  },
+		},
+	});
+		
+	new Chart("Totals", {
 	type: "doughnut",
 	data: {
-	  labels: ["Site", "Client", "Prints"],
-	  datasets: [
-		{
-		  backgroundColor: ["#7933FC", "#B6FC33", "#33FCDD"],
-		  data: y2Values,
+			labels: ["Remaining Storage","Total Stored"],
+			datasets: [{
+				backgroundColor: ["#7933FC", "#B6FC33"],
+				data: y1Values
+			}]
 		},
-	  ],
-	},
-	options: {
-	  elements: {
-		arc: {
-		  borderWidth: 0, 
+		options: {
+			elements: {
+			  arc: {
+				borderWidth: 0, 
+			  },
+			},
+			cutout: "80%",
+			plugins: {
+			  legend: {
+				display: true,
+			  },
+			},
 		},
-	  },
-	  cutout: "80%",
-	  plugins: {
-		legend: {
-		  display: false,
+	});
+	
+	
+	new Chart('clientImageChart1', {
+		type: 'bar',
+		data: {
+		  labels: clientNameList,
+		  datasets: [{
+			label: 'Number of Client images',
+			data: clientcountList,
+			borderWidth: 1
+		  }]
 		},
-	  },
-	},
-});
+		options: {
+		  scales: {
+			y: {
+			  beginAtZero: true
+			}
+		  }
+		}
+	});	
+	breakdownChart.update();
+	totalsChart.update();
+	clientImageChart.update();
+}
 
-
-
-    
-new Chart("Totals", {
-type: "doughnut",
-data: {
-		labels: ["Remaining Storage","Total Stored"],
-		datasets: [{
-			backgroundColor: ["#7933FC", "#B6FC33"],
-			data: y1Values
-		}]
-	},
-	options: {
-		elements: {
-		  arc: {
-			borderWidth: 0, 
-		  },
-		},
-		cutout: "80%",
-		plugins: {
-		  legend: {
-			display: false,
-		  },
-		},
-	},
-});
-
-
-new Chart('clientImageChart1', {
-    type: 'bar',
-    data: {
-      labels: clientNameList,
-      datasets: [{
-        label: '# of Votes',
-        data: clientcountList,
-        borderWidth: 1
-      }]
-    },
-    options: {
-      scales: {
-        y: {
-          beginAtZero: true
-        }
-      }
-    }
-  });
+fetchDataAndCreateCharts();

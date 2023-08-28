@@ -1,0 +1,110 @@
+{% extends 'panel.html' %}
+{% block title %}Billing{% endblock %}
+{% block content %}
+{% if user.is_authenticated %}
+
+<div class='row text-center mt-4 mb-4 sections-small'>
+	<div class='col-3'>
+		<h1 class='h1-1'>Total Due</h1>
+		<p class='nums'>${{ totalDue }}</p>
+	</div>
+	<div class='col-3'>
+		<h1 class='h1-1'>Total paid</h1>
+		<p class='nums'>${{ totalPaid }}</p>
+	</div>
+	<div class='col-3'>
+		<h1 class='h1-1'>Outstand</h1>
+		<p class='nums'>${{ outstanding }}</p>
+	</div>
+	<div class='col-3'>
+		<h1 class='h1-1'>Earned</h1>
+		<p class='nums'>${{ totalEarned }}</p>
+	</div>
+</div>
+
+
+<div class='row mt-4 mb-4 sections-inv'>
+
+	<h1 class='h1-1 mb-2'>Search and Filter</h1>
+	<form method="GET" action="." class='form-group'>
+		<div class='row'>
+			<div class='col-12 mb-2'>
+				<input class="form-control" type="search" name="number" placeholder="Invoice Number">
+			</div>
+		</div>
+		<div class='row'>
+			<div class='col-12 mb-2'>
+				<input class="form-control" list="project-list" type="search" name="project" placeholder="Project">
+				<datalist id="project-list">
+				{% for project in project_list %}
+					<option value="{{ project.name }}"></option>
+				{% endfor %}
+				</datalist>
+			</div>
+			<div class='col-12 mb-2'>
+				<input class="form-control" list="client-list" type="search" name="client" placeholder="Client">
+				<datalist id="client-list">
+				{% for client in client_list %}
+					<option value="{{ client.name }}"></option>
+				{% endfor %}
+				</datalist>
+			</div>
+			<div class='col-12'>
+				<div class="form-check">
+					<input class="form-check-input" value="all" type="radio" name="fufiled" id="fufiled1" checked>
+					<label class="form-check-label p-p" for="fufiled1">All</label>
+				  </div>
+				  <div class="form-check">
+					<input class="form-check-input" value='open' type="radio" name="fufiled" id="fufiled2">
+					<label class="form-check-label p-p" for="fufiled2">Open</label>
+				  </div>
+				  <div class="form-check">
+					<input class="form-check-input" value='closed' type="radio" name="fufiled" id="fufiled3">
+					<label class="form-check-label p-p" for="fufiled3">Closed</label>
+				  </div>
+			</div>
+		</div>
+		<div class='row'>
+			<div class="col-6 col-md-2 mt-4">
+				<select class="form-select" type="select" name="order">
+					<option value="Newest">Newest</option>
+					<option value="Oldest">Oldest</option>
+				</select>
+			</div>                
+			<div class="col-6">
+				<button type="submit" class="btn-cust btn-cust-color mt-4">Search</button>
+			</div>
+		</div>
+	</form>
+
+
+	<div class="overflow-auto scroll-menu">
+	{% for inv in invoice %}
+		<div class='col-12'>
+			<div class='row mt-1 inv-card'>
+				<div class='col-6 col-md-2'>
+					<p class="p-p">{{ inv.project_details.invoice }} | {{ inv.project_details.project }}</p>
+				</div>
+				<div class='col-6 col-md-2'>
+					<p class="p-p"> Client: {{ inv.project_details.client }}</p>
+				</div>
+				<div class='col-6 col-md-2'>
+					<p class="p-p">Project Images:  {{ inv.project_details.images|length }}</p>
+				</div>
+				<div class='col-6 col-md-2'>
+					<p class="p-p">Billed/Paid:  {{ inv.project_details.billed}}/{{ inv.project_details.paid}}</p>
+				</div>
+				<div class='col-12 col-md-2'>
+					<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'billing-details' inv.billID %}'">Details</button>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+
+
+
+{% endif %}
+
+{% endblock %}

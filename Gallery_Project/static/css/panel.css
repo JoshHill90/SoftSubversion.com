@@ -1,6 +1,5 @@
 /*font import*/
-@import url('https://fonts.googleapis.com/css2?family=Arvo:wght@400;700&family=Cormorant+Garamond:wght@300;400;600;700&display=swap');
-
+@import url('https://fonts.googleapis.com/css2?family=Arvo&family=Calistoga&display=swap');
 /*variable*/
 :root{
     --text-color:rgb(255, 255, 255);
@@ -9,15 +8,12 @@
     --bg-color-secondary:rgba(61, 61, 61);
     --bg-color-opec:rgba(56, 56, 56, 0.534);  
     --font-family-header:'Arvo', serif;
-    --font-family-body: 'Arvo', serif;
+    --numbers: 'Calistoga', cursive;
     --h1: 26px;
     --p: 16px;
+    --np:50px;
     --font-weights-norm: 400;
-    --font-weights-bold: 700;
-    --arvo-light: 300;
     --arvo-norm: 400;
-    --arvo-simi: 600;
-    --arvo-bold: 700;
 
 }
 
@@ -32,7 +28,7 @@ html {
   display: block;
   margin: none;
   padding: 0;
-  font-family: var(--font-family-body);
+  font-family: var(--font-family-header);
   font-display: swap;
   background-color: var(--bg-color);
   height: 100%;
@@ -55,6 +51,24 @@ html {
   font-weight: var(--font-weights-norm);
   color: var(--text-color);
 }
+
+.nums {
+  font-family: var(--numbers);
+  font-display: swap;
+  font-size: var(--np);
+  font-weight: var(--font-weights-norm);
+  color: var(--text-color);
+  background-image: linear-gradient(75deg, #7933FC 10%,  #B6FC33 35%, #33FCDD 75%);
+  background-repeat: repeat;
+  background-position: fixed;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  margin-top: 10px;
+  text-align: center;
+  text-transform: uppercase;
+  -webkit-font-smoothing: antialiased;
+}
+
 
 .p-2 {
   font-size:var(--p);
@@ -84,24 +98,24 @@ button
 
 .btn-cust{
 font: var(--p);
-color: #fff;
-background-color: #0066CC;
+color: #ffffff;
+background-color: #33fcde73;
 padding: 10px 21px;
-border: 2px solid #0066cc;
+border: 2px solid #33FCDD;
 box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
 border-radius: 25px;
 transition : 777ms;
 align-items: center;
 margin: 5px;
+min-width: 165px;
 cursor: pointer;
 }
 
 .btn-cust:hover{
 transition : 777ms;
-padding: 10px 24px;
 background-color: #ffffff00;
-color: #0066cc;
-border: solid 2px #0066cc;
+color: #33FCDD;
+border: solid 2px #33FCDD;
 }
 
 .right-i{
@@ -130,8 +144,16 @@ main
   padding: 15px;
   min-height: 28vh;
   border-radius: 25px;
+  position: relative;
 }
 
+.sections-small {
+  border: 2px solid #7933fc79 ;
+  background-color: #292929 ;
+  padding: 15px;
+  border-radius: 25px;
+  position: relative;
+}
 
 .chart-container{
   background-color: #292929 ;
@@ -139,8 +161,16 @@ main
   display: flex;
   justify-content: center; 
   align-items: center;
-  height:20vh; 
-  width:auto;
+  width:25vw;
+  padding: 10px 10px;
+}
+.chart-container2{
+  background-color: #292929 ;
+  position: relative; 
+  display: flex;
+  justify-content: center; 
+  align-items: center;
+  width:50vw;
   padding: 10px 10px;
 }
 
@@ -191,4 +221,55 @@ images and prints
 .previous_image {
   position: absolute;
   left: 0;
+}
+
+/* --------------------------------
+billing
+--------------------------------*/
+
+.inv-card {
+  border:  1px solid #000cad98;
+  background-color: #000000;
+  background-image: linear-gradient(272deg, #1d1d1d 0%, #000000 74%); 
+}
+
+
+
+.inv-card div{
+  position: relative;
+  padding: 5px;
+  margin: auto;
+}
+
+
+.sections-inv {
+  border: 2px solid #7933fc79 ;
+  background-color: #292929 ;
+  padding: 15px;
+  height:60vh;
+  border-radius: 25px;
+}
+
+/* --------------------------------
+js parts 
+--------------------------------*/
+#dueProgress {
+  width: 100%;
+  border-radius: 16px 0 0 16px;
+  background-color: #757575;
+}
+
+#due {
+  width: 0%;
+  height: 50px;
+  border-radius: 16px 0 0 16px;
+  overflow: visible;
+  background-position: fixed;
+  background-image: linear-gradient(75deg, #7933FC 10%,  #B6FC33 35%, #33FCDD 75%);
+}
+
+.due-h {
+  position: relative;
+  top: 14px;
+  left: 30%;
 }

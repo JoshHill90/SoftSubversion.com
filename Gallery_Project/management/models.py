@@ -19,7 +19,7 @@ class Crew(models.Model):
 class Memeber(models.Model):
     name = models.CharField(max_length=255, verbose_name='Prefered Name')
     phone = models.CharField(max_length=10, verbose_name='Contact Phone Number')
-    email = models.EmailField(max_length=100, verbose_name='Contact Phone Number')
+    email = models.EmailField(max_length=100, verbose_name='Email Address')
     user_id = models.ForeignKey(User, on_delete=models.CASCADE)
     group_id = models.ForeignKey(Group, null=True, on_delete=models.SET_NULL)
 
@@ -48,15 +48,19 @@ class Coupon(models.Model):
 class Billing(models.Model):
 
     client_id = models.ForeignKey('clients.Client', on_delete=models.CASCADE)
+    invoice = models.CharField(max_length=12, blank=True)
     billed = models.FloatField(default=0.00)
     paid = models.FloatField(default=0.00)
+    fufiled = models.BooleanField(default=False)
     crew_id = models.ForeignKey(Crew, on_delete=models.CASCADE)
     details = models.TextField(blank=True, null=True)
-    project_id = models.ForeignKey('gallery.Project', on_delete=models.CASCADE)
+    project_id = models.OneToOneField('gallery.Project', on_delete=models.CASCADE)
     cupon_id = models.ForeignKey(Coupon, null=True, on_delete=models.SET_NULL)
     
     def __str__(self):
-        return str(self.id + ' | ' + self.client_id.name)
+        ret_str = str(self.id)
+        cust_str = str(self.client_id) 
+        return ret_str + ' | ' + cust_str
 
     def get_absolute_url(self):
         return reverse("client-details", args=(str(self.id)))
