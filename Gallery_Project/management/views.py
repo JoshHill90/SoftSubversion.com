@@ -1,5 +1,5 @@
 from django.forms.models import BaseModelForm 
-from django.http import JsonResponse
+from django.http import HttpResponse, JsonResponse
 from django.views import generic
 from django.views.generic import CreateView, ListView, DeleteView, DetailView, UpdateView
 from django.shortcuts import render
@@ -7,43 +7,22 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.conf import settings
+from django.contrib.auth.models import User
 from pathlib import Path
 from .models import Billing
 from clients.models import Client
-from .forms import RegForm, ProfileForm, LoginForm
+from .forms import RegForm, ProfileForm, LoginForm, BillingForm
 from gallery.models import Image, Print, Project
-from clients.models import Client
+from clients.models import Client, Invite
 from django.shortcuts import render, redirect
+from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
 import os
 import json
 import requests
 
-def clientJsonData(jsonDataSets):
 
-    json_filename = 'clientData.json'
-    
-    for static_dir in settings.STATICFILES_DIRS:
-        json_path = os.path.join(static_dir, 'json', json_filename)
-        json_directory = os.path.dirname(json_path)
-        
-        Path(json_directory).mkdir(parents=True, exist_ok=True)
-    
-    with open(json_path, "w") as json_writer:
-        json.dump(jsonDataSets, json_writer) 
-        
-def invoiceDetailsJson(jsonDataSets):
+dataQ = DataSetUpdate()
 
-    json_filename = 'invoiceDetails.json'
-    
-    for static_dir in settings.STATICFILES_DIRS:
-        json_path = os.path.join(static_dir, 'json', json_filename)
-        json_directory = os.path.dirname(json_path)
-        
-        Path(json_directory).mkdir(parents=True, exist_ok=True)
-    
-    with open(json_path, "w") as json_writer:
-        json.dump(jsonDataSets, json_writer) 
-        
         
 
 #-------------------------------------------------------------------------------------------------------#
@@ -67,6 +46,8 @@ def billing_panel(request):
     number_query = request.GET.get('number')
     completed_query = request.GET.get('fufiled')
     order_set = request.GET.get('order')
+    
+
 
     # Calculate balances
     bills = Billing.objects.all()
@@ -85,7 +66,10 @@ def billing_panel(request):
     if project_query:
         billing_info = billing_info.filter(Q(project_id__name=project_query))
     if client_query:
-        billing_info = billing_info.filter(Q(client_id__name=client_query))
+        project_list = project_list.filter(Q(name__icontains=project_query))
+        project_clients = project_list.values_list('client_id',)
+        billing_info = billing_info.filter(client_id__in=project_clients)
+        
     if number_query:
         billing_info = billing_info.filter(Q(invoice__icontains=number_query))
 
@@ -102,7 +86,7 @@ def billing_panel(request):
         
     # billing details set  
     for bill in billing_info:
-        client_billed = str(bill.client_id)    
+        client_billed = str(bill.project_id.client_id)    
         for project in project_list:
             if project.id == bill.project_id.id:
                 project_images = []
@@ -149,6 +133,7 @@ class BillCreateView(CreateView):
 class BillEditView(UpdateView):
     model = Billing
     template_name = 'billing/billing-edit.html'
+    form_class = BillingForm
     success_url = reverse_lazy('billing')
 
 class BillDeleteView(DeleteView):
@@ -203,10 +188,51 @@ class UserEditView(generic.UpdateView):
     
 
 class UserRegistrationView(generic.CreateView):
+    dataQ.json_user_list_check()
     form_class = RegForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('client')
+    
+    def form_valid(self, form):
+        print('test 2')
+        username = form.cleaned_data.get('username')
+        hex_key = form.cleaned_data.get('hexkey')
+        email = form.cleaned_data.get('email')
+        phone = form.cleaned_data.get('phone')
+        contact_method = form.cleaned_data.get('contact_method')
+        address_1 = form.cleaned_data.get('address_1')
+        address_2 = form.cleaned_data.get('address_2')
+        city = form.cleaned_data.get('city')
+        state = form.cleaned_data.get('state')
+        zip_code = form.cleaned_data.get('zip_code')
 
+        invite = Invite.objects.filter(hexkey=hex_key).first()
+        if invite:
+            print('test 1')
+            user = form.save()
+            user.groups.set('1')
+            user.save()
+            user_id = form.instance
+            client = Client.objects.create(name=username, 
+                                           email=email, 
+                                           phone=phone, 
+                                           contact_method=contact_method,
+                                           address_1=address_1,
+                                           address_2=address_2,
+                                           city=city,
+                                           state=state, 
+                                           zip_code=zip_code,
+                                           user_id=user_id
+                                           )
+            
+            client.save()
+            invite.used = True
+            invite.save()
+            return super().form_valid(form)
+        else:
+            print('test 0')
+            form.add_error('hexkey', 'Invalid hexkey. Please enter a valid key.')
+            return self.form_invalid(form)
 
 class UserLoginView(generic.CreateView):
     form_class = LoginForm
@@ -228,38 +254,7 @@ def o_main(request):
     gal4 = Image.objects.filter(Q(display="subgal4") | Q(display="gallery4"))
     site_image = Image.objects.filter(Q(client_id="1"))
     client_images = Image.objects.exclude(Q(client_id="1"))
-    
-    # setting up JSON string
-    client_images_list = {}
-    site_image_count = len(site_image)
-    client_image_count = len(client_images)
-    print_list_count = len(print_list)
-    image_list_count = len(image_list)
-    total_Image_count = image_list_count + print_list_count
-    
-    site_Image_data = {'siteImageCount': site_image_count}
-    client_Image_data = {'clientImageCount': client_image_count}
-    print_Image_data = {'printImageCount': print_list_count}
-    total_Image_data = {'totalImageCount': total_Image_count}
-    for client in client_list:
-        client_images_count = 0
-        for image in image_list:
-            if image.client_id == client:
-                client_images_count +=1
-        client_images_list[client.id] = {
-            "clientsName": client.name,
-            "clientsCount": client_images_count
-            }
-    jsonDataSets = {
-        'clientImageList': client_images_list,
-        'site_Image_data': site_Image_data,
-        'client_Image_data': client_Image_data,
-        'print_Image_data': print_Image_data,
-        'total_Image_data': total_Image_data
-    }
-    clientJsonData(jsonDataSets)
-
-    
+    dataQ.json_chart_data()
 
     return render(request, 'management/main.html', {
         'image_list': image_list,
@@ -273,3 +268,16 @@ def o_main(request):
         'client_images':client_images,
     })
     
+def notebook(request):
+    
+    project_list = Project.objects.all()
+    client_list = Client.objects.all()
+    image_list = Image.objects.all()
+    print_list = Print.objects.all()
+    
+    return render(request, 'management/notebook.html', {
+        'image_list': image_list,
+        'print_list': print_list,
+        'project_list': project_list,
+        'client_list': client_list
+    })

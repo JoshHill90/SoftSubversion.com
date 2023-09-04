@@ -1,0 +1,109 @@
+{% extends 'panel.html' %}
+{% block title %}Clients{% endblock %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+
+<div class='row text-center sections'>
+	
+	<div class='chart-container2'>
+		<canvas id="clientImageChart1"></canvas>
+	</div>
+
+</div>
+
+<div class='row mt-4 sections-small'>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client-intake' %}'">
+			<i class="fa-solid fa-user-plus fa-2xl"></i>
+			<p class='mt-2'>Client Intake</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-regular fa-folder-open fa-2xl"></i>
+			<p class='mt-2'>Open Project</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-user-large-slash fa-2xl"></i>
+			<p class='mt-2'>Delete Client</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-user-gear fa-2xl"></i>
+			<p class='mt-2'>Client settings</p>
+		</div>
+	</div>
+</div>
+
+<div class='row mt-4 sections'>
+
+	<h1 class='h1-1 mb-2'>Search and Filter</h1>
+	<form method="GET" action="." class='form-group'>
+		<div class='row'>
+			<div class='col-12 mb-2'>
+				<input class="form-control" list="project-list" type="search" name="project" placeholder="Project">
+				<datalist id="project-list">
+				{% for project in project_list %}
+					<option value="{{ project.name }}"></option>
+				{% endfor %}
+				</datalist>
+			</div>
+			<div class='col-12 mb-2'>
+				<input class="form-control" list="client-list" type="search" name="client" placeholder="Client">
+				<datalist id="client-list">
+				{% for client in client_info %}
+					<option value="{{ client.client_details.client }}"></option>
+				{% endfor %}
+				</datalist>
+			</div>
+		</div>
+		<div class='row'>
+			<div class="col-6 col-md-2 mt-4">
+				<select class="form-select" type="select" name="order">
+					<option value="Newest">Newest</option>
+					<option value="Oldest">Oldest</option>
+				</select>
+			</div>                
+			<div class="col-6">
+				<button type="submit" class="btn-cust btn-cust-color mt-4">Search</button>
+			</div>
+		</div>
+	</form>
+
+
+	<div class="overflow-auto scroll-menu">
+	{% for clients in client_info %}
+		<div class='col-12'>
+			<div class='row mt-1 inv-card'>
+				<div class='col-6 col-md-3'>
+					<p class="p-p">
+						{{ clients.client_details.client }} 
+						<br>
+						Client ID: {{ clients.client_details.client_id }}
+					</p>
+				</div>
+				<div class='col-6 col-md-3'>
+					
+					<p class="p-p"> Number of propjects: {{ clients.project_count }}</p>
+				</div>
+				<div class='col-6 col-md-3'>
+					<p class="p-p">Project Images:  {{ clients.image_count }}</p>
+				</div>
+				<div class='col-12 col-md-3'>
+					<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'client-details' clients.client_details.client_id %}'">Details</button>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+</div>
+
+<script src={% static 'js/graphs.js' %}></script>
+
+{% endif %}
+
+{% endblock %}

@@ -6,8 +6,8 @@
     --text-color:rgb(255, 255, 255);
     --text-color-secondary:rgb(0, 0, 0);
     --bg-color:rgb(24, 24, 24);
-    --bg-color-secondary:rgba(61, 61, 61);
-    --bg-color-opec:rgba(56, 56, 56, 0.534);  
+    --bg-color-secondary:rgb(255, 254, 254);
+    --bg-color-opec:rgba(255, 253, 253, 0.534);  
     --font-family-header:'Cormorant Garamond', serif;
     --font-family-body: 'Arvo', serif;
     --h1: 48px;

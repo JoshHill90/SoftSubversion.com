@@ -36,7 +36,10 @@ html {
   font-display: swap;
   margin: none;
   background-image: url(https://imagedelivery.net/4_y5kVkw2ENjgzV454LjcQ/975061b2-c4b2-4554-5b7b-04eb2627d100/heroObjectLeft);
-  height: 100%;
+  background-repeat: no-repeat;
+  background-color:black ;
+  background-position: center;
+  height: 100vh;
 
 }
 
@@ -123,15 +126,36 @@ main
 --------------------------------*/
 
 .box {
+  position: absolute;
   border: 2px solid #7933fc79 ;
   background-color: #000000cb ;
   padding: 15px;
   height: 95vh;
   border-radius: 25px;
   color:#fff;
-  max-width: 450px;
+  width: 400px;
+  transition: transform 0.8s ease-in-out, opacity 0.8s ease-in-out;
 }
+
+#card-1,
+#card-2,
+#card-3 {
+  transform: translateY(-100%); 
+
+  opacity: 0;
+}
+
+
 
 .froms-reg input{
 	width: 100%;
+}
+
+.icon-color{
+  color:#fc3379;
+  transition: color 0.5s ease-in-out;
+}
+
+.icon-color:hover {
+  color:#7d4af3
 }

@@ -3,7 +3,8 @@
 {% block content %}
 {% load static %}
 {% if user.is_authenticated %}
-<div class='row mt-4 mb-4 sections'>
+
+<div class='row mt-4 text-center mb-4 sections'>
 	<div class='col-4'>
 		<h1 class='h1-1'>Total Due</h1>
 		<p class='nums'>${{ due }}</p>
@@ -23,6 +24,7 @@
 		<h1 class='h1-1 mt-2 mb-2'>{{ ratio }}% Paid</h1>
 	</div>
 </div>
+
 <div class='row mt-4 mb-4 sections'>
 	<div class='col-12'>
 		<h1 class='h1-1'>{{ invoice.invoice }} - Client: {{ invoice.client_id }}</h1>
@@ -36,27 +38,34 @@
 		<h1 class='h1-1'>Project Details</h1>
 		<p class='p-p'>{{ invoice.details }}</p>
 	</div>
-
-
 </div>
 
-
-<div class='row sections-small'>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Gallery</h1>
+<div class='row mt-4 sections-small'>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center'>
+			<i class="fa-solid fa-file-invoice-dollar fa-2xl"></i>
+			<p class='mt-2'>Payment Histoy</p>
+		</div>
 	</div>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Edit</h1>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-money-bill-1-wave fa-2xl"></i>
+			<p class='mt-2'>Add Cash Payment</p>
+		</Div>
 	</div>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Add Cash Payment</h1>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-file-lines fa-2xl"></i>
+			<p class='mt-2'>Invoice Details</p>
+		</div>
 	</div>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Cancel Invoice</h1>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-regular fa-file-lines fa-2xl"></i>
+			<p class='mt-2'>Void Invoice</p>
+		</div>
 	</div>
 </div>
-
-
 
 {% endif %}
 <script src={% static 'js/invoiceBar.js' %}></script>

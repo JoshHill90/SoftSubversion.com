@@ -30,6 +30,7 @@ class Project(models.Model):
     name = models.CharField(max_length=255)
     cost = models.FloatField(default=0.00)
     status = models.BooleanField(default=False)
+    client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.SET_NULL)
     user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
 
     def __str__(self):

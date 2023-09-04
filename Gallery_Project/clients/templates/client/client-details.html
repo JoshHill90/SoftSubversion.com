@@ -1,0 +1,63 @@
+{% extends 'panel.html' %}
+{% block title %}Upload Link{% endblock %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<div class='row mt-4 text-center mb-4 sections'>
+	<div class='col-4'>
+		<h1 class='h1-1'>Total Due</h1>
+		<p class='nums'>${{ due }}</p>
+	</div>
+	<div class='col-4'>
+		<h1 class='h1-1'>Total paid</h1>
+		<p class='nums'>${{ paid }}</p>
+	</div>
+	<div class='col-4'>
+		<h1 class='h1-1'>Outstand</h1>
+		<p class='nums'>${{ out }}</p>
+	</div>
+	<div class='col-12'>
+		<div id="dueProgress">
+			<div id="due" value="{{ ratio }}"></div>
+		</div>
+		<h1 class='h1-1 mt-2 mb-2'>{{ ratio }}% Paid</h1>
+	</div>
+</div>
+<div class='row mt-4 mb-4 sections'>
+	<div class='col-12'>
+		<h1 class='h1-1'>{{ invoice.invoice }} - Client: {{ invoice.client_id }}</h1>
+	</div>
+	<div class='col-4'>
+		<p class='p-p'>Email <br> {{ invoice.client_id.email }}</p>
+		<p class='p-p'>Number <br> {{ invoice.client_id.phone }}</p>
+		<p class='p-p'>client ID: {{ invoice.client_id.user_id.id }}</p>
+	</div>
+	<div class='col-8'>
+		<h1 class='h1-1'>Project Details</h1>
+		<p class='p-p'>{{ invoice.details }}</p>
+	</div>
+
+
+</div>
+
+
+<div class='row sections-small'>
+	<div class='col-3'>
+		<button class='btn btn-cust'>Gallery</h1>
+	</div>
+	<div class='col-3'>
+		<button class='btn btn-cust'onclick="window.location.href='#'">Edit</h1>
+	</div>
+	<div class='col-3'>
+		<button class='btn btn-cust'>Add Cash Payment</h1>
+	</div>
+	<div class='col-3'>
+		<button class='btn btn-cust'>Cancel Invoice</h1>
+	</div>
+</div>
+
+
+
+{% endif %}
+<script src={% static 'js/invoiceBar.js' %}></script>
+{% endblock %}

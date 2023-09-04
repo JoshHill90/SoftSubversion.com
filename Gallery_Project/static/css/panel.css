@@ -2,18 +2,24 @@
 @import url('https://fonts.googleapis.com/css2?family=Arvo&family=Calistoga&display=swap');
 /*variable*/
 :root{
-    --text-color:rgb(255, 255, 255);
-    --text-color-secondary:rgb(0, 0, 0);
-    --bg-color:rgb(24, 24, 24);
-    --bg-color-secondary:rgba(61, 61, 61);
-    --bg-color-opec:rgba(56, 56, 56, 0.534);  
-    --font-family-header:'Arvo', serif;
-    --numbers: 'Calistoga', cursive;
-    --h1: 26px;
-    --p: 16px;
-    --np:50px;
-    --font-weights-norm: 400;
-    --arvo-norm: 400;
+  --text-color:rgb(223, 223, 223);
+  --text-color-secondary:rgb(0, 0, 0);
+  --bg-color:rgb(19, 19, 19);
+  --bg-color-secondary:#252525d2;
+  --bg-color-nav:#272727;
+  --bg-color-opec:rgba(0, 0, 0, 0.534);  
+  --font-family-header:'Arvo', serif;
+  --numbers: 'Calistoga', cursive;
+  --h1: 26px;
+  --p: 16px;
+  --np:36px;
+  --font-weights-norm: 400;
+  --arvo-norm: 400;
+  --nav-width: 70px;           
+  --first-color: #7933FC;           
+  --first-color-light: #e2e2e2;          
+  --white-color: #B6FC33;                           
+  --z-fixed: 100;
 
 }
 
@@ -24,15 +30,21 @@ html {
   scroll-behavior: smooth;
 }
 
+.hidden-nav {
+  display: none;
+}
+
 .body-main {
+  margin-left:70px;
   display: block;
   margin: none;
   padding: 0;
-  font-family: var(--font-family-header);
+  font-family: var(--font-family-header)!important;
   font-display: swap;
   background-color: var(--bg-color);
-  height: 100%;
-
+  margin-top: 50px;           
+  padding: 0 1rem;                 
+  transition: .5s;
 }
 
 @font-face {
@@ -58,7 +70,7 @@ html {
   font-size: var(--np);
   font-weight: var(--font-weights-norm);
   color: var(--text-color);
-  background-image: linear-gradient(75deg, #7933FC 10%,  #B6FC33 35%, #33FCDD 75%);
+  background-image: linear-gradient(75deg, #7933FC 10%,   #33FCDD 55%, #B6FC33 75%);
   background-repeat: repeat;
   background-position: fixed;
   -webkit-background-clip: text;
@@ -103,7 +115,7 @@ background-color: #33fcde73;
 padding: 10px 21px;
 border: 2px solid #33FCDD;
 box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
-border-radius: 25px;
+border-radius: 8px;
 transition : 777ms;
 align-items: center;
 margin: 5px;
@@ -139,24 +151,23 @@ main
 --------------------------------*/
 
 .sections {
-  border: 2px solid #7933fc79 ;
-  background-color: #292929 ;
+  box-shadow: 0px 0px 10px 0px #7933fc3b;
+  background-color: var(--bg-color-secondary) ;
   padding: 15px;
   min-height: 28vh;
-  border-radius: 25px;
+  border-radius: 8px;
   position: relative;
 }
 
 .sections-small {
-  border: 2px solid #7933fc79 ;
-  background-color: #292929 ;
+  box-shadow: 0px 0px 10px 0px #7933fc3b;
+  background-color: var(--bg-color-secondary) ;
   padding: 15px;
-  border-radius: 25px;
+  border-radius: 8px;
   position: relative;
 }
 
 .chart-container{
-  background-color: #292929 ;
   position: relative; 
   display: flex;
   justify-content: center; 
@@ -165,7 +176,6 @@ main
   padding: 10px 10px;
 }
 .chart-container2{
-  background-color: #292929 ;
   position: relative; 
   display: flex;
   justify-content: center; 
@@ -182,18 +192,18 @@ main
 images and prints 
 --------------------------------*/
 .section-image-data {
-  border: 2px solid #7933fc79 ;
-  background-color: #292929 ;
+  box-shadow: 0px 0px 10px 0px #7933fc3b;
+  background-color: var(--bg-color-secondary) ;
   padding: 15px;
   min-height: 28vh;
-  border-radius: 25px;
+  border-radius: 8px;
   
 }
 
 .section-image {
-  border-radius: 25px;
-  border: 2px solid #7933fc79 ;
-  background-color: #292929 ;
+  border-radius: 8px;
+  box-shadow: 0px 0px 10px 0px #7933fc3b;
+  background-color: var(--bg-color-secondary) ;
   padding: 15px;
   display: flex;
   justify-content: center; 
@@ -224,8 +234,43 @@ images and prints
 }
 
 /* --------------------------------
+Notebook  
+--------------------------------*/
+
+.bookcard {
+  position: relative;
+  font: var(--p);
+  color: #ffffff;
+  background-color: #33fcde73;
+  padding: 5px 5px;
+  border: 2px solid #33FCDD;
+  box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
+  border-radius: 2px;
+  transition : 777ms;
+  align-items: center;
+  height: 120px;
+  cursor: pointer;
+  object-position: center;
+}
+  
+.bookcard:hover{
+  transition : 777ms;
+  background-color: #ffffff00;
+  color: #33FCDD;
+  border: solid 2px #33FCDD;
+}
+
+.bookcard p,
+.bookcard i{
+  position: relative;
+  top: 20px;
+}
+
+
+/* --------------------------------
 billing
 --------------------------------*/
+
 
 .inv-card {
   border:  1px solid #000cad98;
@@ -243,11 +288,12 @@ billing
 
 
 .sections-inv {
-  border: 2px solid #7933fc79 ;
-  background-color: #292929 ;
+  box-shadow: 0px 0px 10px 0px #7933fc3b;
+  
+  background-color: var(--bg-color-secondary) ;
   padding: 15px;
   height:60vh;
-  border-radius: 25px;
+  border-radius: 8px;
 }
 
 /* --------------------------------
@@ -265,11 +311,173 @@ js parts
   border-radius: 16px 0 0 16px;
   overflow: visible;
   background-position: fixed;
+  transform: 300ms;
   background-image: linear-gradient(75deg, #7933FC 10%,  #B6FC33 35%, #33FCDD 75%);
 }
+
 
 .due-h {
   position: relative;
   top: 14px;
   left: 30%;
+}
+
+/* --------------------------------
+  NAv Body
+--------------------------------*/
+
+*,::before,::after
+{
+  box-sizing: border-box
+}
+
+a{
+  text-decoration: none
+}
+.header{
+  width: 100%;           
+  height: var(--header-height);           
+  position: fixed;           
+  top: 0;           
+  left: 0;           
+  display: flex;          
+  align-items: center;          
+ justify-content: space-between;           
+  padding: 0 1rem;           
+  background-color: var(--bg-color-nav);           
+  z-index: var(--z-fixed);           
+  transition: .5s;
+}
+
+.header_toggle{
+  color: var(--first-color);           
+  font-size: 1.5rem;           
+  cursor: pointer;
+}
+
+.home-i {
+  color: var(--first-color);           
+}
+
+.header_img{
+  width: 35px;           
+  height: 35px;           
+  display: flex;           
+  justify-content: center;           
+  border-radius: 50%;           
+  overflow: hidden;
+}
+
+.header_img img{
+  width: 40px;
+}
+
+.l-navbar{
+  position: fixed;           
+  top: 0;           
+  left: -30%;           
+  width: var(--nav-width);           
+  height: 100vh;           
+  background-color: var(--bg-color-nav);           
+  padding: .5rem 1rem 0 0;           
+  transition: .5s;           
+  z-index: var(--z-fixed);
+}
+
+.nav{
+  height: 100%;           
+  display: flex;           
+  flex-direction: column;           
+  justify-content: space-between;           
+  overflow: hidden;
+}
+
+.nav_logo, 
+.nav_link{
+  display: grid;           
+  grid-template-columns: max-content max-content;           
+  align-items: center;           
+  column-gap: 1rem;           
+  padding: .5rem 0 .5rem 1.5rem;
+}
+
+.nav_logo{
+  margin-bottom: 2rem;
+}
+
+.nav_logo-icon{
+  font-size: 1.25rem;           
+  color: var(--white-color);
+}
+
+.nav_logo-name{
+  color: var(--white-color);           
+  font-weight: 700;
+}
+
+.nav_link{
+  position: relative;           
+  color: var(--first-color-light);           
+  margin-bottom: 1.5rem;           
+  transition: .3s;
+}
+.nav_link:hover{
+  color: var(--white-color);
+}
+
+.nav_icon{
+  font-size: 1.25rem;
+}
+
+.show{
+  left: 0;
+}
+
+.body-pd{
+  padding-left: calc(var(--nav-width) + 1rem)
+}
+
+.active{
+  color: var(--white-color)
+}
+
+.active::before{
+  content: '';           
+  position: absolute;           
+  left: 0;           
+  width: 2px;           
+  height: 32px;           
+  background-color: var(--white-color);
+}
+
+.height-100{
+  height:100vh
+}
+
+@media screen and (min-width: 768px){
+  body{
+    margin: calc(var(--header-height) + 1rem) 0 0 0;
+    padding-left: calc(var(--nav-width) + 2rem);
+  }
+  .header{
+    height: calc(var(--header-height) + 1rem);           
+    padding: 0 2rem 0 calc(var(--nav-width) + 2rem);
+  }
+  .header_img{
+    width: 40px;           
+    height: 40px;
+  }
+  .header_img img{
+    width: 45px;
+  }
+  .l-navbar{
+    left: 0;           
+    padding: 1rem 1rem 0 0;
+  }
+  .show{
+    width: calc(var(--nav-width) + 156px);
+  }
+  .body-pd{
+    padding-left: calc(var(--nav-width) + 188px);
+  }
 }

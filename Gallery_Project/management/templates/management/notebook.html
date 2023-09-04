@@ -1,0 +1,60 @@
+
+{% extends 'panel.html' %}
+{% block title %}Register{% endblock %}
+{% block content %}
+{% load static %}
+<div class='row mt-4 sections-small'>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center'onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-users-line fa-2xl"></i>
+			<p class='mt-2'>Cleints</p>
+
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'projects' %}'">
+			<i class="fa-solid fa-diagram-project fa-2xl"></i>
+			<p class='mt-2'>Projects</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-solid fa-file-invoice fa-2xl"></i>
+			<p class='mt-2'>Billing</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-solid fa-gears fa-2xl"></i>
+			<p class='mt-2'>Automate</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center'>
+			<i class="fa-solid fa-user-plus fa-2xl"></i>
+			<p class='mt-2'>Client Intake</p>
+			
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-regular fa-folder-open fa-2xl"></i>
+			<p class='mt-2'>Open Project</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-solid fa-plus fa-2xl"></i>
+			<p class='mt-2'>Add Invoice</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3 mt-4'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-solid fa-file-contract fa-2xl"></i>
+			<p class='mt-2'>Documents</p>
+		</div>
+	</div>
+</div>
+<script src={% static 'js/graphs.js' %}></script>
+
+{% endblock %}

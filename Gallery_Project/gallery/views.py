@@ -12,6 +12,9 @@ from .forms import ImageForms, PrintForms, ProjectForms, CreatImageForm
 from Gallery_Project.env.app_Logic.photo_layer import col3_col6_col3
 from Gallery_Project.env.cloudflare_API.CFAPI import APICall, Encode_Metadata
 from django.core.paginator import Paginator 
+from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
+
+data_triggere = DataSetUpdate()
 
 #-----------------------------------------------------------------------------------------------------------#
 #
@@ -194,6 +197,7 @@ class ImageDetailView(DetailView):
 
 class PrintListView(ListView):
     template_name = 'gallery/prints/prints.html'
+    data_triggere.json_chart_data()
     model = Print
 
 class PrintEditView(UpdateView):
@@ -241,6 +245,7 @@ def print_upload(request):
 class ProjectListView(ListView):
     template_name = 'gallery/project/projects.html'
     model = Project
+    
     
 class ProjectCreateView(CreateView):
     model = Project

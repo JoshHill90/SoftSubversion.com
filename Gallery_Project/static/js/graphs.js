@@ -43,75 +43,114 @@ function exportData(data) {
 
 function createCharts() {
     
-	new Chart("BreakDown", {
+	if (document.querySelector('[id*="BreakDown"]')) {
+		new Chart("BreakDown", {
+			type: "doughnut",
+			data: {
+			  labels: ["Site", "Client", "Prints"],
+			  datasets: [
+				{
+				  backgroundColor: ["#7933FC", "#B6FC33", "#33FCDD"],
+				  data: y2Values,
+				},
+			  ],
+			},
+			options: {
+			  elements: {
+				arc: {
+				  borderWidth: 0, 
+				},
+			  },
+			  cutout: "90%",
+			  plugins: {
+				legend: {
+				  display: true,
+				},
+			  },
+			},
+		});
+	};
+
+
+
+	if (document.querySelector('[id*="Totals"]')) {
+		new Chart("Totals", {
 		type: "doughnut",
 		data: {
-		  labels: ["Site", "Client", "Prints"],
-		  datasets: [
-			{
-			  backgroundColor: ["#7933FC", "#B6FC33", "#33FCDD"],
-			  data: y2Values,
+				labels: ["Remaining Storage","Total Stored"],
+				datasets: [{
+					backgroundColor: ["#7933FC", "#B6FC33"],
+					data: y1Values
+				}]
 			},
-		  ],
-		},
-		options: {
-		  elements: {
-			arc: {
-			  borderWidth: 0, 
+			options: {
+				elements: {
+				arc: {
+					borderWidth: 0, 
+				},
+				},
+				cutout: "90%",
+				plugins: {
+				legend: {
+					display: true,
+				},
+				},
 			},
-		  },
-		  cutout: "80%",
-		  plugins: {
-			legend: {
-			  display: true,
+		});
+	};
+
+	if (document.querySelector('[id*="clientImageChart1"]')) {
+		new Chart('clientImageChart1', {
+			type: 'bar',
+			data: {
+				labels: clientNameList,
+				datasets: [{
+					label: 'Number of Client images',
+					data: clientcountList,
+					backgroundColor: (context) => {
+						const bgColor = [
+							"#7933FC",
+							"#33FCDD",
+							"#B6FC33"
+						];
+						if (!context.chart.chartArea) {
+							return bgColor;
+						}
+						const {chartArea: { left, right } } = context.chart;
+						const gradientBg = context.chart.ctx.createLinearGradient(left, 0, right, 0);
+						gradientBg.addColorStop(1, bgColor[2]);
+						gradientBg.addColorStop(0.7, bgColor[1]);
+						gradientBg.addColorStop(.6, bgColor[0]);
+						return gradientBg;
+					},
+					borderWidth: 0,
+					width: 14
+				}]
 			},
-		  },
-		},
-	});
-		
-	new Chart("Totals", {
-	type: "doughnut",
-	data: {
-			labels: ["Remaining Storage","Total Stored"],
-			datasets: [{
-				backgroundColor: ["#7933FC", "#B6FC33"],
-				data: y1Values
-			}]
-		},
-		options: {
-			elements: {
-			  arc: {
-				borderWidth: 0, 
-			  },
-			},
-			cutout: "80%",
-			plugins: {
-			  legend: {
-				display: true,
-			  },
-			},
-		},
-	});
-	
-	
-	new Chart('clientImageChart1', {
-		type: 'bar',
-		data: {
-		  labels: clientNameList,
-		  datasets: [{
-			label: 'Number of Client images',
-			data: clientcountList,
-			borderWidth: 1
-		  }]
-		},
-		options: {
-		  scales: {
-			y: {
-			  beginAtZero: true
+			options: {
+				scales: {
+					y: {
+						beginAtZero: true,
+						grid: {
+							color: '#252525',
+							lineWidth: 1
+						}
+					},
+					x: {
+						grid: {
+							color: '#474747',
+							lineWidth: 1
+						}
+					}
+				},
+				indexAxis: 'y',
+				barPercentage: 0.9,
+				categoryPercentage: 0.1
+
 			}
-		  }
-		}
-	});	
+		});
+	};
+	
 	breakdownChart.update();
 	totalsChart.update();
 	clientImageChart.update();
