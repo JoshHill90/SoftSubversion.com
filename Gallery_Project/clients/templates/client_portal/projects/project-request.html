@@ -1,0 +1,73 @@
+{% extends 'client-panel.html' %}
+{% block title %}Project Request Form{% endblock %}
+{% block content %}
+
+
+
+
+
+
+    <div class="sections p-p form-group">
+        <h1 class='h1-1'>Project Request Form</h1>
+        <form method=POST>
+            {% csrf_token %}
+				<p>
+					<label for="id_name">Project Name:</label>
+					<input type="text" name="name" class="form-control" maxlength="255" required="" id="id_name">
+					
+					
+				</p>
+				
+				
+				<p>
+					<label for="id_date">Desired date:</label>
+					<input type="date" name="date" class="form-control" required="" id="id_date">
+					
+					
+				</p>
+					
+				<p>
+					<label for="id_scope">Project-Type/Scope:</label>
+					<select name="scope" class="form-select" maxlength="255" id="id_scope">
+						<option value='' selected>Select Project Type/Scope</option>
+						<option value='FPTS'>Family photography, timed session</option>
+						<option value='FPDS'>Family photography, day-rate session</option>
+						<option value='MPTS'>Model photography, timed sesseion</option>
+						<option value='MPDS'>Model photography, day-rate sesseion</option>
+						<option value='MPMS'>Model photography, multiple sesseion</option>
+						<option value='WPDS'>Wedding photography, day-rate sesseion</option>
+						<option value='WVDS'>Wedding Videography, day-rate sesseion</option>
+						<option value='WVPDS'>Wedding Videography/photography, day-rate sesseion</option>
+						<option value='WPMS'>Wedding photography, multiple sesseion</option>
+						<option value='WVMS'>Wedding Videography, multiple sesseion</option>
+						<option value='WVPMS'>Wedding Videography/photography, multiple sesseion</option>
+					</select>
+
+				</p>
+
+				<p>
+					<label for="id_details">Project Details:</label>
+						<ul>Please include any details that may help me understand your vision. </ul>
+
+					<textarea name="details" cols="40" rows="10" class="form-control" maxlength="3000" required="" id="id_details"></textarea>
+				</p>
+
+				<p>
+					<label for="id_location">Location type:</label>
+					<select type="select" name="location" class="form-select" required="" id="id_location">
+						<option value='' selected>Select location type</option>
+						<option value='Indoors, in-state'>Indoors, in-state</option>
+						<option value='Indoors, out-state'>Indoors, out-state</option>
+						<option value='Outdoors, in-state'>Outdoors, in-state</option>
+						<option value='Outdoors, out-state'>Outdoors, out-state</option>
+						<option value='Indoors, in-state: Photographers Pick'>Indoors, in-state: Photographers Pick</option>
+						<option value='Outdoors, in-state: Photographers Pick'>Outdoors, in-state: Photographers Pick</option>
+					</select>
+				</p>
+			<button class="btn-cust">
+				Request
+			</button>
+        </form>
+    </div>
+
+{% endblock %}

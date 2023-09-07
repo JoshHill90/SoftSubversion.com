@@ -86,7 +86,7 @@ class DataSetUpdate ():
         email_list = []
         
         users = User.objects.all()
-        invite_code = Invite.objects.filter(used=True)
+        invite_code = Invite.objects.filter(used=False)
         
         for user_name in users:
             username_list.append(user_name.username)

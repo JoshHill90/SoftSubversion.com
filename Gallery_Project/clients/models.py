@@ -1,8 +1,18 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.urls import reverse
+import datetime
+import secrets
 
+def hex_gen_small():
+    random_hex = secrets.token_hex(2)
+    print(random_hex)
+    return str(random_hex)
 
+date_and_time = datetime.datetime.now()
+dates = date_and_time.date()
+times = date_and_time.strftime("%I:%M:%S %p")
+date_now = str(dates)
 
     
 class Client(models.Model):
@@ -34,4 +44,36 @@ class Invite(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse("client")
+        return reverse("project-binder", args=(str(self.id)))
+    
+
+class ProjectRequest(models.Model):
+    name = models.CharField(max_length=255, verbose_name='Project Name')
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
+    date = models.CharField(max_length=10)
+    scope = models.CharField(max_length=255, verbose_name='Project-Type/Scope')
+    details = models.CharField(max_length=3000, verbose_name='Project Details')
+    slug = models.SlugField(null=False, unique=True, default=hex_gen_small())
+    location = models.CharField(max_length=255, verbose_name='Location type')
+    status = models.CharField(max_length=25, default='pending')
+
+    def __str__(self):
+        return str(self.name)
+
+    def get_absolute_url(self):
+        
+        return reverse("request-status", kwargs={"slug": self.slug})
+    
+class RequestReply(models.Model):
+    project_request_id = models.ForeignKey(ProjectRequest, on_delete=models.CASCADE, )
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
+    comment = models.CharField(max_length=3000)
+    read = models.BooleanField(default=False)
+
+    def __str__(self):
+        return str(self.project_request_id) + ' | ' + str(self.user_id)
+
+    def get_absolute_url(self):
+        
+        return reverse("request-status", kwargs={"slug": self.slug})
+    

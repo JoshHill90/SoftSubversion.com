@@ -5,7 +5,8 @@
   --text-color:rgb(223, 223, 223);
   --text-color-secondary:rgb(0, 0, 0);
   --bg-color:rgb(19, 19, 19);
-  --bg-color-secondary:#252525d2;
+  --bg-color-secondary:linear-gradient(315deg, #212121, #282828);
+  --bg-shadow:-4px -4px 10px rgba(63, 27, 131, 0.493), 4px 4px 10px #42385380;
   --bg-color-nav:#272727;
   --bg-color-opec:rgba(0, 0, 0, 0.534);  
   --font-family-header:'Arvo', serif;
@@ -60,7 +61,7 @@ html {
 }
 .p-p {
   font-size: var(--p);
-  font-weight: var(--font-weights-norm);
+  font-weight: normal;
   color: var(--text-color);
 }
 
@@ -84,8 +85,8 @@ html {
 
 .p-2 {
   font-size:var(--p);
-  font-weight: var(--font-weights-norm);
-  color: var(--text-color-secondary);
+  font-weight:  normal;
+  color: var(--text-color);
 }
 
 .ham{
@@ -124,10 +125,10 @@ cursor: pointer;
 }
 
 .btn-cust:hover{
-transition : 777ms;
-background-color: #ffffff00;
-color: #33FCDD;
-border: solid 2px #33FCDD;
+  transition : 777ms;
+  background-color: #ffffff00;
+  color: #33FCDD;
+  border: solid 2px #33FCDD;
 }
 
 .right-i{
@@ -151,17 +152,22 @@ main
 --------------------------------*/
 
 .sections {
-  box-shadow: 0px 0px 10px 0px #7933fc3b;
-  background-color: var(--bg-color-secondary) ;
+  background: var(--bg-color-secondary) ;
   padding: 15px;
   min-height: 28vh;
   border-radius: 8px;
   position: relative;
+  box-shadow:var(--bg-shadow);
+
+}
+.sections:hover{
+  transition : 777ms;
+  box-shadow:  -4px -4px 10px rgba(122, 52, 252, 0.507), 4px 4px 10px #c2a3f7a6;
 }
 
 .sections-small {
-  box-shadow: 0px 0px 10px 0px #7933fc3b;
-  background-color: var(--bg-color-secondary) ;
+  box-shadow: var(--bg-shadow);
+  background: var(--bg-color-secondary) ;
   padding: 15px;
   border-radius: 8px;
   position: relative;
@@ -192,8 +198,8 @@ main
 images and prints 
 --------------------------------*/
 .section-image-data {
-  box-shadow: 0px 0px 10px 0px #7933fc3b;
-  background-color: var(--bg-color-secondary) ;
+  box-shadow:var(--bg-shadow);
+  background: var(--bg-color-secondary) ;
   padding: 15px;
   min-height: 28vh;
   border-radius: 8px;
@@ -202,8 +208,8 @@ images and prints
 
 .section-image {
   border-radius: 8px;
-  box-shadow: 0px 0px 10px 0px #7933fc3b;
-  background-color: var(--bg-color-secondary) ;
+  box-shadow:var(--bg-shadow);
+  background: var(--bg-color-secondary) ;
   padding: 15px;
   display: flex;
   justify-content: center; 
@@ -288,9 +294,8 @@ billing
 
 
 .sections-inv {
-  box-shadow: 0px 0px 10px 0px #7933fc3b;
-  
-  background-color: var(--bg-color-secondary) ;
+  box-shadow: var(--bg-shadow);
+  background: var(--bg-color-secondary) ;
   padding: 15px;
   height:60vh;
   border-radius: 8px;
@@ -320,6 +325,73 @@ js parts
   position: relative;
   top: 14px;
   left: 30%;
+}
+/* --------------------------------
+client-portal
+--------------------------------*/
+
+.comment-sub-box {
+  border-radius: 20px;
+  padding: 5px;
+  box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
+  background-image: linear-gradient(144deg,#AF40FF, #5B42F3 50%,#00DDEB);
+  z-index: 2;
+}
+
+.user-box{
+  text-align: right;
+}
+
+.comment-content {
+  background: rgb(5, 6, 45);
+  border-radius: 17px;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+.user-content {
+  background: rgb(18, 19, 32);
+  border-radius: 17px;
+  padding: 15px;
+  width: 100%;
+  height: 100%;
+}
+
+
+
+.comment-line-1{
+  position: relative;
+  content: '';
+  position: relative;
+  top: 30px;
+  width: 100%;
+  height: 2px;
+  background-color: var(--text-color);
+}
+
+.comment-line-2{
+  position: relative;
+  content: '';
+  position: relative;
+  top: 23px;
+  left: 5%;
+  width: 2px;
+  height: 100%;
+  background-color: var(--text-color);
+  max-height: 50px;
+}
+
+.comment-line-3{
+  position: relative;
+  content: '';
+  position: relative;
+  top: 23px;
+  left: 90%;
+  width: 2px;
+  height: 100%;
+  max-height: 50px;
+  background-color: var(--text-color);
 }
 
 /* --------------------------------

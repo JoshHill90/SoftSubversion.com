@@ -1,7 +1,75 @@
 
-{% extends 'clinet-portal.html' %}
-{% block title %}Contact me {% endblock %}
+{% extends 'client-panel.html' %}
+{% block title %}Client Panel{% endblock %}
 {% block content %}
+{% load static %}
+{% if user.id == client_info.user_id.id %}
+
+<div class='row text-center sections'>
+	
+	<div class='chart-container2'>
+		<canvas id="clientImageChart1"></canvas>
+	</div>
+
+</div>
+
+<div class='row mt-4 sections-small'>
+	<div class='col-6 col-md-3'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'project-request' %}'">
+			<i class="fa-regular fa-folder-open fa-2xl"></i>
+			<p class='mt-2'>Request New Project</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'billing' %}'">
+			<i class="fa-solid fa-credit-card fa-2xl"></i>
+			<p class='mt-2'>Make a Payment</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-user-large-slash fa-2xl"></i>
+			<p class='mt-2'>Reviews</p>
+		</div>
+	</div>
+	<div class='col-6 col-md-3'>
+		<div class='bookcard text-center' onclick="window.location.href='{% url 'client' %}'">
+			<i class="fa-solid fa-user-gear fa-2xl"></i>
+			<p class='mt-2'>Client settings</p>
+		</div>
+	</div>
+</div>
+<div class='row mt-4 sections'>
+	<div class="overflow-auto scroll-menu">
+		{% for project in project_request %}
+			<div class='col-12'>
+				<div class='row mt-1 inv-card'>
+					<div class='col-6 col-md-3'>
+						<p class="p-p">
+							{{ project.name }} 
+							<br>
+							Request ID:<br>{{ project.slug }}
+						</p>
+					</div>
+					<div class='col-6 col-md-3'>
+						
+						<p class="p-p"> Scope:<br>{{ project.scope }}</p>
+					</div>
+					<div class='col-6 col-md-3'>
+						<p class="p-p">Requested Date:<br>{{ project.date }}</p>
+					</div>
+					<div class='col-12 col-md-3'>
+						<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-status' project.slug %}'">Details</button>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+</div>
+
+<script src={% static 'js/graphs.js' %}></script>
 
 
+{% endif %}
 {% endblock %}

@@ -1,0 +1,33 @@
+{% extends 'panel.html' %}
+{% block title %}Client Request{% endblock %}
+{% block content %}
+{% load static %}
+<div class='row mt-4 sections'>
+	<div class="overflow-auto scroll-menu">
+		{% for request in client_request %}
+			<div class='col-12'>
+				<div class='row mt-1 inv-card'>
+					<div class='col-6 col-md-3'>
+						<p class="p-p">
+							{{ request.name }} 
+							<br>
+							Client ID: {{ request.user_id}}
+						</p>
+					</div>
+					<div class='col-6 col-md-3'>
+						
+						<p class="p-p"> Scope: {{ request.scope }}</p>
+					</div>
+					<div class='col-6 col-md-3'>
+						<p class="p-p">Location Type:  {{ request.location }}</p>
+					</div>
+					<div class='col-12 col-md-3'>
+						<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-details' request.slug %}'">Details</button>
+					</div>
+				</div>
+			</div>
+		{% endfor %}
+		</div>
+	</div>
+</div>
+{% endblock %}

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Client, Invite
+from .models import Client, Invite, ProjectRequest, RequestReply
 from phonenumber_field.modelfields import PhoneNumberField
 
 class ClientForm(forms.ModelForm):
@@ -18,4 +18,24 @@ class InviteForm(forms.ModelForm):
         widgets = {
             'name': forms.TextInput(attrs={'class': 'form-control'}),
             'email': forms.EmailInput(attrs={'class': 'form-control'}),
+        }
+        
+class ProjectRequestForm(forms.ModelForm):
+    class Meta:
+        model = ProjectRequest
+        fields = ('name', 'date', 'scope', 'details', 'location')
+        widgets = {
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'scope': forms.Select(attrs={'class': 'form-select'}),
+            'details': forms.Textarea(attrs={'class': 'form-control'}),
+            'location': forms.Select(attrs={'class': 'form-select'}),
+        }
+        
+class RequestReplyComment(forms.ModelForm):
+    class Meta:
+        model = RequestReply
+        fields = ('comment',)
+        widgets = {
+            'comment': forms.Textarea(attrs={'class': 'form-control'}),
         }

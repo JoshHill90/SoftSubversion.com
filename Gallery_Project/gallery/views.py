@@ -8,6 +8,7 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Image, Print, Project
+from clients.models import ProjectRequest
 from .forms import ImageForms, PrintForms, ProjectForms, CreatImageForm
 from Gallery_Project.env.app_Logic.photo_layer import col3_col6_col3
 from Gallery_Project.env.cloudflare_API.CFAPI import APICall, Encode_Metadata
@@ -185,10 +186,6 @@ class ImageDetailView(DetailView):
         context['next_image'] = next_image
         
         return context
-        
-        
-        
-
     
 
 #-------------------------------------------------------------------------------------------------------#

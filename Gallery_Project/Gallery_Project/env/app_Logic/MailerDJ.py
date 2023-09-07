@@ -1,16 +1,19 @@
 import ssl
 import smtplib
+from.text_py.text_for_emails import *
 from email.message import EmailMessage
 from email.utils import formataddr
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from functools import reduce
 
 current_dir = Path(__file__).resolve().parent
 ven = current_dir / "../.env"
 load_dotenv(ven)
 
-print('stage-1')
+
+
 #-------------------------------------------------------------------------------------------------------#
 # Secret Values
 #-------------------------------------------------------------------------------------------------------#
@@ -30,35 +33,28 @@ class AutoReply:
     # Contact form auto reply
     #------------------------#
 
-    def contact_request(self, reciver, name):
+    def owner_post_comment(self, user_email, user_name, comment, project_name, slug):
         print('preparing message')
 
         contact_subject = "Thank You for Contacting Soft Subversion!"
 
-        contact_body = f"""
-Hi {name},
+        user_nameS = str(user_name)
+        project_nameS = str(project_name)
+        commentS = str(comment)
+        linkS = str(slug)
+        
+        
 
-Thank you for reaching out! I've received your message regarding {contact_subject}, and I'll be sure to get back to you shortly.
+        text_swap = {'user_name': user_nameS, 'project_name': project_nameS, 'comment': commentS, 'link': linkS}
+        print(text_swap)
+        string = owner_post_comment_body
+        result_string = reduce(lambda old_string, key_var: old_string.replace(key_var, text_swap[key_var]), text_swap, string)
 
-I'm excited to discuss your photography needs and collaborate with you to create stunning visuals that capture your unique style.
-
-In the meantime, please keep an eye on your inbox for my response. If you don't receive a follow-up email from me within 24 hours, please check your spam folder, just in case.
-
-Looking forward to connecting with you soon!
-
-Best regards,
-Carly
-
-
-SoftSubversion.com
-"""
-
-
-
+        contact_body = result_string
         mailer = EmailMessage()
-
+        print(result_string)
         mailer['From'] = formataddr(("Soft Subversion", f"{self.send_from}"))
-        mailer['To'] = reciver
+        mailer['To'] = user_email
         mailer['Subject'] = contact_subject
         mailer.set_content(contact_body)
 
@@ -66,7 +62,39 @@ SoftSubversion.com
             try:
                 server.starttls()
                 server.login(self.send_from, self.email_password)
-                server.sendmail(self.send_from, reciver, mailer.as_string())
+                server.sendmail(self.send_from, user_email, mailer.as_string())
+                server.close()
+                print('email sent')
+            except Exception as e:
+                print(f"An error occurred while sending the email: {e}")
+    
+    #------------------------#
+    # Contact form auto reply
+    #------------------------#
+
+    def contact_request(self, user_email, user_name, user_subject):
+        print('preparing message')
+
+        contact_subject = "Thank You for Contacting Soft Subversion!"
+
+        text_swap = {'user_name' : user_name, 'user_subject' : user_subject}
+        string = contact_request_body
+        result_string = reduce(lambda old_string, key_var: old_string.replace(key_var, text_swap[key_var]), text_swap, string)
+        contact_body = result_string
+
+
+        mailer = EmailMessage()
+
+        mailer['From'] = formataddr(("Soft Subversion", f"{self.send_from}"))
+        mailer['To'] = user_email
+        mailer['Subject'] = contact_subject
+        mailer.set_content(contact_body)
+
+        with smtplib.SMTP(self.email_host, self.email_port) as server:
+            try:
+                server.starttls()
+                server.login(self.send_from, self.email_password)
+                server.sendmail(self.send_from, user_email, mailer.as_string())
                 server.close()
                 print('email sent')
             except Exception as e:
@@ -77,23 +105,56 @@ SoftSubversion.com
     # Email Alart
     #------------------------#
 
-    def contact_alart(self, email, name, subject, body):
+    def contact_alart(self, email, user_name, user_subject, body):
 
         contact_subject = "Contact Form Alart"
 
-        contact_body = f""" 
-        Subject: {subject}
-
-        From: {email} - Name: {name}
-
-        Message:
-            {body}"""
-
+        text_swap = {'user_name' : user_name, 'user_subject' : user_subject, 'body': body, 'user_email': email}
+        string = contact_request_body
+        result_string = reduce(lambda old_string, key_var: old_string.replace(key_var, text_swap[key_var]), text_swap, string)
+        contact_body = result_string
 
 
         mailer = EmailMessage()
 
         mailer['From'] = formataddr(("Contact Form", f"{self.alart_email}"))
+        mailer['To'] = self.receive_email
+        mailer['Subject'] = contact_subject
+        mailer.set_content(contact_body)
+
+        with smtplib.SMTP(self.email_host, self.email_port) as server:
+            try:
+                server.starttls()
+                server.login(self.send_from, self.email_password)
+                server.sendmail(self.send_from, self.receive_email, mailer.as_string())
+                server.close()
+                print('alart sent')
+            except Exception as e:
+                print(f"An error occurred while sending the email: {e}")
+    
+    #------------------------#
+    # Project Request
+    #------------------------#
+
+    def project_request_notice(self, project_name, date_selected, scope, details, location, user_id, client_name):
+
+        contact_subject = "Project Request"
+
+        text_swap = {'client_name': client_name,
+                     'user_id': user_id,
+                     'project_name': project_name,
+                     'scope': scope,
+                     'date_selected': date_selected,
+                     'location': location, 
+                     'details': details }
+        
+        string = project_request_notice_body
+        result_string = reduce(lambda old_string, key_var: old_string.replace(key_var, text_swap[key_var]), text_swap, string)
+        contact_body = result_string
+
+        mailer = EmailMessage()
+
+        mailer['From'] = formataddr(("Soft Subversion", f"{self.alart_email}"))
         mailer['To'] = self.receive_email
         mailer['Subject'] = contact_subject
         mailer.set_content(contact_body)

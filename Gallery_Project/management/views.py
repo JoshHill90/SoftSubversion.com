@@ -22,7 +22,7 @@ import requests
 
 
 dataQ = DataSetUpdate()
-
+dataQ.json_user_list_check()
         
 
 #-------------------------------------------------------------------------------------------------------#
@@ -188,7 +188,7 @@ class UserEditView(generic.UpdateView):
     
 
 class UserRegistrationView(generic.CreateView):
-    dataQ.json_user_list_check()
+
     form_class = RegForm
     template_name = 'registration/register.html'
     success_url = reverse_lazy('client')
