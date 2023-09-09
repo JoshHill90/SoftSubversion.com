@@ -2,32 +2,232 @@
 {% block title %}Client Request{% endblock %}
 {% block content %}
 {% load static %}
-<div class='row mt-4 sections'>
-	<div class="overflow-auto scroll-menu">
-		{% for request in client_request %}
-			<div class='col-12'>
-				<div class='row mt-1 inv-card'>
-					<div class='col-6 col-md-3'>
-						<p class="p-p">
-							{{ request.name }} 
-							<br>
-							Client ID: {{ request.user_id}}
-						</p>
+<div class='row'>
+	<div class='col-8'>
+		<div class='sections mt-4 mb-4'>
+			<h1 class='h1-1'>
+				Set terms for the services for Project {{ client_request }}
+			</h1>
+			<hr>
+			<form method=POST class='p-p row'>
+				{% csrf_token %}
+
+				<div class='col-6'>
+					<h1 class='h1-1 mb-4'> Project Detials</h1>
+					<p class='p-p mt-4'>
+						Photographer: {{ user.first_name }} {{ user.last_name }}<br>
+					</p>
+					<p class='p-p'>
+						Clients Name: {{ client_request.user_id.first_name }} {{ client_request.user_id.last_name }}<br>
+					</p>
+					<p class='p-p'>
+						Project Scope: {{ client_request.scope }}<br>
+					</p>
+					<p class='p-p'>
+						Location Type: {{ client_request.location }}<br>
+					</p>
+					<p class='p-p'>
+						Prroject Number: {{ client_request.slug }}<br>
+					</p>
+				</div>
+				<div class='col-6'>
+					<h1 class='h1-1'> Location Details</h1>
+					<p class='p-p'>
+						<label for="id_location">Address</label>
+						<input type="text" name="location" class="form-control" maxlength="255" required="" id="id_location">
+
+						<label for="id_city">City</label>
+						<input type="text" name="city" class="form-control" maxlength="255" required="" id="id_city">
+						<label for="id_state">State</label>
+						<input type="text" name="state" class="form-control" maxlength="255" required="" id="id_state">
+						<label for="id_zip">Zip Code</label>
+						<input type="text" name="zip" class="form-control" maxlength="255" required="" id="id_zip">
+					
+					</p>
+				</div>
+
+				<div class='col-6'>
+					<h1 class='h1-1'>Session and Consultation Dates</h1>
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="date1" name="optradio" 
+						data-bs-toggle="collapse" 
+						href="#collapse1" 
+						role="radio" 
+						aria-expanded="false" 
+						aria-controls="collapse1"
+						value='Photo Session Only'>
+						<label class="form-check-label" for="date1">Consultation</label>
 					</div>
-					<div class='col-6 col-md-3'>
-						
-						<p class="p-p"> Scope: {{ request.scope }}</p>
+					<div class="form-check">
+						<input type="checkbox"
+						class="form-check-input"
+						id="date2"
+						name="optradio"
+						data-bs-toggle="collapse" 
+						href="#collapse2" 
+						role="radio" 
+						aria-expanded="false" 
+						aria-controls="collapse1"
+						value='Consultation and Photo Session'>
+						<label class="form-check-label" for="date2">Photo Session</label>
 					</div>
-					<div class='col-6 col-md-3'>
-						<p class="p-p">Location Type:  {{ request.location }}</p>
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="date3" name="optradio" 
+						data-bs-toggle="collapse" 
+						href="#collapse3" 
+						role="radio" 
+						aria-expanded="false" 
+						aria-controls="collapse1"
+						value='Consultation and Two Photo Session'>
+						<label class="form-check-label" for="date3">Addtional Photo Session</label>
 					</div>
-					<div class='col-12 col-md-3'>
-						<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-details' request.slug %}'">Details</button>
+					<div class="form-check">
+						<input type="checkbox" class="form-check-input" id="date4" name="optradio"
+						data-bs-toggle="collapse" 
+						href="#collapse4" 
+						role="radio" 
+						aria-expanded="false" 
+						aria-controls="collapse1"
+						value='Consultation and Three Photo Session'>
+						<label class="form-check-label" for="date4">Addtional Photo Session</label>
 					</div>
 				</div>
+
+				<div class='col-6'>
+					<div class="collapse mt-4" id="collapse1" style='width:100%'>
+						<label for="id_session_date1">Consultation Date:</label>
+						<input type="date" name="session_date1" class="form-control" maxlength="10" required="" id="id_session_date1">
+
+						<label for="id_session_start1">Consultation Start Time:</label>
+						<input type="time" name="session_start1" value="9:00" class="form-control" id="id_session_start1">
+
+						<label for="id_session_end1">Consultation End Time</label>
+						<input type="time" name="session_end1" value="9:00" class="form-control" id="id_session_end1">
+					</div>
+
+					<div class="collapse mt-4" id="collapse2" style='width:100%'>
+						<label for="id_session_date2">Photo Session:</label>
+						<input type="date" name="session_date2" class="form-control" maxlength="10" id="id_session_date2">
+	
+	
+						<label for="id_session_start2">Photo Session Start Time:</label>
+						<input type="time" name="session_start2" value="9:00" class="form-control" id="id_session_start2">
+	
+						<label for="id_session_end2">Photo Session End Time:</label>
+						<input type="time" name="session_end2" value="9:00" class="form-control" id="id_session_end2">
+	
+					</div>
+
+					<div class="collapse mt-4" id="collapse3" style='width:100%'>
+						<label for="id_session_date3">Addtional Photo Session:</label>
+						<input type="date" name="session_date3" class="form-control" maxlength="10" id="id_session_date3">
+	
+						<label for="id_session_start3">Addtional Photo Session Start Time:</label>
+						<input type="time" name="session_start3" value="9:00" class="form-control" id="id_session_start3">
+	
+						<label for="id_session_end3">Addtional Photo Session End Time:</label>
+						<input type="time" name="session_end3" value="9:00" class="form-control" id="id_session_end3">
+					</div>
+
+					<div class="collapse mt-4" id="collapse4" style='width:100%'>
+						<label for="id_session_date4">Addtional Photo Session:</label>
+						<input type="date" name="session_date4" class="form-control" maxlength="10" id="id_session_date4">
+	
+						<label for="id_session_start4">Addtional Photo Session Start Time:</label>
+						<input type="time" name="session_start4" value="9:00" class="form-control" id="id_session_start4">
+	
+						<label for="id_session_end4">Addtional Photo Session End Time:</label>
+						<input type="time" name="session_end4" value="9:00" class="form-control" id="id_session_end4">
+					</div>
+				</div>
+				
+				<div class='col-12 mt-4 mb-4'>
+					<h1 class='h1-1'>Session Outline</h1>
+					<p class='p-p'>Please detail anny Addtional notes about the services that will be provded</p>
+
+					<label for="id_services">Details</label>
+					<textarea name="services" cols="40" rows="10" class="form-control" maxlength="5000" id="id_services"></textarea>
+				</div>
+
+				<div class='col-12'>
+					<label for="id_project_cost">Project cost:</label>
+					<input type="text" name="project_cost" value="600.00" class="form-control" required="" id="id_project_cost">
+
+					<label for="id_deposit" class=' mt-2'>Deposit:</label>
+					<input type="text" name="deposit" value="0.00" class="form-control" required="" id="id_deposit">
+
+				</div>
+
+				<div class='col-12 mt-4'>
+					<button class="btn-cust">
+						Submit
+					</button>
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<div class='col-4'>
+		<div class='sections mt-4 mb-4'>
+			<h1 class='h1-1'>
+				Request Thread
+			</h1>
+			<hr>
+			<p class='p-p'>
+				<a class="btn-cust" data-bs-toggle="collapse" href="#collapseComments" role="button" aria-expanded="false" aria-controls="collapse1">
+					Project Request Thread
+				</a>
+			</p>
+		  
+	
+			<div class='row'>
+				<div class="collapse" id="collapseComments" style='width:100%'>
+	
+				{% for comment in comments %}
+				{% if comment.user_id == user %}
+				<div class='col-12 mt-4 mb-4'>
+					<div class='row'>
+						<div class='col-12 comment-sub-box'> 
+							<div class="user-content" >
+								<h1 class='user-box h1-1'>
+									{{ comment.user_id }}
+								</h1>
+								<hr>
+								<p class='p-p'>
+									{{ comment.comment}}
+								</p>
+								<div class='comment-line-3'></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% else %}
+				<div class='col-12 mt-4 mb-4'>
+					<div class='row'>
+						<div class='col-12 comment-sub-box'> 
+							<div class="comment-content" >
+								<h1 class='h1-1'>
+									{{ comment.user_id }}
+								</h1>
+								<hr>
+								<p class='p-p'>
+									{{ comment.comment}}
+								</p>
+								<div class='comment-line-2'></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{% endfor %}
 			</div>
-		{% endfor %}
 		</div>
 	</div>
 </div>
+<script>
+	$('.form-check-input').click(function() {
+		$('.collapse').collapse('hide');
+		$('#' + $(this).attr('aria-controls')).collapse('show');
+	});
+</script>
 {% endblock %}

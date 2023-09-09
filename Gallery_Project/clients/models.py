@@ -77,3 +77,35 @@ class RequestReply(models.Model):
         
         return reverse("request-status", kwargs={"slug": self.slug})
     
+class ProjectTerms(models.Model):
+    project_request_id = models.ForeignKey(ProjectRequest, on_delete=models.CASCADE, )
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
+    session_date1 = models.CharField(max_length=10)
+    session_start1 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_end1 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_date2 = models.CharField(max_length=10, blank=True)
+    session_start2 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_end2 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_date3 = models.CharField(max_length=10, blank=True)
+    session_start3 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_end3 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_date4 = models.CharField(max_length=10, blank=True)
+    session_start4 = models.TimeField(max_length=20, blank=True, default='9:00')
+    session_end4 = models.TimeField(max_length=20, blank=True, default='9:00')
+    location = models.CharField(max_length=255, verbose_name='Physical Address')
+    city = models.CharField(max_length=255, verbose_name='City')
+    state = models.CharField(max_length=255, verbose_name='State')
+    zip = models.CharField(max_length=7, verbose_name='Zip Code')
+    scope = models.CharField(max_length=255)
+    services = models.TextField(max_length=5000, blank=True)
+    slug = models.SlugField(null=False, unique=True, default=hex_gen_small())
+    project_cost = models.FloatField(default='600.00')
+    deposit = models.FloatField(default='0.00')
+    project_docs = models.CharField(max_length=255)
+
+    def __str__(self):
+        return str(self.project_request_id) + ' | ' + str(self.user_id)
+
+    def get_absolute_url(self):
+        
+        return reverse("request-approval", kwargs={"slug": self.slug})

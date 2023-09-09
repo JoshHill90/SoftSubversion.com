@@ -6,7 +6,7 @@ from django.db.models import Q
 from django.conf import settings
 from pathlib import Path
 from .models import Client, Invite, ProjectRequest, RequestReply
-from .forms import ClientForm, InviteForm, ProjectRequestForm, RequestReplyComment
+from .forms import ClientForm, InviteForm, ProjectRequestForm, RequestReplyComment, ProjectTermsForm
 from gallery.models import Image, Project
 from management.models import Payments, Billing
 from django.shortcuts import render, redirect, get_object_or_404
@@ -133,19 +133,49 @@ def clientRequestDetails(request, slug):
 def client_request(request):
     client_request_info = ProjectRequest.objects.all()
     request_comments = RequestReply.objects.all()
+    project_terms = ProjectTermsForm
     
     return render(request, 'client/client-requests.html', {
 		'client_request': client_request_info,
-        'request_comments' : request_comments
+        'request_comments' : request_comments,
+        'project_terms': project_terms
   })
 
 def request_approval(request, id):
-    client_request_info = ProjectRequest.objects.all()
-    request_comments = RequestReply.objects.all()
+    client_request_info = get_object_or_404(ProjectRequest, id=id)
+    comments = RequestReply.objects.filter(project_request_id=client_request_info)
+    new_template = None
+    if request.method == 'POST':
+        terms_form = ProjectTermsForm(data=request.POST)
+        if terms_form.is_valid():
+            user_info = request.user
+            new_template = terms_form.save(commit=False)
+            new_template.user_id = user_info
+            new_template.project_request_id = client_request_info
+            new_template.scope = client_request_info.scope
+            new_template.slug = str(client_request_info.slug) + 'terms'
+            new_template.project_docs = str(user_info) + '/' + str(client_request_info.name)
+            new_template.save()
+            slug = terms_form.cleaned_data.get('slug')
+            client_request_info.status = 'Approved'
+            client_request_info.save()
+            #invoice creation
+            # crete project
+            # send contract
+            return render(request, 'client_portal/projects/upload-terms.html', {
+                'slug': slug,
+            })
+            # on the upload-terms page, set upo a method to collect the payment and then allow access to project
+
+    else:
+        terms_form = ProjectTermsForm()
     
     return render(request, 'client/request/request-approval.html', {
 		'client_request': client_request_info,
-        'request_comments' : request_comments
+        'comments': comments,
+        'terms_form': terms_form,
+        'new_template': new_template
+        
   })
         
         
