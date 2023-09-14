@@ -7,7 +7,6 @@ from django.contrib.auth.views import PasswordChangeView
 from django.urls import reverse_lazy
 from django.db.models import Q
 from django.conf import settings
-from django.contrib.auth.models import User
 from pathlib import Path
 from .models import Billing
 from clients.models import Client
@@ -110,7 +109,7 @@ def billing_panel(request):
                       'totalDue': bal_due,
                       'totalPaid': bal_paid,
                       'totalEarned': bal_ern,
-                      'outstanding': bal_out,
+                      #'outstanding': bal_out,
                       'project_list': project_list,
                       'client_list': client_list
         })          
@@ -254,7 +253,7 @@ def o_main(request):
     gal4 = Image.objects.filter(Q(display="subgal4") | Q(display="gallery4"))
     site_image = Image.objects.filter(Q(client_id="1"))
     client_images = Image.objects.exclude(Q(client_id="1"))
-    dataQ.json_chart_data()
+    #dataQ.json_chart_data()
 
     return render(request, 'management/main.html', {
         'image_list': image_list,

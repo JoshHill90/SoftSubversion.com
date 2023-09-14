@@ -59,7 +59,7 @@ class credit(models.Model):
 
 class Billing(models.Model):
 
-    invoice = models.CharField(max_length=12, blank=True)
+    invoice = models.CharField(max_length=100)
     billed = models.FloatField(default=0.00)
     paid = models.FloatField(default=0.00)
     fufiled = models.BooleanField(default=False)
@@ -71,7 +71,7 @@ class Billing(models.Model):
     
     def __str__(self):
         ret_str = str(self.id)
-        cust_str = str(self.client_id) 
+        cust_str = str(self.project_id) 
         return ret_str + ' | ' + cust_str
 
     def get_absolute_url(self):
@@ -83,6 +83,8 @@ class Payments(models.Model):
     amount = models.FloatField(default=5.00)
     receipt = models.CharField(max_length=400, blank=True)
     time_stamp = models.DateField(auto_created=True)
+    due_date = models.DateField(blank=True, null=True)
+    invoice_id = models.CharField(max_length=400, blank=True)
     
     def __str__(self):
         num_str = str(self.id)

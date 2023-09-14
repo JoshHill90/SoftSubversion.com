@@ -137,7 +137,7 @@ class AutoReply:
     #------------------------#
 
     def project_request_notice(self, project_name, date_selected, scope, details, location, user_id, client_name):
-
+        user_id = str(user_id) + '-1'
         contact_subject = "Project Request"
 
         text_swap = {'client_name': client_name,

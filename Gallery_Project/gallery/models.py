@@ -1,6 +1,17 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+import secrets
+import random
+
+def hex_gen_small():
+    fronter = 'SSP'
+    random_num = random.randint(0, 99)
+    random_hex = secrets.token_hex(4)
+    print(random_hex)
+    return fronter + str(random_hex) + str(random_num)
+
+
 
 DISPLAY_PEACE = [    
     ('none', 'none'),
@@ -29,12 +40,14 @@ ASPECT_RATIO = [
 class Project(models.Model):
     name = models.CharField(max_length=255)
     cost = models.FloatField(default=0.00)
-    status = models.BooleanField(default=False)
+    status = models.CharField(max_length=255, default='Pending Deposit')
     client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.SET_NULL)
     user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    deposit_amount = models.FloatField(default=0.00)
+
 
     def __str__(self):
-        return str(self.user_id.username + ' | ' + self.name)
+        return str(self.name)
 
     def get_absolute_url(self):
         return reverse("project-details", args=(str(self.id)))

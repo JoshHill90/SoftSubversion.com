@@ -23,16 +23,17 @@
 		<h1 class='h1-1 mt-2 mb-2'>{{ ratio }}% Paid</h1>
 	</div>
 </div>
-<div class='row mt-4 mb-4 sections'>
-	<div class='col-12'>
-		<h1 class='h1-1'>{{ invoice.invoice }} - Client: {{ invoice.client_id }}</h1>
+<div class='row mt-4 mb-4 '>
+
+	<div class='col-4 sections'>
+		<h1 class='h1-1'>{{ user_info.first_name }} {{ user_info.last_name }}</h1>
+		<p class='p-p'>Email hey <br> {{ client_info.email }}</p>
+		<p class='p-p'>Number <br> {{ client_info.phone }}</p>
+		<p class='p-p'>client ID: {{ client_info.id }}</p>
 	</div>
-	<div class='col-4'>
-		<p class='p-p'>Email <br> {{ invoice.client_id.email }}</p>
-		<p class='p-p'>Number <br> {{ invoice.client_id.phone }}</p>
-		<p class='p-p'>client ID: {{ invoice.client_id.user_id.id }}</p>
-	</div>
-	<div class='col-8'>
+</div>
+<div class='row mt-4 mb-4 '>
+	<div class='col-8 sections'>
 		<h1 class='h1-1'>Project Details</h1>
 		<p class='p-p'>{{ invoice.details }}</p>
 	</div>

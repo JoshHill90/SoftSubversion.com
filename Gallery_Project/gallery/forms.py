@@ -44,10 +44,7 @@ class ProjectForms(forms.ModelForm):
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title for the post'}),
             'client_id': forms.Select(attrs={'class': 'form-control'}),
             'cost': forms.NumberInput(attrs={'class': 'form-control'}),
-            'status': forms.CheckboxInput(attrs={'type': 'checkbox',
-                                                  'class': 'form-check-input',
-                                                  'id': 'flexSwitchCheckChecked',
-                                                  }),
+            'status': forms.Select(attrs={'class': 'form-control'}),
             'user_id': forms.TextInput(attrs={'class': 'form-control'})  
         }
         

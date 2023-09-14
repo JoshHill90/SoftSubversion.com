@@ -194,7 +194,6 @@ class ImageDetailView(DetailView):
 
 class PrintListView(ListView):
     template_name = 'gallery/prints/prints.html'
-    data_triggere.json_chart_data()
     model = Print
 
 class PrintEditView(UpdateView):

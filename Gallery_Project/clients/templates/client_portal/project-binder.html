@@ -42,25 +42,25 @@
 <div class='row mt-4 sections'>
 	<div class="overflow-auto scroll-menu">
 		{% for project in project_request %}
-			<div class='col-12'>
-				<div class='row mt-1 inv-card'>
-					<div class='col-6 col-md-3'>
-						<p class="p-p">
-							{{ project.name }} 
-							<br>
-							Request ID:<br>{{ project.slug }}
-						</p>
-					</div>
-					<div class='col-6 col-md-3'>
-						
-						<p class="p-p"> Scope:<br>{{ project.scope }}</p>
-					</div>
-					<div class='col-6 col-md-3'>
-						<p class="p-p">Requested Date:<br>{{ project.date }}</p>
-					</div>
-					<div class='col-12 col-md-3'>
-						<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-status' project.slug %}'">Details</button>
-					</div>
+			<div class='col-12 mt-1 inv-card'>
+				<div class='row inv-card-content'>
+						<div class='col-6 col-md-3'>
+							<p class="p-p">
+								{{ project.name }} 
+								<br>
+								Request ID:<br>{{ project.slug }}
+							</p>
+						</div>
+						<div class='col-6 col-md-3'>
+							
+							<p class="p-p"> Scope:<br>{{ project.scope }}</p>
+						</div>
+						<div class='col-6 col-md-3'>
+							<p class="p-p">Requested Date:<br>{{ project.date }}</p>
+						</div>
+						<div class='col-12 col-md-3'>
+							<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-status' project.slug %}'">Details</button>
+						</div>
 				</div>
 			</div>
 		{% endfor %}

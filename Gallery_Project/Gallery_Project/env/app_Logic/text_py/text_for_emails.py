@@ -43,7 +43,7 @@ project_request_notice_body = """
 Project Request!!!
 From: client_name - ID#: user_id
 Project Name project_name
-Requested scope  scope
+Requested Scope  scope
 Requested date  date_selected
 Requested Location type location
 Details details

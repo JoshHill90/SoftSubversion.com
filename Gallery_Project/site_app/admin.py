@@ -3,7 +3,7 @@ from .models import Contact
 from gallery.models import Image, Project, Print
 from blog.models import Blog
 from management.models import Crew, Coupon, Billing, Payments
-from clients.models import Client, Invite, ProjectRequest, RequestReply
+from clients.models import Client, Invite, ProjectRequest, RequestReply, ProjectTerms
 
 admin.site.register(Blog)
 admin.site.register(Project)
@@ -18,3 +18,4 @@ admin.site.register(Billing)
 admin.site.register(Payments)
 admin.site.register(ProjectRequest)
 admin.site.register(RequestReply)
+admin.site.register(ProjectTerms)
