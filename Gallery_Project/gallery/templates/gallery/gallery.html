@@ -6,7 +6,7 @@
 <div class='container'>
     <div class='section-height'>
         <div class='row'>
-            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+            <div class='col-12 col-md-4 slide-up' id='slide-in'>
                 <button class='card card-attrs'>
                     <div class="card-body">
                         {% for image in image_list %}
@@ -24,7 +24,7 @@
                     </div>
                 </button>
             </div>
-            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+            <div class='col-12 col-md-4 slide-up' id='slide-in'>
                 <button class='card card-attrs'>
                     <div class="card-body">
                         {% for image in image_list %}
@@ -42,25 +42,7 @@
                     </div>
                 </button>
             </div>
-            <div class='col-12 col-md-3 slide-up' id='slide-in'>
-                <button class='card card-attrs'>
-                    <div class="card-body">
-                        {% for print in print_list %}
-                        {% if print.display == 'gallery3' %}
-                        <div class='card-shot'>
-                            <img class='img-fluid' src="{{ print.image_link }}" onclick="window.location.href='{% url 'prints' %}'">
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        <div class='card-text'>
-                            <p class='p-p'>
-                                Print Gallery
-                            </p>
-                        </div>
-                    </div>
-                </button>
-            </div>
-            <div class='col-12 col-md-3 slide-up' id='slide-in'>
+            <div class='col-12 col-md-4 slide-up' id='slide-in'>
                 <button class='card card-attrs'>
                     <div class="card-body">
                         {% for image in image_list %}

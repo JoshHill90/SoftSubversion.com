@@ -1,0 +1,37 @@
+{% extends 'panel.html' %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+
+
+<div class='row mt-4 mb-4'>
+	<div class='col-12'>
+		<h1 class='h1-1 text-center'>
+			Event Calendar
+		</h1>
+	</div>
+	<div class='col-12'>
+		<div class='row mt-4 text-center'>
+			<div class='cust-cols sections-small'>
+				<p class='p-p' >Monday</p>
+
+				<p class='p-p' >Tuesday</p>
+
+				<p class='p-p' >Wednesday</p>
+
+				<p class='p-p' >Thursday</p>
+
+				<p class='p-p' >Friday</p>
+
+				<p class='p-p' >Saturday</p>
+
+				<p class='p-p' >Sunday</p>
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endif %}
+
+{% endblock %}

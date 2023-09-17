@@ -1,0 +1,159 @@
+{% extends 'panel.html' %}
+{% block title %}Project {{ project.name }} {% endblock %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+<div class='row mt-4 mb-4'>
+	<div class='col-12 mt-4 mb-4'>
+		<div class='sections'>
+			<div class='row text-center'>
+				<div class='col-4'>
+					<h1 class='h1-1'>Deposit Amount</h1>
+					<p class='nums'>${{ project.deposit_amount }}</p>
+				</div>
+				<div class='col-4'>
+					<h1 class='h1-1'>Total Cost</h1>
+					<p class='nums'>${{ project.cost }}</p>
+				</div>
+				<div class='col-4'>
+					<h1 class='h1-1'>Next Amount Due</h1>
+					<p class='nums'>${{ out }}</p>
+				</div>
+				<div class='col-12'>
+					<div id="dueProgress">
+						<div id="due" value="{{ ratio }}"></div>
+					</div>
+					<h1 class='h1-1 mt-2 mb-2'>{{ ratio }}% Paid</h1>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div class='row'>
+	<div class='col-8'>
+		<div class='row'>
+			<div class='col-6 mb-4'>
+				<div class='sections'>
+					<h1 class='h1-1'>Client: {{ client.user_id.first_name }} {{ client.user_id.last_name }}</h1>
+					<hr>
+					<p class='p-p'>Email<br> {{ client.email }}</p>
+					<p class='p-p'>Phone <br> {{ client.phone }}</p>
+					<p class='p-p'>Client ID: {{ client.id }}</p>
+				</div>
+			</div>
+
+			<div class='col-6 mb-4'>
+				<div class='sections'>
+					<h1 class='h1-1'>Project Event Dates</h1>
+					<hr>
+					<div class="overflow-auto">
+						{% for event in project_events %}	
+						<p class='p-p'>
+							{{ event.date }} | {{ event.start }} to {{ event.end }} 
+							<a href={% url 'project-event' event.id %}>
+								<i class="fa-solid fa-calendar-days"></i>
+							</a>
+						</p>
+						<hr>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+
+			<div class='col-12 mt-4 mb-4'>
+				<div class='sections'>
+					<h1 class='h1-1'>Project Details <br> {{ project }} </h1>
+					<hr>
+					<div class='row'>
+						<div class='col-3'>
+							<p class='p-p'>Scope{{ project.scope }}</p>
+						</div>
+						<div class='col-3'>
+							<p class='p-p'>{{ project.location }}</p>
+						</div>
+						<div class='col-3'>
+						
+							<p class='p-p'>{{ project.status }}</p>
+						</div>
+						
+						<div class='col-12'>
+							<button class="btn-cust" type="button" data-bs-toggle="collapse" data-bs-target="#dropdetails" aria-expanded="false" aria-controls="dropdetails">
+								Info
+							</button>
+							<div class="collapse" id="dropdetails" style='width:100%'>
+								<div class='inv-card'>
+									<div class='inv-card-content'>
+										<p class='p-p'>Project Details</p>
+										<p class='p-p'>{{project.details}}</p>
+
+									</div>
+
+								</div>
+							</div>
+						</div>
+					</div>
+
+				</div>
+			</div>	
+		</div>
+	</div>
+
+	<div class='col-4 mb-4'>
+		<div class='sections h-100'>
+			<h1 class='h1-1'>Payments</h1>
+			<hr>
+			<div class="overflow-auto">
+				{% for payment in payment_list %}
+				<p class='p-p'>
+					{{ payment.status|title }} Amount: ${{ payment.amount|floatformat:2 }}  | {{ payment.receipt|title }} 
+					<a href={% url 'payment-details' payment.id %}>
+						<i class="fa-solid fa-file-invoice"></i>
+					</a>
+				</p>
+				<hr>
+				{% endfor %}
+			</div>
+		</div>
+	</div>	
+</div>
+
+<div class='row mt-4 mb-4'>
+	<div class='col-12 mt-4 mb-4'>
+		<div class='sections-small'>
+			<div class='row'>
+				<div class='col-3'>
+					<button class='w-100 btn-cust'>Edit Project</button>
+				</div>
+				<div class='col-3'>
+					<button class='w-100 btn-cust'onclick="window.location.href='#'">Cancel Project</button>
+				</div>
+				<div class='col-3'>
+					<button class='w-100 btn-cust'>Gallery</button>
+				</div>
+				<div class='col-3'>
+					<button class='w-100 btn-cust'>Add Event</button>
+				</div>
+				<div class='col-3'>
+					<button class='w-100 btn-cust '>Billing Details</button>
+				</div>
+				<div class='col-3'>
+					<button class='btn-cust w-100'onclick="window.location.href='#'">Add Invoice</h1>
+				</div>
+				<div class='col-3'>
+					<button class='btn-cust w-100'>Add Cash Payment</button>
+				</div>
+				<div class='col-3'>
+					<button class='w-100 btn-cust'>Client Details</button>
+				</div>
+			</div>
+
+		</div>
+	</div>
+</div>
+
+
+
+{% endif %}
+<script src={% static 'js/invoiceBar.js' %}></script>
+{% endblock %}

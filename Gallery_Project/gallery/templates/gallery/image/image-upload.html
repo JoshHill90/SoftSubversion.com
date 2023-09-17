@@ -1,21 +1,14 @@
 {% extends 'panel.html' %}
 {% block title %}Upload Link{% endblock %}
 {% block content %}
-
-
-
 {% if user.is_authenticated %}
-
-
-
-
 <br/>
 {{object_path}}
 
         <form class='form-group' id="uploadForm" method="post" enctype="multipart/form-data">
-            <div class="sections p-p">
+            <div class="sections form-fit p-p">
               <h1 class='h1-1'>Upload Image and Prints</h1>
-                <div class="mb-5">
+                <div class="mb-5" id='onWait'>
             {% csrf_token %}
                     <input class="form-control" id='cfURL' type="text" value="{{ front_end_url }}" hidden>
 
@@ -37,20 +30,19 @@
                       <p class='p-p'>Images are subject to a file size limit of 10 megabytes</p>
                       <p class='p-p'>Animated GIFs, inclusive of all frames, must adhere to a limit of 50 megapixels</p>
                     </ol>
-                    <p class='p-p'>If Error message shows upload fails please contact the site admin.</p>
+                    <p class='p-p'>If an error message shows upload fails please contact the site admin.</p>
 
                     <input class="form-control" value="{{clfr_id}}" type="text" id="cloudflareid" hidden>
                     <button class="btn-cust mt-3" onclick="delayedRedirect('{% url 'image-create' clfr_id %}')">Upload Image</button>
-                    <button class="btn-cust mt-3" onclick="delayedRedirect('{% url 'print-create' clfr_id %}')">Upload Prints</button>
                 </div>
-                <img id="frame" src="" class="img-fluid">
             </div>
         </form>
+
+
         <script>
           const uploadForm = document.getElementById("uploadForm");
           const imageUpload = document.getElementById("imageUpload");
           const cfURL = document.getElementById("cfURL");
-
 
           uploadForm.addEventListener("submit", e => {
             e.preventDefault();
@@ -67,18 +59,23 @@
             })
               .then(response => response.json())
               .then(data => {
+
                 console.log(data); // You can access the response data here
               })
               .catch(error => {
                 console.error(error);
+                alert(error);
+                return false;
               });
           });
+
           function delayedRedirect(url) {
             setTimeout(function() {
               window.location.href = url;
             }, 1000); // Delay of 1 second (3000 milliseconds)
           }
         </script>
+
 {% endif %}
 
 {% endblock %}

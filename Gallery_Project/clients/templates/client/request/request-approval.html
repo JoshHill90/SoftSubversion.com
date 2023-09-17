@@ -46,8 +46,6 @@
 						{{ client_info.city }} {{ client_info.state }}, {{ client_info.zip_code }}
 					</p>
 				</div>
-				
-
 
 				<div class='col-6'>
 					<h1 class='h1-1 mb-4'>Schedule Consultation</h1>
@@ -145,10 +143,5 @@
 		</div>
 	</div>
 </div>
-<script>
-	$('.form-check-input').click(function() {
-		$('.collapse').collapse('hide');
-		$('#' + $(this).attr('aria-controls')).collapse('show');
-	});
-</script>
+
 {% endblock %}

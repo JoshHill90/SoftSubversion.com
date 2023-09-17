@@ -3,6 +3,7 @@ from django.urls import reverse
 from django.contrib.auth.models import User
 import secrets
 import random
+import datetime
 
 def hex_gen_small():
     fronter = 'SSP'
@@ -10,6 +11,15 @@ def hex_gen_small():
     random_hex = secrets.token_hex(4)
     print(random_hex)
     return fronter + str(random_hex) + str(random_num)
+
+def date_stamp():
+    date_and_time = datetime.datetime.now()
+    dates = date_and_time.date()
+    times = date_and_time.strftime("%I:%M:%S %p")
+    date = str(dates)
+    time = str(times)
+    print(date)
+    return date
 
 
 
@@ -44,13 +54,16 @@ class Project(models.Model):
     client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.SET_NULL)
     user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
     deposit_amount = models.FloatField(default=0.00)
+    scope = models.CharField(max_length=255, blank=True, verbose_name='Project-Type/Scope')
+    details = models.CharField(max_length=3000, blank=True, verbose_name='Project Details')
+    location = models.CharField(max_length=255, blank=True, verbose_name='Location type')
 
 
     def __str__(self):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse("project-details", args=(str(self.id)))
+        return reverse("project-details", args=(self.id,))
     
     
 class Image(models.Model):
@@ -90,3 +103,19 @@ class Print(models.Model):
 
     def get_absolute_url(self):
         return reverse("print-details", args=(self.id,))
+    
+class ProjectEvents(models.Model):
+    title = models.CharField(max_length=255)
+    payment_id = models.ForeignKey('management.Payments', on_delete=models.CASCADE)
+    Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
+    date = models.DateField(default=date_stamp())
+    start = models.TimeField(blank=True, null=True)
+    end = models.TimeField(blank=True, null=True)
+    details = models.CharField(max_length=500, blank=True)
+
+    
+    def __str__(self):
+        return str(self.title)
+
+    def get_absolute_url(self):
+        return reverse("project-event", args=(self.id,))

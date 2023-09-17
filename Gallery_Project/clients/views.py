@@ -18,6 +18,9 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from datetime import datetime, timedelta
+from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
+
+        
 
 # -------------------------------------------------------------------------------------------------------------#
 # Date and time configeration
@@ -66,9 +69,9 @@ def hex_gen_small():
 #-------------------------------------------------------------------------------------------------------#
 
 def client_main(request):
-    client_list = Client.objects.exclude(Q(id='1'))
-    client_images = Image.objects.exclude(Q(client_id="1"))
-    project_list = Project.objects.exclude(Q(user_id="1"))
+    client_list = Client.objects.exclude(Q(name='Soft Subversion'))
+    client_images = Image.objects.exclude(Q(client_id__name="Soft Subversion"))
+    project_list = Project.objects.exclude(Q(user_id__username="Soft Subversion"))
     project_temp = 0
     image_temp = 0
 	# Get query parameters
@@ -133,10 +136,14 @@ class ClientIntake(CreateView):
         add_feild = self.object
         add_feild.hexkey = hex_key
         add_feild.save()
+        response_back = smtp_request.send_invite(email, name, hex_key)
+        if response_back == 'sent':
+            dataQ = DataSetUpdate()
+            dataQ.json_user_list_check()
+            return redirect('invite-success')
+        else:
+            return redirect('invite-failed')
         
-        
-        return redirect('login')
-
 def clientRequestDetails(request, slug):
     project_request = get_object_or_404(ProjectRequest, slug=slug)
     print(project_request.id)
@@ -261,6 +268,7 @@ def request_approval(request, id):
                     invoice=stripe_invoice_deposit.id,
                     customer=stripe_id
             )
+            print(stripe_invoice_deposit, '\n \n',invoice_item)
             
             new_project = Project.objects.create(
                 name=client_request.name,
@@ -285,8 +293,6 @@ def request_approval(request, id):
             )
 
             return render(request, 'client/client.html')
-        
-            # on the upload-terms page, set upo a method to collect the payment and then allow access to project
 
     else:
         terms_form = ProjectTermsForm()
@@ -301,8 +307,7 @@ def request_approval(request, id):
   })
         
         
-class CommentSuccessView(TemplateView):
-    template_name = 'client/comment_success.html'
+
 #-------------------------------------------------------------------------------------------------------#
 # client project views 
 #-------------------------------------------------------------------------------------------------------#
@@ -389,3 +394,20 @@ def request_status(request, slug):
         'new_comments' : new_comments,
         'comments': comments, 
   })
+    
+#-------------------------------------------------------------------------------------------------------#
+# success static views
+#-------------------------------------------------------------------------------------------------------#   
+    
+class SuccessInvite(TemplateView):
+    template_name = 'client/success/success-invite.html'
+    
+class CommentSuccessView(TemplateView):
+    template_name = 'client/comment_success.html'
+    
+#-------------------------------------------------------------------------------------------------------#
+# failed static views 
+#-------------------------------------------------------------------------------------------------------#
+    
+class FailedInvite(TemplateView):
+    template_name = 'client/success/failed-invite.html'

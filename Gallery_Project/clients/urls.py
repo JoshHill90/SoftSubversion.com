@@ -18,5 +18,8 @@ urlpatterns = [
     path('client/request/approval/<int:id>', views.request_approval, name='approval'),
 
     path('client/request/success', CommentSuccessView.as_view(), name='comment-success'),
+    path('client/invite/success', SuccessInvite.as_view(), name='invite-success'),
+    
+    path('client/invite/failed', SuccessInvite.as_view(), name='invite-failed'),
     
 ]

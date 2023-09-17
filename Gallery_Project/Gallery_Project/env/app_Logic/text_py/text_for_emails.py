@@ -66,3 +66,36 @@ link
 
 """
 owner_post_comment_body = str(owner_post_comment_)
+
+
+send_invite_text = """
+
+Dear [client_name],
+
+We're thrilled to extend an exclusive invitation for you to become a part of Soft Subversion's Online Studio, where you'll gain access to a world of captivating photography and personalized experiences.
+
+To kickstart your journey with us and unlock the ability to submit project requests, you'll need to complete your registration by creating an account. To begin, please make note of your unique registration key: [REG_KEY]. Then, follow this link to register using your exclusive key:
+
+[REG_URL]
+
+Here's a brief overview of what you can anticipate from your Soft Subversion's Online Studio account:
+Seamless Project Requests: You'll be able to submit project requests and directly collaborate with Carly to outline project details, ensuring your vision comes to life.
+
+
+Private Proofing Gallery: Gain access to a private gallery where you can preview your photos for proofing purposes. Feel free to communicate directly with Carly to fine-tune your selections before finalization.
+
+
+Easy Downloads and Printing: Once your final payment is processed, you'll have the convenience of downloading high-quality copies of your gallery and even ordering prints directly from Soft Subversion's Online Studio.
+
+
+Should you encounter any questions or encounter any hiccups during the registration process, our dedicated support team is here to provide assistance. Reach out to us at support@softsubversion.com, and we'll guide you through any challenges you may face.
+Thank you for choosing to embark on this creative journey with us at Soft Subversion's Online Studio. We look forward to helping you bring your photography and videography projects to life.
+
+Warm regards,
+
+Carley Brown
+Photographer/Videographer 
+Soft Subversion 
+Website: softsubversion.com  
+Email: Carly@softsubversion.com"""
+

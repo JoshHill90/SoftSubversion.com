@@ -2,31 +2,46 @@
 {% block title %}Client Request{% endblock %}
 {% block content %}
 {% load static %}
-<div class='row mt-4 sections'>
-	<div class="overflow-auto scroll-menu">
-		{% for request in client_request %}
-			<div class='col-12'>
-				<div class='row mt-1 inv-card'>
-					<div class='col-6 col-md-3'>
-						<p class="p-p">
-							{{ request.name }} 
-							<br>
-							Client ID: {{ request.user_id}}
-						</p>
+<div class='row mt-4'>
+	<div class='col-12'>
+		<div class='sections'>
+			<h1 class='h1-1'>Pending Project Request</h1>
+			<div class='row mt-4 '>
+				<div class="overflow-auto scroll-menu">
+					{% for project in client_request %}
+					{% if project.status == 'pending' %}
+					<div class='col-12 mt-1 inv-card'>
+						<div class='row text-center inv-card-content'>
+							<div class='col-3'>
+								<p class="p-p">
+									Title <br>
+									{{ project.name }} 
+									<br>
+								</p>
+							</div>
+							<div class='col-3'>
+								<p class="p-p">
+									Client <br>
+									{{ project.user_id }} 
+									<br>
+								</p>
+							</div>
+							<div class='col-3'>
+								Project scope <br>
+								<p class="p-p">
+									{{ project.scope }} 
+									<br>
+								</p>
+							</div>
+							<div class='col-3'>
+								<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-status' project.slug %}'">Details</button>
+							</div>
+						</div>
 					</div>
-					<div class='col-6 col-md-3'>
-						
-						<p class="p-p"> Scope: {{ request.scope }}</p>
-					</div>
-					<div class='col-6 col-md-3'>
-						<p class="p-p">Location Type:  {{ request.location }}</p>
-					</div>
-					<div class='col-12 col-md-3'>
-						<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'request-details' request.slug %}'">Details</button>
-					</div>
+					{% endif %}
+					{% endfor %}
 				</div>
 			</div>
-		{% endfor %}
 		</div>
 	</div>
 </div>

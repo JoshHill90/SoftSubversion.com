@@ -1,18 +1,22 @@
 {% extends 'panel.html' %}
-{% block title %}Upload Link{% endblock %}
+{% block title %}Delete Image{% endblock %}
 {% block content %}
 
-<h1>Upload your image and get an image link</h1>
+
 
 {% if user.is_authenticated %}
 
 
-    <div class="sections p-p form-group">
+    <div class="sections-small form-fit p-p form-group">
+        <h1 class='h1-1'>Delete Image</h1>
+        <p class='p-p'>
+            This action cannot be undone, are you sure you would like to processed
+        </p>
         <form method=POST enctype="multipart/form-data">
             {% csrf_token %}
             {{form.media}}
             {{form.as_p}}
-            <button class="btn btn-primary">
+            <button class="btn-cust">
                 Submit
             </button>
         </form>

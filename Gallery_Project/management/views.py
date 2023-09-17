@@ -8,21 +8,18 @@ from django.urls import reverse_lazy
 from django.db.models import Q
 from django.conf import settings
 from pathlib import Path
-from .models import Billing
+from .models import Billing, Payments
 from clients.models import Client
 from .forms import RegForm, ProfileForm, LoginForm, BillingForm
 from gallery.models import Image, Print, Project
 from clients.models import Client, Invite
 from django.shortcuts import render, redirect
-from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
+from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate 
 import os
 import json
 import requests
 
-
 dataQ = DataSetUpdate()
-dataQ.json_user_list_check()
-        
 
 #-------------------------------------------------------------------------------------------------------#
 # Billing views
@@ -190,10 +187,8 @@ class UserRegistrationView(generic.CreateView):
 
     form_class = RegForm
     template_name = 'registration/register.html'
-    success_url = reverse_lazy('client')
     
     def form_valid(self, form):
-        print('test 2')
         username = form.cleaned_data.get('username')
         hex_key = form.cleaned_data.get('hexkey')
         email = form.cleaned_data.get('email')
@@ -204,10 +199,9 @@ class UserRegistrationView(generic.CreateView):
         city = form.cleaned_data.get('city')
         state = form.cleaned_data.get('state')
         zip_code = form.cleaned_data.get('zip_code')
-
         invite = Invite.objects.filter(hexkey=hex_key).first()
         if invite:
-            print('test 1')
+
             user = form.save()
             user.groups.set('1')
             user.save()
@@ -227,7 +221,7 @@ class UserRegistrationView(generic.CreateView):
             client.save()
             invite.used = True
             invite.save()
-            return super().form_valid(form)
+            return redirect('login')
         else:
             print('test 0')
             form.add_error('hexkey', 'Invalid hexkey. Please enter a valid key.')
@@ -253,7 +247,7 @@ def o_main(request):
     gal4 = Image.objects.filter(Q(display="subgal4") | Q(display="gallery4"))
     site_image = Image.objects.filter(Q(client_id="1"))
     client_images = Image.objects.exclude(Q(client_id="1"))
-    #dataQ.json_chart_data()
+    dataQ.json_chart_data()
 
     return render(request, 'management/main.html', {
         'image_list': image_list,
@@ -280,3 +274,10 @@ def notebook(request):
         'project_list': project_list,
         'client_list': client_list
     })
+    
+    
+    
+    
+class PaymentsDetailView(DeleteView):
+    model = Payments
+    template_name = 'billing/payments/payment-details.html'

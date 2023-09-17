@@ -7,17 +7,16 @@
 {% if user.is_authenticated %}
 
 
-    <div class="sections p-p form-group">
-        <h1 class='h1-1'>Send Client invite</h1>
+    <div class="sections p-p form-group form-fit">
+        <h1 class='h1-1'>Send Client Invite</h1>
         <form method=POST enctype="multipart/form-data">
             {% csrf_token %}
             {{form.as_p}}
-			<h1 class='h1-1'> 
-				Hit submit to send the patential client an invite to 
-				register and fill out their project questionair questionar
-			</h1>
+			<p class='p-p'> 
+                This will send a unique code to the client that will grant them access to register. 
+            </p>
 
-            <button class="btn btn-primary">
+            <button class="btn-cust">
                 Submit
             </button>
         </form>

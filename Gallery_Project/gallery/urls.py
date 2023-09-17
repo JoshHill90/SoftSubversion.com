@@ -19,10 +19,9 @@ urlpatterns = [
     path('print/<int:pk>/details', PrintDetailView.as_view(), name='print-details'),
     path('print/<int:pk>/edit', PrintEditView.as_view(), name='print-edit'),
     path('print/<int:pk>/delete', PrintDeleteView.as_view(), name='print-delete'),
-    path('print/upload', print_upload, name='print-upload'),
 
-    path('project/', ProjectListView.as_view(), name='projects'),
-    path('project/<int:pk>/details', ProjectDetailView.as_view(), name='project-details'),
+    path('project/', views.project_main, name='projects'),
+    path('project/<int:pk>/details', views.project_owner_view, name='project-details'),
     path('project/create', ProjectCreateView.as_view(), name='project-create'),
     path('project/<int:pk>/edit', ProjectEditView.as_view(), name='project-edit'),
     path('project/<int:pk>/delete', ProjectDeleteView.as_view(), name='project-delete'),
@@ -30,4 +29,7 @@ urlpatterns = [
     path('image/create/<str:clfr_id>', CreateImage.as_view(), name='image-create'),
     path('print/create/<str:clfr_id>', PrintCreateView.as_view(), name='print-create'),
     path('image/upload', upload_image, name='image-upload'),
+    
+    path('project/<int:pk>/event', views.clandar, name='project-event'),
+    path('project/events', ProjectEventCalendar.as_view(), name='project-calendar'),
 ] 

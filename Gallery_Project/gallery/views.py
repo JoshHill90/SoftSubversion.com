@@ -7,13 +7,15 @@ from django.db.models import Q
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import Image, Print, Project
+from .models import Image, Print, Project, ProjectEvents
 from clients.models import ProjectRequest
 from .forms import ImageForms, PrintForms, ProjectForms, CreatImageForm
 from Gallery_Project.env.app_Logic.photo_layer import col3_col6_col3
 from Gallery_Project.env.cloudflare_API.CFAPI import APICall, Encode_Metadata
 from django.core.paginator import Paginator 
 from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
+from clients.models import Client, ProjectRequest, ProjectTerms
+from management.models import Payments, Billing
 
 data_triggere = DataSetUpdate()
 
@@ -73,6 +75,15 @@ def column_sort(image_list):
 # views
 #
 #-----------------------------------------------------------------------------------------------------------#
+
+class ProjectEventCalendar(ListView):
+    model = ProjectEvents
+    template_name = 'gallery/project/project-events/calendar.html'
+    
+def clandar(request):
+    project_events = ProjectEvents.objects.all()
+    calendar_set = 
+    return render(request, 'gallery/project/project-events/event-details.html' )
 
 
 #-------------------------------------------------------------------------------------------------------#
@@ -231,16 +242,61 @@ class PrintDetailView(DetailView):
         
         return context
 
-def print_upload(request):
-    pass
-
 #-------------------------------------------------------------------------------------------------------#
 # Prints views
 #-------------------------------------------------------------------------------------------------------#
 
-class ProjectListView(ListView):
-    template_name = 'gallery/project/projects.html'
-    model = Project
+def project_main(request):
+    client_list = Client.objects.exclude(Q(name='Soft Subversion'))
+    project_images = Image.objects.exclude(Q(client_id__name="Soft Subversion"))
+    project_list = Project.objects.exclude(Q(name="Soft Subversion"))
+    project_request = ProjectRequest.objects.all()
+    project_events = ProjectEvents.objects.all()
+    project_temp = 0
+    image_temp = 0
+	# Get query parameters
+    project_query = request.GET.get('project')
+    client_query = request.GET.get('client')
+    order_set = request.GET.get('order')
+
+    # Apply filters
+    if project_query:
+        project_list = project_list.filter(Q(name__icontains=project_query))
+
+
+    if client_query:
+        client_list = client_list.filter(Q(name__icontains=client_query))
+        #client_ids = client_list.values_list('id',)
+        #project_list = project_list.filter(user_id__in=client_ids)
+	        
+    if order_set == 'Oldest':
+        project_list = project_list.order_by('id')
+    else:
+        project_list = project_list.order_by('-id')
+   
+    project_info =[]
+    for project in project_list:
+        client_name = str(project.user_id.first_name + ' ' + project.user_id.last_name)
+        project_details = {
+            'project': project.name,
+            'project_id': project.id,
+            'project_client': client_name,
+            'project_cost': project.cost,
+            'project_status': project.status
+                           }
+        
+        for image in project_images:
+            if image.project_id.id == project.id:
+                image_temp +=1
+        project_info.append({'project_details': project_details, 'image_count': image_temp})
+                	
+    return render(request, 'gallery/project/projects.html', {
+		'project_info': project_info,
+		'project_images':project_images,
+		'project_list': project_list,
+        'project_request': project_request,
+        'project_events': project_events
+	})
     
     
 class ProjectCreateView(CreateView):
@@ -258,10 +314,21 @@ class ProjectDeleteView(DeleteView):
     template_name = 'gallery/project/project-delete.html'
     success_url = reverse_lazy('print')
     
-class ProjectDetailView(DetailView):
-    model = Project
-    form_class = ProjectForms
-    template_name = 'gallery/project/project-details.html'
+def project_owner_view(request, pk):
+    project = Project.objects.get(Q(id=pk))
+    project_events = ProjectEvents.objects.filter(Project_id=pk)
+    client = Client.objects.get(user_id=project.user_id)
+    billing_info = Billing.objects.get(project_id=pk)
+    payment_list = Payments.objects.filter(billing_id=billing_info)
+    print(payment_list)    
+    
+    return render(request, 'gallery/project/project-details.html', {
+        'project': project,
+        'project_events': project_events,
+        'billing_info': billing_info,
+        'payment_list': payment_list,
+        'client': client
+    })
 
 #---------------------------------------------------------------------------------------------------------#
 

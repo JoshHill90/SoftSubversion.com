@@ -16,6 +16,8 @@ urlpatterns = [
     path('billing/<int:pk>/edit', BillEditView.as_view(), name='billing-edit'),
     path('billing/<int:pk>/delete', BillDeleteView.as_view(), name='billing-delete'),
     
+    path('billing/payment/<int:pk>/details', PaymentsDetailView.as_view(), name='payment-details'),
+    
     path('<int:user_id>/change-password/', auth_views.PasswordChangeView.as_view(template_name='registration/change-password.html'),
      name='change-password')
      

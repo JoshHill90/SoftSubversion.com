@@ -5,18 +5,21 @@
 
 
 {% if user.is_authenticated %}
-<div class="sections p-p">
+<div class="sections form-fit p-p">
     <h1>Set Image Details</h1>
     <div class="nested-box">
-        heey {{ clfr_id }}
+         {{ clfr_id }}
         <div class="form-group">
             <form method=POST enctype="multipart/form-data">
                 {% csrf_token %}
                 {{form.media}}
                 {{form.as_p}}
-                <button type ="submit" class="btn btn-primary">
+                <button type ="submit" class="btn-cust" id='clicker' onclick=clickedHide()>
                     Submit
                 </button>
+                <div class="spinner" id='loader'>
+                    <div class="spinner1"></div>
+                </div>
             </form>
         </div>
     </div>
@@ -31,6 +34,15 @@
 
         const cloudflareIdField = document.getElementById('cloudflare_id');
         cloudflareIdField.value = cloudflareId;
+
+        const loader = document.getElementById('loader');
+        const clicker = document.getElementById('clicker');
+        
+        function clickedHide () {
+            loader.style.display = 'block';
+            clicker.style.display = 'none';
+        };
+
     </script>
 {% endif %}
 

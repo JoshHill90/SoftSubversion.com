@@ -1,6 +1,6 @@
 from django.contrib import admin
 from .models import Contact
-from gallery.models import Image, Project, Print
+from gallery.models import Image, Project, Print, ProjectEvents
 from blog.models import Blog
 from management.models import Crew, Coupon, Billing, Payments
 from clients.models import Client, Invite, ProjectRequest, RequestReply, ProjectTerms
@@ -19,3 +19,4 @@ admin.site.register(Payments)
 admin.site.register(ProjectRequest)
 admin.site.register(RequestReply)
 admin.site.register(ProjectTerms)
+admin.site.register(ProjectEvents)

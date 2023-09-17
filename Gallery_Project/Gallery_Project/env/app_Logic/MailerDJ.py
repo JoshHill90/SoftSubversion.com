@@ -133,6 +133,40 @@ class AutoReply:
                 print(f"An error occurred while sending the email: {e}")
     
     #------------------------#
+    # Client invite
+    #------------------------#
+
+    def send_invite(self, client_email, client_name, hexkey):
+
+        contact_subject = "Your Exclusive Registration Key for Soft Subversion's Online Studio"
+
+        text_swap = {'[client_name]': client_name,
+                     '[REG_URL]': 'softsubversion.com/register',
+                     '[REG_KEY]': hexkey
+                     }
+        
+        string = send_invite_text
+        result_string = reduce(lambda old_string, key_var: old_string.replace(key_var, text_swap[key_var]), text_swap, string)
+        contact_body = result_string
+
+        mailer = EmailMessage()
+
+        mailer['From'] = formataddr(("Soft Subversion", f"{self.alart_email}"))
+        mailer['To'] = client_email
+        mailer['Subject'] = contact_subject
+        mailer.set_content(contact_body)
+
+        with smtplib.SMTP(self.email_host, self.email_port) as server:
+            try:
+                server.starttls()
+                server.login(self.send_from, self.email_password)
+                server.sendmail(self.send_from, client_email, mailer.as_string())
+                server.close()
+                return 'sent'
+            except Exception as e:
+                return 'error'
+                
+    #------------------------#
     # Project Request
     #------------------------#
 
@@ -168,7 +202,6 @@ class AutoReply:
                 print('alart sent')
             except Exception as e:
                 print(f"An error occurred while sending the email: {e}")
-
 
 #### Test
 """test_send = os.getenv("TEST_SEND")

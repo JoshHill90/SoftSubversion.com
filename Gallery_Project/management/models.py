@@ -80,10 +80,11 @@ class Billing(models.Model):
 class Payments(models.Model):
     
     billing_id = models.ForeignKey(Billing, on_delete=models.CASCADE)
-    amount = models.FloatField(default=5.00)
+    amount = models.FloatField(default=5.00) 
     receipt = models.CharField(max_length=400, blank=True)
     time_stamp = models.DateField(auto_created=True)
     due_date = models.DateField(blank=True, null=True)
+    status = models.CharField(max_length=30, default='due')
     invoice_id = models.CharField(max_length=400, blank=True)
     
     def __str__(self):
