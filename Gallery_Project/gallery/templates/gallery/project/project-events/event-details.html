@@ -1,0 +1,43 @@
+{% extends 'panel.html' %}
+{% block title %}Projects{% endblock %}
+{% block content %}
+{% load static %}
+{% if user.is_authenticated %}
+
+
+<div class='row mt-4 mb-4'>
+	<div class='col-12 mt-4 mb-4'>
+		<div class='sections-small'>
+			<h1 class='h1-1 text-center'>Project Event Details</h1>
+			<div class='inv-card'>
+				<div class='inv-card-content'>
+					<div class='row text-center'>
+						<div class='col-4'>
+							<h1 class='h1-1 text-center'>Title: {{projectevents}}</h1>
+						</div>
+						<div class='col-4'>
+							<h1 class='h1-1 text-center'>{{projectevents.date|title}}</h1>
+						</div>
+						<div class='col-4'>
+							<h1 class='h1-1 text-center'>From {{projectevents.start|date:"H:i a"|title}} to {{projectevents.end|date:"H:i a"|title}}</h1>
+						</div>
+						
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class='col-12 mt-4 mb-4'>
+			<div class='sections'>
+				{{ projectevents.project_id.user_id.first_name }}
+			</div>
+		</div>
+
+	</div>
+
+
+
+</div>
+
+{% endif %}
+
+{% endblock %}

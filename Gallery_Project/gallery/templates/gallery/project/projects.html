@@ -34,12 +34,77 @@
 			</div>
 		</div>
 	</div>
-	<div class='col-4'>
+	<div class='col-4 text-center'>
 		<div class='sections'>
-			<h1 class='h1-1'>				<button
+			<h1 class='h1-1'>				
+				{{ month }} {{ year }}
+			</h1>
+			<button
 				class="btn-cust btn-cust-color" 
-				onclick="window.location.href='{% url 'project-calendar' %}'">Calendar</button></h1>
+				onclick="window.location.href='{% url 'project-calendar' year month %}'">
+				Full Calendar
+			</button>
 			<hr>
+			
+			<div class="big-cal">
+
+				<div class="day_name">Mon</div>
+				<div class="day_name">Tue</div>
+				<div class="day_name">Wed</div>
+				<div class="day_name">Thu</div>
+				<div class="day_name">Fri</div>
+				<div class="day_name">Sat</div>
+				<div class="day_name">Sun</div>
+
+				<div class="sm-day"><div class="{% if cal.week1.Mon.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Mon.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Mon.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week1.Tue.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Tue.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Tue.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week1.Wed.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Wed.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Wed.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week1.Thu.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Thu.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Thu.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week1.Fri.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Fri.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Fri.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week1.Sat.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Sat.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Sat.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week1.Sun.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week1.Sun.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week1.Sun.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+ 
+				<div class="sm-day"><div class="{% if cal.week2.Mon.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Mon.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Mon.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week2.Tue.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Tue.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Tue.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week2.Wed.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Wed.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Wed.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week2.Thu.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Thu.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Thu.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week2.Fri.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Fri.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Fri.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week2.Sat.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Sat.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Sat.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week2.Sun.day > 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week2.Sun.day }}</p><div class=" {% for event in project_events %}{% if event.date|date:"Y-m-d" == cal.week2.Sun.date|date:"Y-m-d" %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+ 
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Mon.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Mon.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Tue.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Tue.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Wed.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Wed.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Thu.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Thu.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Fri.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Fri.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Sat.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Sat.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week3.Sun.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week3.Sun.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Mon.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Mon.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Tue.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Tue.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Wed.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Wed.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Thu.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Thu.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Fri.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Fri.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Sat.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Sat.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="sm-day-box"><p class='p-p'>{{ cal.week4.Sun.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week4.Sun.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+
+				<div class="sm-day"><div class="{% if cal.week5.Mon.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Mon.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Mon.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week5.Tue.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Tue.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Tue.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week5.Wed.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Wed.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Wed.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week5.Thu.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Thu.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Thu.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week5.Fri.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Fri.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Fri.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week5.Sat.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Sat.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Sat.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week5.Sun.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week5.Sun.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week5.Sun.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+
+				<div class="sm-day"><div class="{% if cal.week6.Mon.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Mon.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Mon.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week6.Tue.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Tue.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Tue.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week6.Wed.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Wed.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Wed.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week6.Thu.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Thu.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Thu.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week6.Fri.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Fri.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Fri.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week6.Sat.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Sat.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Sat.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+				<div class="sm-day"><div class="{% if cal.week6.Sun.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Sun.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Sun.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
+
+			</div>
 
 		</div>
 	</div>

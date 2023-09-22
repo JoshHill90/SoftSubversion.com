@@ -30,6 +30,6 @@ urlpatterns = [
     path('print/create/<str:clfr_id>', PrintCreateView.as_view(), name='print-create'),
     path('image/upload', upload_image, name='image-upload'),
     
-    path('project/<int:pk>/event', views.clandar, name='project-event'),
-    path('project/events', ProjectEventCalendar.as_view(), name='project-calendar'),
+    path('project/<int:pk>/event',ProjectEventsDetails.as_view() , name='project-event'),
+    path('project/events/<int:year>/<str:month>', views.clandar, name='project-calendar'),
 ] 

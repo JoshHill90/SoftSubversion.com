@@ -107,7 +107,7 @@ class Print(models.Model):
 class ProjectEvents(models.Model):
     title = models.CharField(max_length=255)
     payment_id = models.ForeignKey('management.Payments', on_delete=models.CASCADE)
-    Project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
+    project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     date = models.DateField(default=date_stamp())
     start = models.TimeField(blank=True, null=True)
     end = models.TimeField(blank=True, null=True)

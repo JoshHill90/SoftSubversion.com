@@ -16,7 +16,10 @@ from django.core.paginator import Paginator
 from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
 from clients.models import Client, ProjectRequest, ProjectTerms
 from management.models import Payments, Billing
-
+from datetime import datetime
+import calendar
+from Gallery_Project.env.app_Logic.date_time_calendar import cal_gen
+import datetime
 data_triggere = DataSetUpdate()
 
 #-----------------------------------------------------------------------------------------------------------#
@@ -76,14 +79,36 @@ def column_sort(image_list):
 #
 #-----------------------------------------------------------------------------------------------------------#
 
-class ProjectEventCalendar(ListView):
-    model = ProjectEvents
-    template_name = 'gallery/project/project-events/calendar.html'
+def clandar(request, year, month):
+
+    event_list = ProjectEvents.objects.all()
+    event_list = ProjectEvents.objects.order_by('date')
+    month = month.title()
+    month_number = list(calendar.month_name).index(month)
+    month_number = int(month_number) 
+
+
+    month0, month1, month2, cal, year_new, todays_date, cal_date = cal_gen(month_number, year)
+    next_year = year + 1
+    last_year = year - 1
+    print(year_new)
+
+    return render(request, 'gallery/project/project-events/calendar.html', {
+        'year': year,
+        'month1': month1,
+        'month0':month0,
+        'month2' :month2,
+        'cal': cal,
+        'event_list':event_list,
+        'last_year': last_year,
+        'next_year': next_year,
+        'todays_date': todays_date,
+        'cal_date': cal_date
+    })
     
-def clandar(request):
-    project_events = ProjectEvents.objects.all()
-    calendar_set = 
-    return render(request, 'gallery/project/project-events/event-details.html' )
+class ProjectEventsDetails(DetailView):
+    model = ProjectEvents
+    template_name = 'gallery/project/project-events/event-details.html' 
 
 
 #-------------------------------------------------------------------------------------------------------#
@@ -246,6 +271,7 @@ class PrintDetailView(DetailView):
 # Prints views
 #-------------------------------------------------------------------------------------------------------#
 
+
 def project_main(request):
     client_list = Client.objects.exclude(Q(name='Soft Subversion'))
     project_images = Image.objects.exclude(Q(client_id__name="Soft Subversion"))
@@ -258,7 +284,11 @@ def project_main(request):
     project_query = request.GET.get('project')
     client_query = request.GET.get('client')
     order_set = request.GET.get('order')
+    
 
+
+
+    month0, month1, month2, cal, year, todays_date, cal_date = cal_gen()
     # Apply filters
     if project_query:
         project_list = project_list.filter(Q(name__icontains=project_query))
@@ -295,7 +325,10 @@ def project_main(request):
 		'project_images':project_images,
 		'project_list': project_list,
         'project_request': project_request,
-        'project_events': project_events
+        'project_events': project_events,
+        'year': year,
+        'month': month1,
+        'cal': cal
 	})
     
     
