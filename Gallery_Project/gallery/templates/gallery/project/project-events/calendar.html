@@ -39,24 +39,25 @@
 					{% endif%}
 				</div>
 			</div>
-
-
-				
+		
 			<h1 class='h1-1 text-center'>Selected Events</h1>
 			<hr>
-			<div class="overflow-auto"  style='max-height:50vh'>
+			<div class="overflow-auto sections-2"  style='max-height:40vh'>
 				{% for event in event_list %}
 				<div class="collapse w-100" id="{{ event.date|date:"M-d-Y"|slugify }}"> 
-					<div class="card card-body">
-						<h1 class='h1-1'>{{ event.title|title }}</h1> 
+					<div class="inv-card mt-4 mb-4">
+						<div class='inv-card-content'>
 
-						<hr>
-						<p class='p-p'>Client: {{ event.Project_id.user_id.first_name|title}} {{ event.Project_id.user_id.last_name|title}}</p>
-						<p class='p-p'>Date: {{ event.date|date:"Y-M-d"|title}}</p>
-						<p class='p-p'>Start: {{ event.start}} To {{ event.end}} </p> 
-						<button class='btn-cust' onclick="window.location.href='{% url 'project-event' event.id %}'">
-							Event Details
-						</button>
+							<h1 class='h1-1'>{{ event.title|title }}</h1> 
+
+							<hr>
+							<p class='p-p'>Client: {{ event.project_id.user_id.first_name|title}} {{ event.project_id.user_id.last_name|title}}</p>
+							<p class='p-p'>Date: {{ event.date|date:"Y-M-d"|title}}</p>
+							<p class='p-p'>Start: {{ event.start}} To {{ event.end}} </p> 
+							<button class='btn-cust' onclick="window.location.href='{% url 'project-event' event.id %}'">
+								Event Details
+							</button>
+						</div>
 					</div>
 				</div>
 				{% endfor %}

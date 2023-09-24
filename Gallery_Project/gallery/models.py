@@ -49,15 +49,9 @@ ASPECT_RATIO = [
 
 class Project(models.Model):
     name = models.CharField(max_length=255)
-    cost = models.FloatField(default=0.00)
     status = models.CharField(max_length=255, default='Pending Deposit')
     client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.SET_NULL)
     user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
-    deposit_amount = models.FloatField(default=0.00)
-    scope = models.CharField(max_length=255, blank=True, verbose_name='Project-Type/Scope')
-    details = models.CharField(max_length=3000, blank=True, verbose_name='Project Details')
-    location = models.CharField(max_length=255, blank=True, verbose_name='Location type')
-
 
     def __str__(self):
         return str(self.name)
@@ -106,11 +100,12 @@ class Print(models.Model):
     
 class ProjectEvents(models.Model):
     title = models.CharField(max_length=255)
-    payment_id = models.ForeignKey('management.Payments', on_delete=models.CASCADE)
+    payment_id = models.ForeignKey('management.Payments', on_delete=models.CASCADE, blank=True, null=True)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     date = models.DateField(default=date_stamp())
     start = models.TimeField(blank=True, null=True)
     end = models.TimeField(blank=True, null=True)
+    event_type = models.CharField(max_length=50, blank=True)
     details = models.CharField(max_length=500, blank=True)
 
     

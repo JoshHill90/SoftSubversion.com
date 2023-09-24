@@ -6,9 +6,9 @@ from django.db.models import Q
 from django.conf import settings
 from django.contrib.auth.models import User
 from pathlib import Path
-from .models import Client, Invite, ProjectRequest, RequestReply
+from .models import Client, Invite, ProjectRequest, RequestReply, ProjectTerms
 from .forms import ClientForm, InviteForm, ProjectRequestForm, RequestReplyComment, ProjectTermsForm
-from gallery.models import Image, Project
+from gallery.models import Image, Project, ProjectEvents
 from management.models import Payments, Billing
 from django.shortcuts import render, redirect, get_object_or_404
 import secrets
@@ -198,12 +198,21 @@ def request_approval(request, id):
     if request.method == 'POST':
         terms_form = ProjectTermsForm(data=request.POST)
         if terms_form.is_valid():
+            
+            # creates project
+            new_project = Project.objects.create(
+                name=client_request.name,
+                user_id=user_info,
+                client_id=client_info
+            )
+            
             new_template = terms_form.save(commit=False)
             new_template.user_id = user_info
             new_template.project_request_id = client_request
             new_template.scope = client_request.scope
-            new_template.slug = str(client_request.slug) + hex_gen_small()
+            new_template.slug = 'terms' + str(client_request.slug) + hex_gen_small()
             new_template.project_docs = f"{user_info}/{client_request.name}"
+            new_template.project_id = new_project
             new_template.save()
 
             # Process cleaned data
@@ -211,7 +220,12 @@ def request_approval(request, id):
             start_balance = terms_data.get('project_cost')
             services = terms_data.get('services')
             deposit_amount = terms_data.get('deposit')
+            consultation_date = terms_data.get('session_date')
+            consultation_start = terms_data.get('session_start')
+            consultation_end = terms_data.get('session_end')
             slug = terms_data.get('slug')
+
+            # update the project request
             client_request.status = 'Approved'
             client_request.save()
 
@@ -242,11 +256,12 @@ def request_approval(request, id):
                 # Saving new strip customer id
                 client_info.strip_id = strip_customer.id
                 client_info.save()
+                
                 stripe_id = strip_customer.id
                 stripe_prefix = strip_customer.invoice_prefix
                 print(stripe_id)
-                
-            elif client_info.strip_id:
+            # for existing strip cust id   
+            else:
                 strip_customer = stripe.Customer.retrieve(
                     id=client_info.strip_id
                 )
@@ -268,14 +283,8 @@ def request_approval(request, id):
                     invoice=stripe_invoice_deposit.id,
                     customer=stripe_id
             )
-            print(stripe_invoice_deposit, '\n \n',invoice_item)
             
-            new_project = Project.objects.create(
-                name=client_request.name,
-                cost=start_balance,
-                user_id=user_info,
-                deposit_amount=deposit_amount
-            )
+
 
             new_billing = Billing.objects.create(
                 invoice=stripe_prefix,
@@ -283,13 +292,23 @@ def request_approval(request, id):
                 project_id=new_project,
             )
             
-            Payments.objects.create(
+            new_deposit = Payments.objects.create(
                 billing_id=new_billing,
                 amount=deposit_amount,
                 receipt="Unpaid",
                 time_stamp=date_now(),
                 invoice_id=invoice_item.id,
                 due_date=in_30_days()
+            )
+            
+            ProjectEvents.objects.create(
+                title='Consultation',
+                payment_id=new_deposit,
+                project_id=new_project,
+                date=consultation_date,
+                start=consultation_start,
+                end=consultation_end,
+                event_type='deposit-consultation'
             )
 
             return render(request, 'client/client.html')

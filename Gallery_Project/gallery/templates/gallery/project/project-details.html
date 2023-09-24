@@ -19,13 +19,18 @@
 					<h1 class='h1-1'>Next Amount Due</h1>
 					<p class='nums'>${{ out }}</p>
 				</div>
-				<div class='col-12'>
-					<div id="dueProgress">
-						<div id="due" value="{{ ratio }}"></div>
+			</div>
+			<div class='sections-2'>
+				<div class='project-progress'>
+					<div class="progress-container">
+						<div class="progress" id="progress"> </div>
+						{% for node in project_progress %}
+						<div class="circle "><p class='cir-sm'>{{ node|title }}</p></div>
+						{% endfor %}	
 					</div>
-					<h1 class='h1-1 mt-2 mb-2'>{{ ratio }}% Paid</h1>
 				</div>
 			</div>
+			<div id='nodeActive' value='{{active_nodes}}'></div>
 		</div>
 	</div>
 </div>
@@ -34,29 +39,38 @@
 	<div class='col-8'>
 		<div class='row'>
 			<div class='col-6 mb-4'>
-				<div class='sections'>
+				<div class='sections h-100'>
 					<h1 class='h1-1'>Client: {{ client.user_id.first_name }} {{ client.user_id.last_name }}</h1>
 					<hr>
-					<p class='p-p'>Email<br> {{ client.email }}</p>
-					<p class='p-p'>Phone <br> {{ client.phone }}</p>
-					<p class='p-p'>Client ID: {{ client.id }}</p>
+					<div class='sections-2'>
+						<p class='p-p'>Email<br> {{ client.email }}</p>
+						<p class='p-p'>Phone <br> {{ client.phone }}</p>
+						<p class='p-p'>Client ID: {{ client.id }}</p>
+					</div>
+					
 				</div>
 			</div>
 
 			<div class='col-6 mb-4'>
-				<div class='sections'>
+				<div class='sections h-100'>
 					<h1 class='h1-1'>Project Event Dates</h1>
 					<hr>
-					<div class="overflow-auto">
-						{% for event in project_events %}	
-						<p class='p-p'>
-							{{ event.date }} | {{ event.start }} to {{ event.end }} 
-							<a href={% url 'project-event' event.id %}>
-								<i class="fa-solid fa-calendar-days"></i>
-							</a>
-						</p>
-						<hr>
-						{% endfor %}
+					<div class='sections-2 overflow-auto '>
+						<div class="row" style='height:30vh'>
+							{% for event in project_events %}
+							<div class='col-9'>	
+								<p class='p-p'>
+									Date {{ event.date|title }} <br> From {{ event.start|date:'H:i a' }} to {{ event.end|date:'H:i a' }} 
+								</p>
+							</div>
+							<div class='col-3'>
+								<button class='btn-icon' onclick="window.location.href='{% url 'project-event' event.id %}'">
+									<i class="fa-solid fa-calendar-days"></i>
+								</button>
+							</div>
+							<hr>
+							{% endfor %}
+						</div>
 					</div>
 				</div>
 			</div>
@@ -66,6 +80,7 @@
 					<h1 class='h1-1'>Project Details <br> {{ project }} </h1>
 					<hr>
 					<div class='row'>
+						
 						<div class='col-3'>
 							<p class='p-p'>Scope{{ project.scope }}</p>
 						</div>
@@ -155,5 +170,5 @@
 
 
 {% endif %}
-<script src={% static 'js/invoiceBar.js' %}></script>
+<script src={% static 'js/projectGuide.js' %}></script>
 {% endblock %}

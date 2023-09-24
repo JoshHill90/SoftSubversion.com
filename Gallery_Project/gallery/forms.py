@@ -39,11 +39,10 @@ class PrintForms(forms.ModelForm):
 class ProjectForms(forms.ModelForm):
     class Meta:
         model = Project
-        fields = ('name', 'cost', 'status', 'user_id')
+        fields = ('name', 'status', 'user_id')
         widget ={
             'name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Title for the post'}),
             'client_id': forms.Select(attrs={'class': 'form-control'}),
-            'cost': forms.NumberInput(attrs={'class': 'form-control'}),
             'status': forms.Select(attrs={'class': 'form-control'}),
             'user_id': forms.TextInput(attrs={'class': 'form-control'})  
         }

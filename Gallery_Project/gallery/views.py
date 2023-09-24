@@ -18,7 +18,7 @@ from clients.models import Client, ProjectRequest, ProjectTerms
 from management.models import Payments, Billing
 from datetime import datetime
 import calendar
-from Gallery_Project.env.app_Logic.date_time_calendar import cal_gen
+from Gallery_Project.env.app_Logic.date_time_calendar import cal_gen, date_passed_check
 import datetime
 data_triggere = DataSetUpdate()
 
@@ -349,18 +349,76 @@ class ProjectDeleteView(DeleteView):
     
 def project_owner_view(request, pk):
     project = Project.objects.get(Q(id=pk))
-    project_events = ProjectEvents.objects.filter(Project_id=pk)
+    project_events = ProjectEvents.objects.filter(project_id=pk)
+    project_events = ProjectEvents.objects.order_by('date')
     client = Client.objects.get(user_id=project.user_id)
     billing_info = Billing.objects.get(project_id=pk)
     payment_list = Payments.objects.filter(billing_id=billing_info)
-    print(payment_list)    
     
+
+    
+    for event in project_events:
+        project_progress = []
+    
+        active_nodes = 0
+         # deposit/consulation check
+        if event.payment_id and event.event_type == "deposit-consultation":
+            for payment in payment_list:
+                if payment.receipt == 'deposit':
+                    deposit = 'Deposit $' + str(payment.amount)
+                    consulting = 'consulting'
+                    project_progress.append(deposit)
+                    project_progress.append(consulting)
+                    if payment.status == 'paid':
+                        active_nodes +=1
+                        event_passed = date_passed_check(event.date)
+                        if event_passed == True:
+                            active_nodes +=1
+                            
+        # event check without payment   
+        if not event.payment_id:
+            event_type = event.event_type
+            event_passed = date_passed_check(event.date)
+            if event_passed == True:
+                active_nodes +=1
+                                     
+        # event check with payment check
+        if event.payment_id and event.event_type != "deposit-consultation" or event.event_type != "final":
+            for event_payment in payment_list:
+                if event_payment == event.payment_id:
+                    payment_amount = event_payment.amount
+                    event_type = event.event_type
+                    project_progress.append(payment_amount)
+                    project_progress.append(event_type)
+                    if event_payment.status == 'paid':
+                        active_nodes +=1
+                        event_passed = date_passed_check(event.date)
+                        if event_passed ==True:
+                            active_nodes +=1
+    
+        if event.payment_id and event.event_type == "final":
+            for event_payment in payment_list:
+                if event_payment == event.payment_id:
+                    payment_amount = event_payment.amount
+                    event_type = event.event_type
+                    project_progress.append(payment_amount)
+                    project_progress.append(event_type)
+                    if event_payment.status == 'paid':
+                        active_nodes +=1
+                        event_passed = date_passed_check(event.date)
+                        if event_passed ==True:
+                            active_nodes +=1
+
+                
+    print(active_nodes, project_progress)
     return render(request, 'gallery/project/project-details.html', {
         'project': project,
         'project_events': project_events,
         'billing_info': billing_info,
         'payment_list': payment_list,
-        'client': client
+        'client': client,
+        'project_progress': project_progress,
+        'active_nodes': active_nodes
     })
 
 #---------------------------------------------------------------------------------------------------------#

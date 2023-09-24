@@ -16,6 +16,16 @@ month = month.title()
 month_number = list(calendar.month_name).index(month)
 month_number = int(month_number)
 
+def date_passed_check(check_date):
+    this_date = datetime.date(todays_date)
+    date_passed = ''
+    if this_date <= check_date:
+        date_passed = True
+    else:
+        date_passed = False
+        
+    return date_passed
+
 # ---------------------------------------------------------------------------------------------------------------- #
 # Calendar Function
 # ---------------------------------------------------------------------------------------------------------------- #

@@ -45,18 +45,12 @@ class ProjectTermsForm(forms.ModelForm):
         model = ProjectTerms
         fields = ('project_cost',
                   'deposit',
-                  'session_date',
-                  'session_start',
-                  'session_end',
                   'services'
                   )
         
         widgets = {
             'project_cost': forms.TextInput(attrs={'class': 'form-control'}),
             'deposit': forms.TextInput(attrs={'class': 'form-control'}),
-            'session_date': forms.DateInput(attrs={'class': 'form-control'}),
-            'session_start': forms.TimeInput(attrs={'class': 'form-control'}),
-            'session_end': forms.TimeInput(attrs={'class': 'form-control'}),
             
             'services': forms.Textarea(attrs={'class': 'form-control'}),
 

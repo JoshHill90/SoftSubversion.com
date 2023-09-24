@@ -80,10 +80,8 @@ class RequestReply(models.Model):
     
 class ProjectTerms(models.Model):
     project_request_id = models.ForeignKey(ProjectRequest, on_delete=models.CASCADE, )
+    project_id = models.ForeignKey('gallery.Project', on_delete=models.CASCADE, )
     user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
-    session_date = models.CharField(max_length=10)
-    session_start = models.TimeField(max_length=20,  null=True, blank=True)
-    session_end = models.TimeField(max_length=20,  null=True, blank=True)
     scope = models.CharField(max_length=255)
     services = models.TextField(max_length=5000, blank=True)
     slug = models.SlugField(null=False, unique=True, default=hex_gen_small())

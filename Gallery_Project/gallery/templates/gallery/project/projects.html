@@ -6,12 +6,12 @@
 
 <div class='row mt-4 mb-4'>
 	<div class='col-8'>
-		<div class='sections'>
+		<div class='sections h-100'>
 			<h1 class='h1-1'>Up Comming Events
 
 			</h1>
 			<hr>
-			<div class="overflow-auto scroll-menu">
+			<div class="overflow-auto sections-2 scroll-menu">
 				{% for event in project_events %}
 				<div class='row p-p' style='width: 90%'>
 					<div class='col-3'>	
@@ -24,9 +24,9 @@
 						Title: {{event.title}}
 					</div>
 					<div class='col-2 text-center'>
-						<a href={% url 'project-event' event.id %}>
+						<button class='btn-icon' onclick="window.location.href='{% url 'project-event' event.id %}'">
 							<i class="fa-solid fa-calendar-days fa-xl"></i>
-						</a>
+						</button>
 					</div>
 				</div>
 				<hr>
@@ -115,27 +115,27 @@
 		<div class='sections h-100'>
 			<h1 class='h1-1'>Pending Project Request</h1>
 			<hr>
-			<div class='row mt-4 '>
-				<div class="overflow-auto scroll-menu">
-					{% for project in project_request %}
-					{% if project.status == 'pending' %}
-					<div class='row p-p'>
-						<div class='col-10 text-center'>
-							{{ project.name|title }} 
-						</div>
 
-					
-						<div class='col-2'>
-						<a href="{% url 'request-details' project.slug %}">
-							<i class="fa-regular fa-folder-open"></i>
-						</a>
-						</div>
-						
+			<div class="overflow-auto sections-2 scroll-menu">
+				{% for project in project_request %}
+				{% if project.status == 'pending' %}
+				<div class='row p-p'>
+					<div class='col-8 text-center'>
+						{{ project.name|title }} 
+						<br>
+						{{project.user_id.first_name|title}} {{project.user_id.last_name|title}}
 					</div>
-					<hr>
-					{% endif %}
-					{% endfor %}
+				
+					<div class='col-4'>
+						<button class='btn-icon' onclick="window.location.href='{% url 'request-details' project.slug %}'">
+							<i class="fa-regular fa-folder-open"></i>
+						</button>
+					</div>
+					
 				</div>
+				<hr>
+				{% endif %}
+				{% endfor %}
 			</div>
 		</div>
 	</div>
