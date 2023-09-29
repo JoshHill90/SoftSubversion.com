@@ -53,8 +53,4 @@ class ProjectTermsForm(forms.ModelForm):
             'deposit': forms.TextInput(attrs={'class': 'form-control'}),
             
             'services': forms.Textarea(attrs={'class': 'form-control'}),
-
-
-
-
         }

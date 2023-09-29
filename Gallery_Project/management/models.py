@@ -85,6 +85,7 @@ class Payments(models.Model):
     time_stamp = models.DateField(auto_created=True)
     due_date = models.DateField(blank=True, null=True)
     status = models.CharField(max_length=30, default='due')
+    payment_link = models.URLField(blank=True, null=True)
     invoice_id = models.CharField(max_length=400, blank=True)
     
     def __str__(self):

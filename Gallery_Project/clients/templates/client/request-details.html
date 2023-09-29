@@ -87,8 +87,11 @@
 							<div class='col-12 comment-sub-box'> 
 								<div class="user-content" >
 									<h1 class='user-box h1-1'>
-										{{ comment.user_id }}
+										{{ comment.user_id|title }}
 									</h1>
+									<p class='p-p user-box'>
+										{{ comment.date_posted|title }}
+									</p>
 									<hr>
 									<p class='p-p'>
 										{{ comment.comment}}
@@ -104,8 +107,11 @@
 							<div class='col-12 comment-sub-box'> 
 								<div class="comment-content" >
 									<h1 class='h1-1'>
-										{{ comment.user_id }}
+										{{ comment.user_id|title }}
 									</h1>
+									<p class='p-p'>
+										{{ comment.date_posted|title }}
+									</p>
 									<hr>
 									<p class='p-p'>
 										{{ comment.comment}}

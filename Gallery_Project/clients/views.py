@@ -9,6 +9,7 @@ from pathlib import Path
 from .models import Client, Invite, ProjectRequest, RequestReply, ProjectTerms
 from .forms import ClientForm, InviteForm, ProjectRequestForm, RequestReplyComment, ProjectTermsForm
 from gallery.models import Image, Project, ProjectEvents
+from gallery.forms import ProjectEventForms
 from management.models import Payments, Billing
 from django.shortcuts import render, redirect, get_object_or_404
 import secrets
@@ -25,17 +26,96 @@ from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
 # -------------------------------------------------------------------------------------------------------------#
 # Date and time configeration
 # -------------------------------------------------------------------------------------------------------------#
+
 def in_30_days():
     date_and_time = datetime.now()
     dates = date_and_time.date()
     date_30 = dates + timedelta(days=30)
     return date_30
 
+def in_60_days():
+    date_and_time = datetime.now()
+    dates = date_and_time.date()
+    date_60 = dates + timedelta(days=60)
+    return date_60
+
+def in_90_days():
+    date_and_time = datetime.now()
+    dates = date_and_time.date()
+    date_90 = dates + timedelta(days=90)
+    return date_90
+
+def in_182_days():
+    date_and_time = datetime.now()
+    dates = date_and_time.date()
+    date_90 = dates + timedelta(days=90)
+    return date_90
+
 def date_now():
     date_and_time = datetime.now()
     dates = date_and_time.date()
-
     return dates
+
+def date_setter(desired_date):
+    due_on = ''
+    desired_date_str = str(desired_date)
+    
+    requested_date = datetime.strptime(desired_date_str, "%Y-%m-%d").date()
+    date_and_time = datetime.now()
+    dates = date_and_time.date()
+    
+    if (requested_date - dates).days <= 30:
+        due_on = str(in_30_days())
+        
+    elif (requested_date - dates).days <= 60:
+        due_on = str(in_60_days())
+        
+    elif (requested_date - dates).days <= 90:
+        due_on = str(in_90_days())
+        
+    else:
+        due_on = str(in_182_days())
+        
+    return due_on 
+
+def date_distance(desired_date):
+    due_in = ''
+    desired_date_str = str(desired_date)
+    
+    requested_date = datetime.strptime(desired_date_str, "%Y-%m-%d").date()
+    date_and_time = datetime.now()
+    dates = date_and_time.date()
+    
+    if (requested_date - dates).days <= 30:
+        due_in = 5
+        
+    elif (requested_date - dates).days <= 60:
+        due_in = 30
+        
+    elif (requested_date - dates).days <= 90:
+        due_in = 60
+        
+    else:
+        due_in = 182
+        
+    return due_in 
+
+def deposit_distance(desired_date):
+    desired_date_str = str(desired_date)
+
+    
+    requested_date = datetime.strptime(desired_date_str, "%Y-%m-%d").date()
+    date_and_time = datetime.now()
+    dates = date_and_time.date()
+    
+    if (requested_date - dates).days <= 30:
+        due_in = 5
+        
+    else:
+        due_in = 30
+
+        
+    return due_in 
 
 #-------------------------------------------------------------------------------------------------------#
 # smtp global
@@ -178,6 +258,7 @@ def clientRequestDetails(request, slug):
 def client_request(request):
     client_request = ProjectRequest.objects.all()
     request_comments = RequestReply.objects.all()
+    request_comments = RequestReply.objects.all()
     project_terms = ProjectTermsForm
     client_request
     return render(request, 'client/client-requests.html', {
@@ -207,22 +288,25 @@ def request_approval(request, id):
             )
             
             new_template = terms_form.save(commit=False)
+            if len(str(client_request.slug)) > 16:
+            
+                new_template.slug = 'terms' + str(client_request.slug[0:17]) + hex_gen_small()
+            else:
+                new_template.slug = 'terms' + str(client_request.slug) + hex_gen_small()
+            
             new_template.user_id = user_info
             new_template.project_request_id = client_request
             new_template.scope = client_request.scope
-            new_template.slug = 'terms' + str(client_request.slug) + hex_gen_small()
+            
             new_template.project_docs = f"{user_info}/{client_request.name}"
             new_template.project_id = new_project
-            new_template.save()
+           
 
             # Process cleaned data
             terms_data = terms_form.cleaned_data
-            start_balance = terms_data.get('project_cost')
+            project_amount = terms_data.get('project_cost')
             services = terms_data.get('services')
             deposit_amount = terms_data.get('deposit')
-            consultation_date = terms_data.get('session_date')
-            consultation_start = terms_data.get('session_start')
-            consultation_end = terms_data.get('session_end')
             slug = terms_data.get('slug')
 
             # update the project request
@@ -240,12 +324,24 @@ def request_approval(request, id):
             zipcode = client_info.zip_code
             full_name = f"{firstname} {lastname}"
 
-            # Convert deposit amount to an integer
-            deposit = int(str(deposit_amount).replace('.', ''))
+            # lmabda function to convert from dollars to cents 
+            format_amount = lambda dollar_amount: int(
+                str(
+                    '{:.2f}'.format(
+                        float(dollar_amount))).replace('.','')
+                )
+            deposit = format_amount(deposit_amount)
+            project_cost = format_amount(project_amount)
+    
+            #deposit_amount = float(deposit_amount)
+            #flt_deposit = '{:.2f}'.format(deposit_amount)
+            #str_deposit = str(flt_deposit) 
+            #deposit = int(str_deposit.replace('.', ''))
             
             full_address = {'line1':address1, 'line2':address2, 'city':city, 'state': state, 'postal_code':zipcode, 'country':'US'  }
             email_address = user_info.email
 
+            # check if customer exist in stripe db
             if not client_info.strip_id:
                 strip_customer = stripe.Customer.create(
                                                         name=full_name,
@@ -260,6 +356,7 @@ def request_approval(request, id):
                 stripe_id = strip_customer.id
                 stripe_prefix = strip_customer.invoice_prefix
                 print(stripe_id)
+                
             # for existing strip cust id   
             else:
                 strip_customer = stripe.Customer.retrieve(
@@ -267,51 +364,110 @@ def request_approval(request, id):
                 )
                 stripe_id = client_info.strip_id
                 stripe_prefix = strip_customer.invoice_prefix
-            
+                
+                
+            # create invoice for deposit
             stripe_invoice_deposit = stripe.Invoice.create(
                 customer=stripe_id,
                 collection_method='send_invoice',
-                days_until_due=30,
+                days_until_due=deposit_distance(client_request.date),
                 description=services,
             )
             
-            invoice_item = stripe.InvoiceItem.create(
+            # creates line item charge for deposit
+            deposit_line_item = stripe.InvoiceItem.create(
                     amount=deposit,
                     currency='usd', 
-                    description= 'Deposit for Consulting',
+                    description= 'Deposit',
                     discountable= False,
                     invoice=stripe_invoice_deposit.id,
                     customer=stripe_id
             )
             
-
-
-            new_billing = Billing.objects.create(
-                invoice=stripe_prefix,
-                billed=start_balance,
-                project_id=new_project,
+            
+            # create invoice for the project
+            stripe_invoice_project = stripe.Invoice.create(
+                customer=stripe_id,
+                collection_method='send_invoice',
+                days_until_due=date_distance(client_request.date),
+                description=services,
             )
             
-            new_deposit = Payments.objects.create(
+            # creates line item charge for  the project
+            project_cost_line_item = stripe.InvoiceItem.create(
+                    amount=project_cost,
+                    currency='usd', 
+                    description= 'Project Cost',
+                    discountable= False,
+                    invoice=stripe_invoice_project.id,
+                    customer=stripe_id
+            )
+            
+            # send the invoice and pulls the payment link and the new invoice data 
+            deposit_invoice_out = stripe.Invoice.send_invoice(invoice=stripe_invoice_deposit.id)
+            deposit_payment_link = deposit_invoice_out.hosted_invoice_url
+            deposit_invoice_update = stripe.Invoice.retrieve(id=stripe_invoice_deposit.id)
+            
+            project_invoice_out = stripe.Invoice.send_invoice(invoice=stripe_invoice_project.id)
+            project_payment_link = project_invoice_out.hosted_invoice_url
+            project_invoice_update = stripe.Invoice.retrieve(id=stripe_invoice_project.id)
+            
+            # creates new billing account for client 
+            new_billing = Billing.objects.create(
+                invoice=stripe_prefix,
+                billed=project_amount,
+                project_id=new_project,
+                due_date=date_setter(client_request.date)
+            )
+            
+            # creates new payment/invoice for deposit
+            deposit_payment = Payments.objects.create(
                 billing_id=new_billing,
                 amount=deposit_amount,
-                receipt="Unpaid",
+                receipt='Deposit Cost',
+                status=deposit_invoice_update.status,
                 time_stamp=date_now(),
-                invoice_id=invoice_item.id,
+                invoice_id=deposit_invoice_update.id,
+                payment_link=deposit_payment_link,
                 due_date=in_30_days()
             )
             
-            ProjectEvents.objects.create(
-                title='Consultation',
-                payment_id=new_deposit,
-                project_id=new_project,
-                date=consultation_date,
-                start=consultation_start,
-                end=consultation_end,
-                event_type='deposit-consultation'
+            # creates new payment/invoice for project cost
+            Payments.objects.create(
+                billing_id=new_billing,
+                amount=project_amount,
+                receipt="Project Cost",
+                status=project_invoice_update.status,
+                time_stamp=date_now(),
+                invoice_id=project_invoice_update.id,
+                payment_link=project_payment_link,
+                due_date=date_setter(client_request.date)
             )
-
-            return render(request, 'client/client.html')
+            
+            
+            
+            ProjectEvents.objects.create(
+                title='Deposit Reminder',
+                payment_id=deposit_payment,
+                project_id=new_project,
+                date=deposit_payment.due_date,
+                start=datetime.strptime("5:00 pm", "%I:%M %p").time(),
+                end=datetime.strptime("5:00 pm", "%I:%M %p").time(),
+                event_type='Deposit Reminder',
+                details='Event for Deposit reminder'
+            )
+            project_link = f"https://SoftSubversion.com/client-portal/project-binder/{new_project.id}/details"
+            invoice_link = f"https://SoftSubversion.com/client-portal/billing/invoice/{deposit_payment.id}/"
+            smtp_request.new_project_and_invoice(user_info.email,
+                                                 user_info.first_name,
+                                                 deposit_payment.payment_link,
+                                                 project_link,
+                                                 invoice_link
+                                                 )
+            #saving form at the end after everything is done.
+            new_template.save()
+            
+            return redirect('projects')
 
     else:
         terms_form = ProjectTermsForm()
@@ -324,8 +480,22 @@ def request_approval(request, id):
         'terms_form': terms_form,
         'new_template': new_template
   })
-        
-        
+# defualt consultation createion page, for use after the project is approved 
+# lets not talk about why i chose to indlue it here. 
+def request_event(request, payment_id):
+    cal_form = ProjectEventForms.objects.all()
+    new_event = None
+    
+   
+    if request.method == 'POST':
+        event_form = ProjectEventForms(data=request.POST)
+        if event_form.is_valid():
+            
+            return render(request, 'client/request/request_consultation.html')
+    
+    return render(request,'client/request/request_consultation.html', {
+        'form':cal_form
+    } )
 
 #-------------------------------------------------------------------------------------------------------#
 # client project views 

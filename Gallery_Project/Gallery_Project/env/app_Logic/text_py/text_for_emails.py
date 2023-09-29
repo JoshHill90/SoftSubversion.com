@@ -99,3 +99,31 @@ Soft Subversion
 Website: softsubversion.com  
 Email: Carly@softsubversion.com"""
 
+# client requesing a new project 
+new_project_and_invoice = """
+
+Dear [CLIENT_NAME],
+
+I hope this message finds you well. I am excited to inform you that a new project has been approved and is now available in your Project Binder.
+
+Project Details:
+- Project Name: [PROJECT_NAME]
+- Invoice Number: [INVOICE_NUMBER]
+- Due Date: [DUE_DATE]
+
+To ensure a smooth process, please take the following actions:
+1. Click on the following link to view the project details: [PROJECT_LINK]
+2. Review the project scope and details carefully.
+3. To make a payment or view the invoice, click here: [PAYMENT_LINK]
+4. Please make sure to complete the payment by the due date ([DUE_DATE]). Failure to do so may result in project cancellation.
+
+If you have any questions or require further assistance, please don't hesitate to contact me.
+
+Thank you for choosing Soft Subversion for your photography needs. I look forward to working with you on this exciting project!
+
+
+Carley Brown
+Photographer/Videographer 
+Soft Subversion 
+Website: softsubversion.com  
+Email: Carly@softsubversion.com"""

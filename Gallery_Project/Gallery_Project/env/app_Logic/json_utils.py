@@ -43,6 +43,7 @@ class DataSetUpdate ():
     
     
     def json_chart_data(self):
+        jsonDataSets = []
         image_list = Image.objects.all()
         print_list = Print.objects.all()
         project_list = Project.objects.all()
@@ -76,8 +77,11 @@ class DataSetUpdate ():
                         'print_Image_data': print_Image_data,
                         'total_Image_data': total_Image_data
                         }
+
+        
+
         self.clientJsonData(jsonDataSets)
-		
+
 		# setting up JSON string 
 
     def json_user_list_check(self):

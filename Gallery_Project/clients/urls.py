@@ -22,4 +22,6 @@ urlpatterns = [
     
     path('client/invite/failed', SuccessInvite.as_view(), name='invite-failed'),
     
+    path('requests/event', views.request_event, name='request-event'),
+    
 ]

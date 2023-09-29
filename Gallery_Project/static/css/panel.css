@@ -3,7 +3,7 @@
 /*variable*/
 :root{
   --text-color:rgb(0, 0, 0);
-  --text-color-secondary:rgb(255, 255, 255);
+  --text-color-secondary:rgb(121, 121, 121);
   --bg-color:rgb(255, 255, 255);
   --bg-color-secondary:linear-gradient(315deg, #cacaca, #f0f0f0);
   --bg-shadow:  -10px -10px 10px #a6a6a6, 10px 10px 10px #ffffff;
@@ -21,7 +21,7 @@
   --first-color-light: #000000;          
   --white-color: #7933FC;                           
   --z-fixed: 100;
-  --lingrand: linear-gradient(125deg, #7933FC 45%, #2b6ce4 65%, #2be4c8 95%);
+  --lingrand: linear-gradient(123deg, #7933FC 05%, #2b6ce4 35%, #26ccb3 70%, #7933FC 95%);
   --line-border-fill: #7933FC;
   --line-border-empty: #131313c0;
 }
@@ -88,7 +88,6 @@ html {
   -webkit-text-fill-color: transparent;
   margin-top: 10px;
   text-align: center;
-
   text-transform: uppercase;
   -webkit-font-smoothing: antialiased;
 }
@@ -98,7 +97,7 @@ html {
 .p-2 {
   font-size:var(--p);
   font-weight:  normal;
-  color: var(--text-color);
+  color: var(--text-color-secondary);
 }
 
 .ham{
@@ -127,6 +126,9 @@ hr {
   .form-fit {
     width: 100%;
     left: 0;
+  }
+  .nums {
+    font-size: var(--p);
   }
   
 }
@@ -254,6 +256,7 @@ main
   padding: 15px;
   position: relative;
   border-radius: 21px;
+  overflow: hidden;
   background: #e0e0e0;
   box-shadow: inset -6px -6px 12px #acacac, inset 6px 6px 12px #ffffff;
 }
@@ -864,3 +867,68 @@ project progress
   color: var(--first-color);
 }
 
+
+
+.loader-box{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  cursor: not-allowed;
+  scale: 0.7;
+}
+
+.sections-sepc {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  box-shadow: 0.5em 1em 1em #26ccb3,
+  -0.5em 0.5em 1em #7933FC,
+  0.5em -0.5em 1em #2b6ce4,
+  -0.5em -0.5em 1em #26ccb3;
+
+}
+
+
+
+.external-shadow {
+  width: 10em;
+  height: 10em;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  box-shadow: 0.5em 0.5em 3em #26ccb3,
+    -0.5em 0.5em 3em #7933FC ,
+    0.5em -0.5em 3em #2b6ce4,
+    -0.5em -0.5em 3em #26ccb3;
+  z-index: 999;
+  animation: rotate 10s linear infinite;
+  background-image:var(--bg-color-secondary);
+}
+
+.intern {
+  position: absolute;
+  z-index: 9999;
+}
+
+
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  50% {
+    transform: rotate(180deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
+}

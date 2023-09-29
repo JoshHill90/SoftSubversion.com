@@ -54,7 +54,7 @@ class ProjectRequest(models.Model):
     date = models.CharField(max_length=10)
     scope = models.CharField(max_length=255, verbose_name='Project-Type/Scope')
     details = models.CharField(max_length=3000, verbose_name='Project Details')
-    slug = models.SlugField(null=False, unique=True, default=hex_gen_small())
+    slug = models.SlugField(null=False, unique=True, max_length=32)
     location = models.CharField(max_length=255, verbose_name='Location type')
     status = models.CharField(max_length=25, default='pending')
 
@@ -69,6 +69,7 @@ class RequestReply(models.Model):
     project_request_id = models.ForeignKey(ProjectRequest, on_delete=models.CASCADE, )
     user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
     comment = models.CharField(max_length=3000)
+    date_posted = models.DateField(auto_now=True)
     read = models.BooleanField(default=False)
 
     def __str__(self):

@@ -1,0 +1,130 @@
+{% extends 'panel.html' %}
+{% block title %}Invoice {{payments.invoice_id}}{% endblock %}
+{% block content %}
+
+
+
+{% if user.is_authenticated %}
+
+
+    <div class="sections p-p form-fit">
+		<div class="row">
+			<div class='col-12 text-center'>
+				<h1 class='h1-1'>
+					{{payments.billing_id}}
+				</h1>
+				<p class='p-2'>
+				Invoice ID # {{payments.invoice_id}}
+				</p>
+			</div>
+			<hr>
+			<div class='col-12 text-center'>
+				<p class='p-p'>
+					Invoice Details 
+				</p>
+			</div>
+			<div class='col-12'>
+				<div class='sections-2'> 
+					<div class="row">
+
+						<div class='col-6 mt-4 mb-4'>
+							<div class="sections-2">
+								<p class='p-2 text-center'>Invoice Amount</p>
+								<p class='nums'>
+									${{payments.amount|floatformat:2}}
+								</p>
+							</div>
+						</div>
+						
+						<div class='col-6 mt-4 mb-4'>
+							<p class='p-2'>Client Information</p>
+							<p class='p-p'>
+								Client Name: {{payments.billing_id.project_id.user_id.first_name|title}} 
+								{{payments.billing_id.project_id.user_id.last_name|title}}
+							</p>
+							<p class='p-p'>
+								Client ID: {{payments.billing_id.project_id.client_id.strip_id|title}}
+							</p>	
+						</div>
+	
+						<div class='col-6 mt-4 mb-4'>
+							<p class='p-2'>Project Infromation</p>
+							<p class='p-p'>
+								Project_name:
+								<br>
+								{{payments.billing_id.project_id|title}}
+							</p>						
+							<p class='p-p'>
+								Due Date: {{payments.due_date}}
+							</p>
+							<p class='p-p'>
+								Invoice For: {{payments.receipt|title}}
+							</p>
+							<p class='p-p'>
+								Created: {{payments.time_stamp}}
+							</p>		
+						</div>
+						<div class='col-6 mt-4 mb-4'>
+							<p class='p-2'>
+								Client Billing Address
+							</p>
+							<p class='p-p'>
+								{{payments.billing_id.project_id.client_id.address_1|title}}
+								{{payments.billing_id.project_id.client_id.address_2|title}}
+							</p>
+
+							<p class='p-p'>
+								{{payments.billing_id.project_id.client_id.city|title}}
+								{{payments.billing_id.project_id.client_id.state|title}}, {{payments.billing_id.project_id.client_id.zip_code}}
+							</p>
+							<p class='p-p'>
+								Email: {{payments.billing_id.project_id.client_id.email|title}}
+							</p>		
+							<p class='p-p'>
+								Phone: {{payments.billing_id.project_id.client_id.phone}}
+							</p>		
+						</div>
+					</div>
+					<div class="row">
+
+						<div class='col-12 mt-4 mb-4 text-center'>
+							
+								<p class='p-2'>
+									Status
+								</p>
+							<div class="sections-2">
+								<div class="loader-box">
+									<div class="intern">
+										<p class='nums'>
+											{{payments.status}}
+										</p>
+									</div>
+									<div class="external-shadow">
+										<div class="sections-sepc spec1">
+										</div>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="row mb-4">
+					<div class='col-12 text-center'>
+						<button class='btn-cust'>
+							Edit
+						</button>
+						<button class='btn-cust'>
+							Delete
+						</button>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+
+
+{% endif %}
+
+{% endblock %}

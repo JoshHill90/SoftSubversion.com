@@ -151,7 +151,7 @@ class AutoReply:
 
         mailer = EmailMessage()
 
-        mailer['From'] = formataddr(("Soft Subversion", f"{self.alart_email}"))
+        mailer['From'] = formataddr(("Soft Subversion", f"{self.email_host}"))
         mailer['To'] = client_email
         mailer['Subject'] = contact_subject
         mailer.set_content(contact_body)
@@ -164,7 +164,7 @@ class AutoReply:
                 server.close()
                 return 'sent'
             except Exception as e:
-                return 'error'
+                print(f"An error occurred while sending the email: {e}")
                 
     #------------------------#
     # Project Request
@@ -200,6 +200,42 @@ class AutoReply:
                 server.sendmail(self.send_from, self.receive_email, mailer.as_string())
                 server.close()
                 print('alart sent')
+            except Exception as e:
+                print(f"An error occurred while sending the email: {e}")
+                
+    #------------------------#
+    # project/invoice creation
+    #------------------------#
+
+    def new_project_and_invoice(self, client_email, client_name, payment_link, project_link, invoice_link):
+
+        contact_subject = "New Project in your Project Binder"
+
+        text_swap = {
+            '[CLIENT_NAME]': client_name,
+            '[PAYMENT_LINK]': payment_link,
+            '[PROJECT_LINK]': project_link,
+            '[INVOICE_LINK]': invoice_link,
+            }
+        
+        string = new_project_and_invoice
+        result_string = reduce(lambda old_string, key_var: old_string.replace(key_var, text_swap[key_var]), text_swap, string)
+        contact_body = result_string
+
+        mailer = EmailMessage()
+
+        mailer['From'] = formataddr(("Soft Subversion", f"{self.email_host}"))
+        mailer['To'] = client_email
+        mailer['Subject'] = contact_subject
+        mailer.set_content(contact_body)
+
+        with smtplib.SMTP(self.email_host, self.email_port) as server:
+            try:
+                server.starttls()
+                server.login(self.send_from, self.email_password)
+                server.sendmail(self.send_from, client_email, mailer.as_string())
+                server.close()
+                return 'sent'
             except Exception as e:
                 print(f"An error occurred while sending the email: {e}")
 

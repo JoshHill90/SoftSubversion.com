@@ -51,7 +51,7 @@ class Project(models.Model):
     name = models.CharField(max_length=255)
     status = models.CharField(max_length=255, default='Pending Deposit')
     client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.SET_NULL)
-    user_id = models.ForeignKey(User, null=True, on_delete=models.SET_NULL)
+    user_id = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.name)

@@ -1,5 +1,5 @@
 from django import forms
-from .models import Image, Print, Project
+from .models import Image, Print, Project, ProjectEvents
 
 class ImageForms(forms.ModelForm):
 
@@ -64,4 +64,19 @@ class CreatImageForm(forms.ModelForm):
             'client_id': forms.Select(attrs={'class': 'form-control'}),
             'project_id': forms.Select(attrs={'class': 'form-control'}),
             'cloudflare_id': forms.TextInput(attrs={'class': 'form-control', 'id': "cloudflare_id", 'style': 'display: none;'}),                              
+        }
+        
+class ProjectEventForms(forms.ModelForm):
+    class Meta:
+        model = ProjectEvents
+        fields = ('title', 'project_id', 'date', 'start', 'end', 'event_type', 'details')
+        widget ={
+            'name': forms.TextInput(attrs={'class': 'form-control'}),
+            'project_id': forms.Select(attrs={'class': 'form-control'}),
+            'date': forms.DateInput(attrs={'class': 'form-control'}),
+            'start': forms.TimeInput(attrs={'class': 'form-control'}),
+            'end': forms.TimeInput(attrs={'class': 'form-control'}),
+            'status': forms.TextInput(attrs={'class': 'form-control'}),
+            'event_type': forms.TextInput(attrs={'class': 'form-control'}),
+            'details': forms.Textarea(attrs={'class': 'form-control'})  
         }

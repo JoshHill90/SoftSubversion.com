@@ -280,6 +280,8 @@ def project_main(request):
     project_events = ProjectEvents.objects.all()
     project_temp = 0
     image_temp = 0
+    client_name = ''
+    
 	# Get query parameters
     project_query = request.GET.get('project')
     client_query = request.GET.get('client')
@@ -306,12 +308,13 @@ def project_main(request):
    
     project_info =[]
     for project in project_list:
+
+            
         client_name = str(project.user_id.first_name + ' ' + project.user_id.last_name)
         project_details = {
             'project': project.name,
             'project_id': project.id,
             'project_client': client_name,
-            'project_cost': project.cost,
             'project_status': project.status
                            }
         
@@ -355,12 +358,10 @@ def project_owner_view(request, pk):
     billing_info = Billing.objects.get(project_id=pk)
     payment_list = Payments.objects.filter(billing_id=billing_info)
     
-
-    
+    active_nodes = 0
+    project_progress = []
     for event in project_events:
-        project_progress = []
-    
-        active_nodes = 0
+
          # deposit/consulation check
         if event.payment_id and event.event_type == "deposit-consultation":
             for payment in payment_list:
