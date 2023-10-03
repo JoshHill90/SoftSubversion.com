@@ -113,4 +113,6 @@ class ProjectEvents(models.Model):
         return str(self.title)
 
     def get_absolute_url(self):
-        return reverse("project-event", args=(self.id,))
+        date = date_stamp()
+        year, month, day = date.split('-')
+        return reverse("project-calendar", args=(year, month))

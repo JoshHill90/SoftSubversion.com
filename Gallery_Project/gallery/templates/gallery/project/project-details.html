@@ -1,6 +1,7 @@
 {% extends 'panel.html' %}
 {% block title %}Project {{ project.name }} {% endblock %}
 {% block content %}
+{% load tz %}
 {% load static %}
 {% if user.is_authenticated %}
 <div class='row mt-4 mb-4'>
@@ -9,15 +10,20 @@
 			<div class='row text-center'>
 				<div class='col-4'>
 					<h1 class='h1-1'>Deposit Amount</h1>
-					<p class='nums'>${{ project.deposit_amount }}</p>
+					{% for deposit in payment_list %}
+					{% if deposit.receipt == "Deposit Cost" %}
+					
+					<p class='nums'>${{ deposit.amount|floatformat:2 }}</p>
+					{% endif %}
+					{% endfor %}
 				</div>
 				<div class='col-4'>
 					<h1 class='h1-1'>Total Cost</h1>
-					<p class='nums'>${{ project.cost }}</p>
+					<p class='nums'>${{ billing_info.billed|floatformat:2 }}</p>
 				</div>
 				<div class='col-4'>
-					<h1 class='h1-1'>Next Amount Due</h1>
-					<p class='nums'>${{ out }}</p>
+					<h1 class='h1-1'>Paid</h1>
+					<p class='nums'>${{ billing_info.paid|floatformat:2}}</p>
 				</div>
 			</div>
 			<div class='sections-2'>
@@ -47,7 +53,6 @@
 						<p class='p-p'>Phone <br> {{ client.phone }}</p>
 						<p class='p-p'>Client ID: {{ client.id }}</p>
 					</div>
-					
 				</div>
 			</div>
 
@@ -60,7 +65,7 @@
 							{% for event in project_events %}
 							<div class='col-9'>	
 								<p class='p-p'>
-									Date {{ event.date|title }} <br> From {{ event.start|date:'H:i a' }} to {{ event.end|date:'H:i a' }} 
+									Date {{ event.date|date:" m/d/y" }} <br> From {{ event.start|date:'h:i a' }} to {{ event.end|date:'h:i a' }} 
 								</p>
 							</div>
 							<div class='col-3'>
@@ -77,89 +82,121 @@
 
 			<div class='col-12 mt-4 mb-4'>
 				<div class='sections'>
-					<h1 class='h1-1'>Project Details <br> {{ project }} </h1>
+					<h1 class='h1-1 text-center '>Project Details : {{ project }} </h1>
 					<hr>
 					<div class='row'>
-						
-						<div class='col-3'>
-							<p class='p-p'>Scope{{ project.scope }}</p>
+						<div class='col-4 text-center '>
+							<p class='p-2'>Project Type</p>
+							<p class='p-p'>{{ project_terms.scope|title }}</p>
 						</div>
-						<div class='col-3'>
-							<p class='p-p'>{{ project.location }}</p>
+						<div class='col-4 text-center '>
+							<p class='p-2'>Location Type</p>
+							<p class='p-p'>{{ project_terms.project_request_id.location|title }}</p>
 						</div>
-						<div class='col-3'>
-						
+						<div class='col-4'>
+							<p class='p-2'>Project Status</p>
 							<p class='p-p'>{{ project.status }}</p>
 						</div>
-						
+
 						<div class='col-12'>
 							<button class="btn-cust" type="button" data-bs-toggle="collapse" data-bs-target="#dropdetails" aria-expanded="false" aria-controls="dropdetails">
 								Info
 							</button>
+
 							<div class="collapse" id="dropdetails" style='width:100%'>
 								<div class='inv-card'>
 									<div class='inv-card-content'>
-										<p class='p-p'>Project Details</p>
-										<p class='p-p'>{{project.details}}</p>
-
+										<p class='p-2'>Project Details</p>
+										<p class='p-p'>{{project_terms.services}}</p>
 									</div>
-
 								</div>
 							</div>
+
 						</div>
 					</div>
-
 				</div>
 			</div>	
 		</div>
 	</div>
 
 	<div class='col-4 mb-4'>
-		<div class='sections h-100'>
-			<h1 class='h1-1'>Payments</h1>
-			<hr>
-			<div class="overflow-auto">
-				{% for payment in payment_list %}
-				<p class='p-p'>
-					{{ payment.status|title }} Amount: ${{ payment.amount|floatformat:2 }}  | {{ payment.receipt|title }} 
-					<a href={% url 'payment-details' payment.id %}>
-						<i class="fa-solid fa-file-invoice"></i>
-					</a>
-				</p>
-				<hr>
-				{% endfor %}
+		<div class='row'>
+			<div class='col-12 mb-4'>
+				<div class='sections-small'> 
+					<h1 class="h1-1">
+						Project Image Count
+					</h1>
+					<hr>
+					<div class='sections-2'>
+						<h1 class='nums'>
+							{{ images|length }}
+						</h1>
+					</div>
+				</div>
 			</div>
-		</div>
-	</div>	
+			<div class='col-12 mb-4'>
+				<div class='sections mt-4 mb-4' style='height:50vh'>
+					<h1 class='h1-1'>Payments</h1>
+					<hr>
+					<div class="overflow-auto">
+						{% for payment in payment_list %}
+						<div class='row' style='width:95%'>
+							<div class='col-5'>
+								<p class='p-p'>
+									{{ payment.status|title }} <br> {{ payment.receipt|title }} 
+								</p>
+							</div>
+							<div class='col-5'>
+								<p class='p-p'>
+									Amount: ${{ payment.amount|floatformat:2 }}
+								</p>
+							</div>
+							<div class='col-2'>
+								<button class='btn-icon' onclick="window.location.href='{% url 'payment-details' payment.id %}'">
+									<i class="fa-solid fa-file-invoice"></i>
+								</button>
+							</div>
+						</div>
+						<hr>
+						{% endfor %}
+					</div>
+				</div>
+			</div>
+		</div>		
+	</div>
 </div>
 
 <div class='row mt-4 mb-4'>
 	<div class='col-12 mt-4 mb-4'>
 		<div class='sections-small'>
 			<div class='row'>
+
 				<div class='col-3'>
-					<button class='w-100 btn-cust'>Edit Project</button>
+					<button class='w-100 btn-cust' onclick="window.location.href='{% url 'client-details' client.id %}'">Client Details</button>
 				</div>
 				<div class='col-3'>
-					<button class='w-100 btn-cust'onclick="window.location.href='#'">Cancel Project</button>
+					<button class='w-100 btn-cust' onclick="window.location.href='{% url 'project-gallery' project.id %}'">Gallery</button>
 				</div>
 				<div class='col-3'>
-					<button class='w-100 btn-cust'>Gallery</button>
+					<button class='w-100 btn-cust' onclick="window.location.href='{% url 'project-notes' project.id %}'">Project Notes</button>
 				</div>
 				<div class='col-3'>
-					<button class='w-100 btn-cust'>Add Event</button>
+					<button class='w-100 btn-cust' onclick="window.location.href='{% url 'new-event' %}'">Add Event</button>
 				</div>
 				<div class='col-3'>
-					<button class='w-100 btn-cust '>Billing Details</button>
+					<button class='w-100 btn-cust ' onclick="window.location.href='{% url 'billing-details' billing_info.id %}'">Billing Details</button>
 				</div>
-				<div class='col-3'>
-					<button class='btn-cust w-100'onclick="window.location.href='#'">Add Invoice</h1>
-				</div>
+
 				<div class='col-3'>
 					<button class='btn-cust w-100'>Add Cash Payment</button>
 				</div>
 				<div class='col-3'>
-					<button class='w-100 btn-cust'>Client Details</button>
+					<button class='btn-cust w-100'>Add Invoice</h1>
+				</div>
+
+
+				<div class='col-3'>
+					<button class='w-100 btn-cust' onclick="window.location.href='{% url 'project-delete' project.id %}'">Cancel Project</button>
 				</div>
 			</div>
 

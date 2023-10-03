@@ -1,64 +1,118 @@
 {% extends 'panel.html' %}
-{% block title %}Upload Link{% endblock %}
+{% block title %}Client Details{% endblock %}
 {% block content %}
 {% load static %}
-{% if user.is_authenticated %}
-<div class='row mt-4 text-center mb-4 sections'>
-	<div class='col-4'>
-		<h1 class='h1-1'>Total Due</h1>
-		<p class='nums'>${{ due }}</p>
-	</div>
-	<div class='col-4'>
-		<h1 class='h1-1'>Total paid</h1>
-		<p class='nums'>${{ paid }}</p>
-	</div>
-	<div class='col-4'>
-		<h1 class='h1-1'>Outstand</h1>
-		<p class='nums'>${{ out }}</p>
-	</div>
-	<div class='col-12'>
-		<div id="dueProgress">
-			<div id="due" value="{{ ratio }}"></div>
+<div class='sections form-fit'>
+	<div class='row'>
+		<div class="col-12 mt-4 mb-4">
+		
+			<h1 class='nums'>
+				{{ user_info.first_name }} {{ user_info.last_name }}
+			</h1>
+			<hr>
+			<p class='p-2 text-center'>
+				Client Information
+			</p>
+			<div class='row'>
+				<div class='col-6'>
+					<div class='sections-2 h-100'>
+						<p class='p-2 text-center'>
+							Client Address
+						</p>
+						<p class='p-p'>
+							{{client_info.address_1}}
+							<br>
+							{{client_info.address_2}}
+							<br>
+							{{client_info.city}} {{client_info.state}}, {{client_info.zip_code}}
+							
+						</p>
+					</div>
+				</div>
+
+				<div class='col-6'>
+					<div class='sections-2 h-100'>
+						<p class='p-2 text-center'>
+							Client Contact
+						</p>
+						<p class='p-p'>
+							Email: {{client_info.email}}
+							<br>
+							Phone: {{client_info.phone}}
+							<br>
+							Prefered Contact: {{client_info.contact_method}}
+							
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
-		<h1 class='h1-1 mt-2 mb-2'>{{ ratio }}% Paid</h1>
+
+
+		<div class="col-12 mt-4 mb-4">
+			<h1 class='h1-1'>Project Window</h1>
+			<hr>
+			<div class="overflow-auto sections-2 scroll-menu">
+				<div class='row text-center'>
+					{% for project in client_project %}
+					<div class='col-5'>
+						<p class="p-p">
+							{{ project }} 
+							<br>
+						</p>
+					</div>
+					<div class='col-5'>
+						
+						<p class="p-p">Status: <br> {{ project.status }}</p>
+					</div>
+					<div class='col-2'>
+						<button
+						class="btn-icon" 
+						onclick="window.location.href='{% url 'project-details' project.id %}'">
+							<i class="fa-regular fa-folder-open"></i>
+						</button>
+					</div>
+					{% endfor %}
+				</div>
+			</div>
+		</div>
+
+		<div class="col-12 mt-4 mb-4">
+
+			<h1 class='h1-1'>Images</h1>
+			<hr>
+			<div class="overflow-auto sections-2 scroll-menu">
+				{% for image in image_list %}
+				<div class='row text-center'>
+					<div class='col-5'>
+						{{ image.title }}
+					</div>
+					<div class='col-5'>
+
+						{{ image.project_id }}
+					</div>
+					<div class='col-2'>
+						<button class='btn-icon'
+							onclick="window.location.href='{% url 'image-details' image.id %}'">
+							<i class="fa-regular fa-image"></i>
+						</button> 
+					</div>
+				</div>
+				<hr>
+				{% endfor %}
+				</ul>
+			</div>
+		</div>
+		<div class="col-12 mt-4 mb-4">
+			<button class='btn-cust'
+			onclick="window.location.href='{% url 'client-delete' client_info.id %}'">
+			Delete Client
+			<i class="fa-solid fa-user-slash"></i>
+			</button> 
+		</div>
 	</div>
 </div>
-<div class='row mt-4 mb-4 '>
-
-	<div class='col-4 sections'>
-		<h1 class='h1-1'>{{ user_info.first_name }} {{ user_info.last_name }}</h1>
-		<p class='p-p'>Email hey <br> {{ client_info.email }}</p>
-		<p class='p-p'>Number <br> {{ client_info.phone }}</p>
-		<p class='p-p'>client ID: {{ client_info.id }}</p>
-	</div>
-</div>
-<div class='row mt-4 mb-4 '>
-	<div class='col-8 sections'>
-		<h1 class='h1-1'>Project Details</h1>
-		<p class='p-p'>{{ invoice.details }}</p>
-	</div>
 
 
-</div>
-
-
-<div class='row sections-small'>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Gallery</h1>
-	</div>
-	<div class='col-3'>
-		<button class='btn btn-cust'onclick="window.location.href='#'">Edit</h1>
-	</div>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Add Cash Payment</h1>
-	</div>
-	<div class='col-3'>
-		<button class='btn btn-cust'>Cancel Invoice</h1>
-	</div>
-</div>
-
-
-
-{% endif %}
 <script src={% static 'js/invoiceBar.js' %}></script>
 {% endblock %}

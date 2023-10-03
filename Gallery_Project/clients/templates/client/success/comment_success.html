@@ -1,0 +1,27 @@
+{% extends 'panel.html' %}
+{% block title %}Reply Sent Success{% endblock %}
+{% block content %}
+
+<div class='row'>
+	<div class='col'>
+		<div class='sections form-fit text-center'>
+			<h1 class='h1-1'>
+				Your comment on the project request has been submited
+			</h1>
+			<hr>
+			<div class='sections-2'>
+
+				<p>
+					A notice has been sent to the corresponding party, alerting them of your new comment. 
+					<br>
+					When the responding party makes a commnet, you will be notified via email.
+				</p>
+			</div>
+			<button class='btn-cust' 
+			onclick="window.location.href='{% url 'projects' %}'">
+			Return to Projects</button>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

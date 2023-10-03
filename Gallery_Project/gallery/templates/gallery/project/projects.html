@@ -7,30 +7,78 @@
 <div class='row mt-4 mb-4'>
 	<div class='col-8'>
 		<div class='sections h-100'>
-			<h1 class='h1-1'>Up Comming Events
-
-			</h1>
-			<hr>
-			<div class="overflow-auto sections-2 scroll-menu">
-				{% for event in project_events %}
-				<div class='row p-p' style='width: 90%'>
-					<div class='col-3'>	
-						Date: {{ event.date }}
+			<h1 class='h1-1 mb-2'>Search and Filter Project List</h1>
+			<form method="GET" action="." class='form-group'>
+				<div class='row'>
+					<div class='col-12 mb-2'>
+						<input class="form-control" list="project-list" type="search" name="project" placeholder="Project">
+						<datalist id="project-list">
+						{% for project in project_list %}
+							<option value="{{ project.name }}"></option>
+						{% endfor %}
+						</datalist>
 					</div>
-					<div class='col-4'>
-						Time: {{ event.start }} to {{ event.end }}
-					</div>
-					<div class='col-3'>
-						Title: {{event.title}}
-					</div>
-					<div class='col-2 text-center'>
-						<button class='btn-icon' onclick="window.location.href='{% url 'project-event' event.id %}'">
-							<i class="fa-solid fa-calendar-days fa-xl"></i>
-						</button>
+					<div class='col-12 mb-2'>
+						<input class="form-control" list="client-list" type="search" name="client" placeholder="Client">
+						<datalist id="client-list">
+						{% for client in client_info %}
+							<option value="{{ client.client_details.client }}"></option>
+						{% endfor %}
+						</datalist>
 					</div>
 				</div>
-				<hr>
+				<div class='row'>
+					<div class="col-4 mt-4">
+						<select class="form-select" type="select" name="order">
+							<option value="Newest">Newest</option>
+							<option value="Oldest">Oldest</option>
+						</select>
+					</div>                
+					<div class="col-4">
+						<button type="submit" class="btn-cust btn-cust-color mt-4">Search</button>
+					</div>
+					<div class="col-4">
+						<button
+						type="submit"
+						class="btn-cust btn-cust-color mt-4"
+						onclick="window.location.href='{% url 'projects' %}'">
+						Clear Search</button>
+					</div>
+				</div>
+			</form>
+
+
+			<div class="overflow-auto sections-2 scroll-menu">
+				<div class='row'>
+				{% for project in project_info %}
+					<div class='col-12 mt-4'>
+						<div class='inv-card'>
+							<div class='inv-card-content'>
+								<div class='row mt-1'>
+									<div class='col-5'>
+										<p class="p-p">
+											{{ project.project_details.project }} 
+											<br>
+											{{ project.project_details.project_client }}
+										</p>
+									</div>
+									<div class='col-5'>
+										
+										<p class="p-p">Status: <br> {{ project.project_details.project_status }}</p>
+									</div>
+									<div class='col-2'>
+										<button
+										class="btn-icon" 
+										onclick="window.location.href='{% url 'project-details' project.project_details.project_id %}'">
+											<i class="fa-regular fa-folder-open"></i>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
 				{% endfor %}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -108,9 +156,12 @@
 
 		</div>
 	</div>
+
 </div>
 
 <div class='row mt-4 mb-4'>
+
+
 	<div class='col-4'>
 		<div class='sections h-100'>
 			<h1 class='h1-1'>Pending Project Request</h1>
@@ -141,68 +192,30 @@
 	</div>
 	<div class='col-8'>
 		<div class='sections h-100'>
-			<h1 class='h1-1 mb-2'>Search and Filter Project List</h1>
-			<form method="GET" action="." class='form-group'>
-				<div class='row'>
-					<div class='col-12 mb-2'>
-						<input class="form-control" list="project-list" type="search" name="project" placeholder="Project">
-						<datalist id="project-list">
-						{% for project in project_list %}
-							<option value="{{ project.name }}"></option>
-						{% endfor %}
-						</datalist>
-					</div>
-					<div class='col-12 mb-2'>
-						<input class="form-control" list="client-list" type="search" name="client" placeholder="Client">
-						<datalist id="client-list">
-						{% for client in client_info %}
-							<option value="{{ client.client_details.client }}"></option>
-						{% endfor %}
-						</datalist>
-					</div>
-				</div>
-				<div class='row'>
-					<div class="col-4 mt-4">
-						<select class="form-select" type="select" name="order">
-							<option value="Newest">Newest</option>
-							<option value="Oldest">Oldest</option>
-						</select>
-					</div>                
-					<div class="col-6">
-						<button type="submit" class="btn-cust btn-cust-color mt-4">Search</button>
-					</div>
-				</div>
-			</form>
+			<h1 class='h1-1'>Up Comming Events
 
-
-			<div class="overflow-auto scroll-menu">
-			{% for project in project_info %}
-				<div class='col-6'>
-					<div class='inv-card'>
-						<div class='inv-card-content'>
-							<div class='row mt-1'>
-								<div class='col-6'>
-									<p class="p-p">
-										{{ project.project_details.project }} 
-										<br>
-										{{ project.project_details.project_client }}
-									</p>
-								</div>
-								<div class='col-6'>
-									
-									<p class="p-p">Status: <br> {{ project.project_details.project_status }}</p>
-								</div>
-								<div class='col-6'>
-									<p class="p-p">Cost:  {{ project.project_details.project_cost }}</p>
-								</div>
-								<div class='col-12'>
-									<button href="#" class="btn-cust btn-cust-color" onclick="window.location.href='{% url 'project-details' project.project_details.project_id %}'">Details</button>
-								</div>
-							</div>
-						</div>
+			</h1>
+			<hr>
+			<div class="overflow-auto sections-2 scroll-menu">
+				{% for event in project_events %}
+				<div class='row p-p' style='width: 90%'>
+					<div class='col-3'>	
+						Date: {{ event.date }}
+					</div>
+					<div class='col-4'>
+						Time: {{ event.start }} to {{ event.end }}
+					</div>
+					<div class='col-3'>
+						Title: {{event.title}}
+					</div>
+					<div class='col-2 text-center'>
+						<button class='btn-icon' onclick="window.location.href='{% url 'project-event' event.id %}'">
+							<i class="fa-solid fa-calendar-days fa-xl"></i>
+						</button>
 					</div>
 				</div>
-			{% endfor %}
+				<hr>
+				{% endfor %}
 			</div>
 		</div>
 	</div>

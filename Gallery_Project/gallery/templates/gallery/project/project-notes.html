@@ -1,0 +1,125 @@
+{% extends 'panel.html' %}
+{% block title %}Client Request{% endblock %}
+{% block content %}
+{% load static %}
+<div class='row'>
+	<div class='col-12'>
+		<div class='sections form-fit mt-4 mb-4'>
+
+			<div class='col-12 text-center mt-4 mb-4'>
+			<h1 class='h1-1'>Project Cost and Outline</h1>
+			<hr>
+			<p class='p-p'></p>
+			</div>
+
+
+			<div class='sections-2'>
+				<div class='row text-center'>
+				
+					<div class='col-6 mt-4 mb-4'>
+						<h1 class='h1-1'>
+							Project Cost
+						</h1>
+					</div>
+					<div class='col-6 mt-4 mb-4'>
+						<h1 class='h1-1'>
+							{{project_terms.project_cost|floatformat:2}}
+						</h1>
+					</div>
+
+					<div class='col-6 mt-4 mb-4'>
+						<h1 class='h1-1'>
+							Project Deposit
+						</h1>
+					</div>
+					<div class='col-6 mt-4 mb-4'>
+						<h1 class='h1-1'>
+							{{project_terms.deposit|floatformat:2}}
+						</h1>
+					</div>
+					<div class='col-6 mt-4 mb-4'>
+						<h1 class='h1-1'>
+							Desired Date
+						</h1>
+					</div>
+					<div class='col-6 mt-4 mb-4'>
+						<h1 class='h1-1'>
+							{{project_request.date}}
+						</h1>
+					</div>
+				</div>
+			</div>
+
+
+			<h1 class='h1-1 mt-4'>Session Outline</h1>
+			<hr>
+			<div class='sections-2'>
+				<div class='col-12 mt-4 mb-4'>
+						
+						<p class='p-p'>{{project_terms.services}}</p>
+				</div>
+			</div>
+
+			</div>
+		</div>
+	</div>
+
+	<div class='col-12'>
+		<div class='sections form-fit mt-4 mb-4'>
+			<h1 class='h1-1'>
+				Request Thread
+			</h1>
+			<hr>
+			<p class='p-p'>
+				<a class="btn-cust" data-bs-toggle="collapse" href="#collapseComments" role="button" aria-expanded="false" aria-controls="collapse1">
+					Project Request Thread
+				</a>
+			</p>
+		  
+	
+			<div class='row'>
+				<div class="collapse" id="collapseComments" style='width:100%'>
+	
+				{% for comment in request_reply %}
+				{% if comment.user_id == user %}
+				<div class='col-12 mt-4 mb-4'>
+					<div class='row'>
+						<div class='col-12 comment-sub-box'> 
+							<div class="user-content" >
+								<h1 class='user-box h1-1'>
+									{{ comment.user_id }}
+								</h1>
+								<hr>
+								<p class='p-p'>
+									{{ comment.comment}}
+								</p>
+								<div class='comment-line-3'></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% else %}
+				<div class='col-12 mt-4 mb-4'>
+					<div class='row'>
+						<div class='col-12 comment-sub-box'> 
+							<div class="comment-content" >
+								<h1 class='h1-1'>
+									{{ comment.user_id }}
+								</h1>
+								<hr>
+								<p class='p-p'>
+									{{ comment.comment}}
+								</p>
+								<div class='comment-line-2'></div>
+							</div>
+						</div>
+					</div>
+				</div>
+				{% endif %}
+				{% endfor %}
+			</div>
+		</div>
+	</div>
+</div>
+
+{% endblock %}

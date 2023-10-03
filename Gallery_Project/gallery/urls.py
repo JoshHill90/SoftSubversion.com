@@ -31,5 +31,8 @@ urlpatterns = [
     path('image/upload', upload_image, name='image-upload'),
     
     path('project/<int:pk>/event',ProjectEventsDetails.as_view() , name='project-event'),
+    path('project/event/new', ProjectEventsCreate.as_view() , name='new-event'),
     path('project/events/<int:year>/<str:month>', views.clandar, name='project-calendar'),
+    path('project/<int:id>/gallery',views.project_gallery , name='project-gallery'),
+    path('project/<int:id>/notes',views.project_notes , name='project-notes'),
 ] 

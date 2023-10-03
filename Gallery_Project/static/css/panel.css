@@ -12,7 +12,7 @@
   --font-family-header:'Arvo', serif;
   --numbers: 'Calistoga', cursive;
   --h1: 26px;
-  --p: 16px;
+  --p: 14px;
   --np:36px;
   --font-weights-norm: 400;
   --arvo-norm: 400;
@@ -96,7 +96,6 @@ html {
 
 .p-2 {
   font-size:var(--p);
-  font-weight:  normal;
   color: var(--text-color-secondary);
 }
 
@@ -202,7 +201,7 @@ button
   font: var(--p);
   color: #ffffff;
   background-color: #7933fc96;
-  padding: 15px 15px;
+  padding: 8px 8px;
   border: 2px solid #7933FC;
   box-shadow: rgb(0, 0, 0) 0px 0px 0px 0px;
   border-radius: 8px;

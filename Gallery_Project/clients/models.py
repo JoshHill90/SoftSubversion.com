@@ -33,7 +33,7 @@ class Client(models.Model):
         return str(self.name)
 
     def get_absolute_url(self):
-        return reverse("client-details", args=(str(self.id)))
+        return reverse("client-details", args=(self.id))
     
 class Invite(models.Model):
     name = models.CharField(max_length=255, verbose_name='Name')

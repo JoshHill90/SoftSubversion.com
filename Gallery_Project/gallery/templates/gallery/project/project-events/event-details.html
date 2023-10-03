@@ -7,28 +7,101 @@
 
 <div class='row mt-4 mb-4'>
 	<div class='col-12 mt-4 mb-4'>
-		<div class='sections-small'>
+		<div class='sections form-fit'>
 			<h1 class='h1-1 text-center'>Project Event Details</h1>
-			<div class='inv-card'>
-				<div class='inv-card-content'>
-					<div class='row text-center'>
-						<div class='col-4'>
-							<h1 class='h1-1 text-center'>Title: {{projectevents}}</h1>
+			<hr>
+			<div class='row mt-4 mb-4'>
+				<div class='col-6'>
+
+					<div class='sections-2 h-100'>
+						<div class='row '>
+							<div class='col-4'>
+								<p class='p-2'>Subject</p>
+							</div>
+							<div class='col-8'>
+								<p class='p-p'> {{projectevents}}</p>
+							</div>
+							<div class='col-4'>
+								<p class='p-2'>Date</p>
+							</div>
+							<div class='col-8'>
+								<p class='p-p'>{{projectevents.date|date:'m/d/y'}}</p>
+							</div>
+							<div class='col-4'>
+								<p class='p-2'>Start</p>
+							</div>
+							<div class='col-8'>
+								<p class='p-p'>{{projectevents.start|date:"h:i a"|title}} </p>
+							</div>
+							<div class='col-4'>
+								<p class='p-2'>End</p>
+							</div>
+
+							<div class='col-8'>
+								<p class='p-p'>{{projectevents.end|date:"h:i a"|title}}</p>
+							</div>
 						</div>
-						<div class='col-4'>
-							<h1 class='h1-1 text-center'>{{projectevents.date|title}}</h1>
-						</div>
-						<div class='col-4'>
-							<h1 class='h1-1 text-center'>From {{projectevents.start|date:"H:i a"|title}} to {{projectevents.end|date:"H:i a"|title}}</h1>
-						</div>
-						
 					</div>
 				</div>
-			</div>
-		</div>
-		<div class='col-12 mt-4 mb-4'>
-			<div class='sections'>
-				{{ projectevents.project_id.user_id.first_name }}
+				<div class='col-6'>
+
+					<div class='sections-2 h-100'>
+						<div class='row '>
+							<div class='col-4'>
+								<p class='p-2'>Type</p>
+							</div>
+							<div class='col-8'>
+								<p class='p-p'> {{projectevents.event_type|title}}</p>
+							</div>
+							<div class='col-4'>
+								<p class='p-2'>Status</p>
+							</div>
+							<div class='col-8'>
+								<p class='p-p'>{{projectevents.payment_id.status}}</p>
+							</div>
+							<div class='col-4'>
+								<p class='p-2'>Amount</p>
+							</div>
+							<div class='col-8'>
+								<p class='p-p'>${{projectevents.payment_id.amount|floatformat:2}}</p>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class='col-12 mt-4 mb-4'>
+					<div class='sections-2 mt-4 mb-4 h-100'>
+						<p class='p-2'>Event Details</p>
+						<p class='p-p'>{{projectevents.details}}</p>
+					</div>
+				</div>
+
+				<div class='col-12 mt-4 mb-4'>
+					<h1 class='h1-1 text-center'>Client and Project Details</h1>
+					<hr>
+					<div class='sections-2'>
+						<div class='row '>
+							<div class='col-2'>
+								<p class='p-2'>Client:</p>
+							</div>
+
+							<div class='col-10'>
+								<p class='p-p'>{{ projectevents.project_id.user_id.first_name }} {{ projectevents.project_id.user_id.last_name }}</p>
+							</div>
+
+							<div class='col-2'>
+								<p class='p-2'>Project</p>
+							</div>
+		
+							<div class='col-10'>
+								<p class='p-p'>{{ projectevents.project_id }}</p>
+							</div>
+						</div>
+					</div>
+					<div class='col-12 text-center mt-4'>
+						<button class='btn-cust'>Edit Event</button>
+						<button class='btn-cust'>Cancel Event</button>
+					</div>
+				</div>
 			</div>
 		</div>
 

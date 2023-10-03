@@ -51,6 +51,5 @@ class ProjectTermsForm(forms.ModelForm):
         widgets = {
             'project_cost': forms.TextInput(attrs={'class': 'form-control'}),
             'deposit': forms.TextInput(attrs={'class': 'form-control'}),
-            
             'services': forms.Textarea(attrs={'class': 'form-control'}),
         }

@@ -197,9 +197,12 @@ def client_details(request, client_id):
     client_info = Client.objects.get(id=client_id)
     user_info = User.objects.get(username=client_info.name)
     client_project = Project.objects.filter(client_id=client_info)
+    image_list = Image.objects.filter(client_id=client_info)
     return render(request, 'client/client-details.html', {
 		'client_info': client_info,
         'user_info': user_info,
+        'client_project': client_project,
+        'image_list':image_list
         
     })
 
@@ -240,9 +243,7 @@ def clientRequestDetails(request, slug):
             comment = comment_form.cleaned_data.get('comment')
             clinet_email = user_info.email
             smtp_request.owner_post_comment(clinet_email, user_info, comment, project_request, slug)
-            return render(request, 'client/comment_success.html', {
-                'slug': slug,
-            })
+            return redirect('comment-success')
 
     else:
         comment_form = RequestReplyComment()
@@ -266,6 +267,10 @@ def client_request(request):
         'request_comments' : request_comments,
         'project_terms': project_terms
   })
+
+class CleintDeleteView(DeleteView):
+    model = Client
+    template_name = 'client/client-delete.html'
 
 def request_approval(request, id):
     
@@ -415,7 +420,7 @@ def request_approval(request, id):
             # creates new billing account for client 
             new_billing = Billing.objects.create(
                 invoice=stripe_prefix,
-                billed=project_amount,
+                billed=project_amount + deposit_amount,
                 project_id=new_project,
                 due_date=date_setter(client_request.date)
             )
@@ -547,7 +552,7 @@ class ProjectRquestCreate(CreateView):
         randnum = hex_gen_small()
         pj_id = str(randnum)
 
-        slug_str = str(id_str + '-' + pj_id + '-' + clean_name)
+        slug_str = str(id_str + '-' + pj_id + '-' + 'prj')
         
         project_request.user_id_id = user_id 
         project_request.slug = slug_str
@@ -592,7 +597,7 @@ class SuccessInvite(TemplateView):
     template_name = 'client/success/success-invite.html'
     
 class CommentSuccessView(TemplateView):
-    template_name = 'client/comment_success.html'
+    template_name = 'client/success/comment_success.html'
     
 #-------------------------------------------------------------------------------------------------------#
 # failed static views 

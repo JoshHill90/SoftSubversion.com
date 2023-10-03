@@ -1,4 +1,5 @@
 from typing import Any, Dict
+from django.forms.models import BaseModelForm
 from django.http import HttpResponse, JsonResponse, HttpResponseRedirect
 from django.shortcuts import render, redirect, get_object_or_404
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView, TemplateView
@@ -8,8 +9,9 @@ from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib import messages
 from .models import Image, Print, Project, ProjectEvents
-from clients.models import ProjectRequest
-from .forms import ImageForms, PrintForms, ProjectForms, CreatImageForm
+from clients.models import ProjectRequest, RequestReply
+from .forms import ImageForms, PrintForms, ProjectForms, CreatImageForm, ProjectEventForms
+from clients.forms import ProjectTermsForm
 from Gallery_Project.env.app_Logic.photo_layer import col3_col6_col3
 from Gallery_Project.env.cloudflare_API.CFAPI import APICall, Encode_Metadata
 from django.core.paginator import Paginator 
@@ -46,6 +48,7 @@ def column_sort(image_list):
     image_col1 = []
     image_col2 = []
     image_col3 = []
+    new_list = []
 
     for image in image_list:
         new_list = []
@@ -79,36 +82,6 @@ def column_sort(image_list):
 #
 #-----------------------------------------------------------------------------------------------------------#
 
-def clandar(request, year, month):
-
-    event_list = ProjectEvents.objects.all()
-    event_list = ProjectEvents.objects.order_by('date')
-    month = month.title()
-    month_number = list(calendar.month_name).index(month)
-    month_number = int(month_number) 
-
-
-    month0, month1, month2, cal, year_new, todays_date, cal_date = cal_gen(month_number, year)
-    next_year = year + 1
-    last_year = year - 1
-    print(year_new)
-
-    return render(request, 'gallery/project/project-events/calendar.html', {
-        'year': year,
-        'month1': month1,
-        'month0':month0,
-        'month2' :month2,
-        'cal': cal,
-        'event_list':event_list,
-        'last_year': last_year,
-        'next_year': next_year,
-        'todays_date': todays_date,
-        'cal_date': cal_date
-    })
-    
-class ProjectEventsDetails(DetailView):
-    model = ProjectEvents
-    template_name = 'gallery/project/project-events/event-details.html' 
 
 
 #-------------------------------------------------------------------------------------------------------#
@@ -352,63 +325,54 @@ class ProjectDeleteView(DeleteView):
     
 def project_owner_view(request, pk):
     project = Project.objects.get(Q(id=pk))
-    project_events = ProjectEvents.objects.filter(project_id=pk)
-    project_events = ProjectEvents.objects.order_by('date')
+    project_events = ProjectEvents.objects.filter(project_id=project).order_by('date')
+    project_terms = ProjectTerms.objects.get(Q(project_id__id=pk))
     client = Client.objects.get(user_id=project.user_id)
-    billing_info = Billing.objects.get(project_id=pk)
+    billing_info = Billing.objects.get(project_id=project)
     payment_list = Payments.objects.filter(billing_id=billing_info)
+    images = Image.objects.filter(project_id=project)
     
     active_nodes = 0
     project_progress = []
     for event in project_events:
 
          # deposit/consulation check
-        if event.payment_id and event.event_type == "deposit-consultation":
+        if event.payment_id and event.event_type == "Deposit Reminder":
             for payment in payment_list:
-                if payment.receipt == 'deposit':
-                    deposit = 'Deposit $' + str(payment.amount)
-                    consulting = 'consulting'
+                if payment.receipt == 'Deposit Cost' and payment == event.payment_id:
+                    deposit = '$' + str(payment.amount) + ' Due ' + str(payment.due_date)
                     project_progress.append(deposit)
-                    project_progress.append(consulting)
                     if payment.status == 'paid':
                         active_nodes +=1
-                        event_passed = date_passed_check(event.date)
-                        if event_passed == True:
-                            active_nodes +=1
+
                             
         # event check without payment   
         if not event.payment_id:
-            event_type = event.event_type
+            event_type = str(event.event_type) + ' on ' + str(event.date)
+            project_progress.append(event_type)
             event_passed = date_passed_check(event.date)
             if event_passed == True:
                 active_nodes +=1
                                      
         # event check with payment check
-        if event.payment_id and event.event_type != "deposit-consultation" or event.event_type != "final":
+        if event.payment_id and event.event_type == "Other Payment":
             for event_payment in payment_list:
                 if event_payment == event.payment_id:
-                    payment_amount = event_payment.amount
-                    event_type = event.event_type
-                    project_progress.append(payment_amount)
-                    project_progress.append(event_type)
+                    payment_due = '$' + str(event_payment.amount)  + ' Due ' +  str(event_payment.due_date)
+                    
+                    project_progress.append(payment_due)
+                    
                     if event_payment.status == 'paid':
                         active_nodes +=1
-                        event_passed = date_passed_check(event.date)
-                        if event_passed ==True:
-                            active_nodes +=1
+
     
-        if event.payment_id and event.event_type == "final":
+        if event.payment_id and event.event_type == "Project Payment":
             for event_payment in payment_list:
                 if event_payment == event.payment_id:
-                    payment_amount = event_payment.amount
-                    event_type = event.event_type
-                    project_progress.append(payment_amount)
-                    project_progress.append(event_type)
+                    project_payment = '$' + str(event_payment.amount) + ' Due ' + str(event_payment.due_date)
+                    project_progress.append(project_payment)
                     if event_payment.status == 'paid':
                         active_nodes +=1
-                        event_passed = date_passed_check(event.date)
-                        if event_passed ==True:
-                            active_nodes +=1
 
                 
     print(active_nodes, project_progress)
@@ -418,10 +382,95 @@ def project_owner_view(request, pk):
         'billing_info': billing_info,
         'payment_list': payment_list,
         'client': client,
+        'project_terms': project_terms,
         'project_progress': project_progress,
-        'active_nodes': active_nodes
+        'active_nodes': active_nodes,
+        "images": images
     })
 
+def project_gallery(request, id):
+    project = Project.objects.get(id=id)
+    image_list = Image.objects.filter(Q(project_id=project))
+    image_col1, image_col2, image_col3, new_list, len1, len2 = column_sort(image_list)
+
+    return render(request, 'gallery/project/project-gallery/project-gallery.html', {
+        'image_list': image_list,
+        'image_col1': image_col1,
+        'image_col2': image_col2,
+        'image_col3': image_col3,
+        'new_list': new_list,
+        'len1': len1,
+        'len2': len2,
+    })
+
+def project_notes(request, id):
+    project_terms = ProjectTerms.objects.get(project_id=id)
+    project_request = ProjectRequest.objects.get(id=project_terms.project_request_id.id)
+    request_reply = RequestReply.objects.filter(Q(project_request_id=project_request.id))
+
+    return render(request, 'gallery/project/project-notes.html', {
+        'request_reply': request_reply,
+        'project_terms':project_terms,
+        'project_request': project_request
+    })
+#---------------------------------------------------------------------------------------------------------#
+# Calendar
+#---------------------------------------------------------------------------------------------------------#
+
+class ProjectEventsCreate(CreateView):
+    model = ProjectEvents
+    form_class = ProjectEventForms
+
+    template_name = 'gallery/project/project-events/new-event.html'
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project'] = Project.objects.exclude(name='Soft Subversion')
+        return context
+    def form_invalid(self, form):
+        self.objects = form.save(commit=False)
+        date = form.cleaned_data.get('date',)
+        form.save()
+        year, month, day = str(date).split('-')
+        return redirect('project-calendar', year=year, month=month)
+    
+
+def clandar(request, year, month):
+
+    event_list = ProjectEvents.objects.all()
+    event_list = ProjectEvents.objects.order_by('date')
+    try:
+        month_number = int(month)
+    except ValueError:
+        month = month.title()
+        month_number = list(calendar.month_name).index(month)
+        month_number = int(month_number) 
+
+
+    month0, month1, month2, cal, year_new, todays_date, cal_date = cal_gen(month_number, year)
+    next_year = year + 1
+    last_year = year - 1
+    print(year_new)
+
+    return render(request, 'gallery/project/project-events/calendar.html', {
+        'year': year,
+        'month1': month1,
+        'month0':month0,
+        'month2' :month2,
+        'cal': cal,
+        'event_list':event_list,
+        'last_year': last_year,
+        'next_year': next_year,
+        'todays_date': todays_date,
+        'cal_date': cal_date
+    })
+    
+class ProjectEventsDetails(DetailView):
+    model = ProjectEvents
+    template_name = 'gallery/project/project-events/event-details.html' 
+
+
+#---------------------------------------------------------------------------------------------------------#
+# Image upload and creation
 #---------------------------------------------------------------------------------------------------------#
 
 
