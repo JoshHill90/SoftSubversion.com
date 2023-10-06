@@ -116,3 +116,16 @@ class ProjectEvents(models.Model):
         date = date_stamp()
         year, month, day = date.split('-')
         return reverse("project-calendar", args=(year, month))
+    
+class Note(models.Model):
+    project_id = models.ForeignKey(Project, on_delete=models.CASCADE, )
+    user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
+    note = models.TextField(max_length=3000)
+    date_posted = models.DateField(auto_now=True)
+
+    def __str__(self):
+        return str(self.id)
+
+    def get_absolute_url(self):
+        
+        return reverse("project-notes", args=(str(self.project_id)))

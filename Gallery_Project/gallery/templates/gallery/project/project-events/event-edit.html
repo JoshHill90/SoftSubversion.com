@@ -1,5 +1,5 @@
 {% extends 'panel.html' %}
-{% block title %}New Project Event{% endblock %}
+{% block title %}Edit Project{% endblock %}
 {% block content %}
 
 
@@ -17,20 +17,22 @@
                 <div class='row'>
                     <div class='col-12'>
                         <label for="id_title">Title:</label>
-                        <input class='form-control' type="text" name="title" maxlength="255" required="" id="id_title">
+                        <input class='form-control' value='{{ project_event.title }}' type="text" name="title" maxlength="255" required="" id="id_title">
                     </div>
                     <div class='col-12'>
                         <label for="id_project_id">Project id:</label>
                         <select class='form-control' name="project_id" required="" id="id_project_id">
                             <option>----------</option>
                             {% for projects in project %}
-                                {% if projects %}
+                                {% if projects == project_event.project_id %}
+                                <option value="{{ projects.id }}" selected>{{ projects|title }}</option>
+                                {% else %}
                                 <option value="{{ projects.id }}">{{ projects|title }}</option>
                                 {% endif %}
                             {% endfor %}
                         </select>
                     </div>
-
+                    
                     <div class='col-4'>
                         <label for="id_date">Date:</label>
                         <input class='form-control' type="date" name="date" required="" id="id_date">
@@ -63,7 +65,7 @@
                         rows='6'
                         name="details" 
                         maxlength="500" 
-                        id="id_details"></textarea>
+                        id="id_details">{{project_event.details}}</textarea>
                     </div>
                 </div>  
             </div>  

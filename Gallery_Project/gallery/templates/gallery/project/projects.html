@@ -83,18 +83,14 @@
 		</div>
 	</div>
 	<div class='col-4 text-center'>
-		<div class='sections'>
+		<div class='sections h-100'>
 			<h1 class='h1-1'>				
 				{{ month }} {{ year }}
 			</h1>
-			<button
-				class="btn-cust btn-cust-color" 
-				onclick="window.location.href='{% url 'project-calendar' year month %}'">
-				Full Calendar
-			</button>
+
 			<hr>
 			
-			<div class="big-cal">
+			<div class="big-cal mb-4">
 
 				<div class="day_name">Mon</div>
 				<div class="day_name">Tue</div>
@@ -153,6 +149,11 @@
 				<div class="sm-day"><div class="{% if cal.week6.Sun.day < 20 %} sm-day-tail {% else %} sm-day-box {% endif %}"><p class='p-p'>{{ cal.week6.Sun.day }}</p><div class="{% for event in project_events %}{% if event.date|date:"Y-m-d"  == cal.week6.Sun.date|date:"Y-m-d"  %} sm-event-tag {% endif %}{% endfor %}"></div></div></div>
 
 			</div>
+			<button
+				class="btn-cust mt-4 btn-cust-color" 
+				onclick="window.location.href='{% url 'project-calendar' year month %}'">
+				Full Calendar
+			</button>
 
 		</div>
 	</div>

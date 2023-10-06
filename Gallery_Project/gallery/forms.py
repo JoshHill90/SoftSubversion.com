@@ -1,5 +1,5 @@
 from django import forms
-from .models import Image, Print, Project, ProjectEvents
+from .models import Image, Print, Project, ProjectEvents, Note
 
 class ImageForms(forms.ModelForm):
 
@@ -79,4 +79,12 @@ class ProjectEventForms(forms.ModelForm):
             'status': forms.TextInput(attrs={'class': 'form-control'}),
             'event_type': forms.TextInput(attrs={'class': 'form-control'}),
             'details': forms.Textarea(attrs={'class': 'form-control'})  
+        }
+        
+class NotesForm(forms.ModelForm):
+    class Meta:
+        model = Note
+        fields = ( 'note',)
+        widget ={
+            'name': forms.Textarea(attrs={'class': 'form-control'}),
         }

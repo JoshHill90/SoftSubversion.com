@@ -115,44 +115,45 @@
 	
 			<div class='row'>
 				<div class="collapse" id="collapseComments" style='width:100%'>
-	
-				{% for comment in comments %}
-				{% if comment.user_id == user %}
-				<div class='col-12 mt-4 mb-4'>
-					<div class='row'>
-						<div class='col-12 comment-sub-box'> 
-							<div class="user-content" >
-								<h1 class='user-box h1-1'>
-									{{ comment.user_id }}
-								</h1>
-								<hr>
-								<p class='p-p'>
-									{{ comment.comment}}
-								</p>
-								<div class='comment-line-3'></div>
+				<div class='overflow-auto sections-2 scroll-menu'>
+					{% for comment in comments %}
+					{% if comment.user_id == user %}
+					<div class='col-12 mt-4 mb-4'>
+						<div class='row'>
+							<div class='col-12 comment-sub-box'> 
+								<div class="user-content" >
+									<h1 class='user-box h1-1'>
+										{{ comment.user_id }}
+									</h1>
+									<hr>
+									<p class='p-p'>
+										{{ comment.comment}}
+									</p>
+									<div class='comment-line-3'></div>
+								</div>
 							</div>
 						</div>
 					</div>
-				</div>
-				{% else %}
-				<div class='col-12 mt-4 mb-4'>
-					<div class='row'>
-						<div class='col-12 comment-sub-box'> 
-							<div class="comment-content" >
-								<h1 class='h1-1'>
-									{{ comment.user_id }}
-								</h1>
-								<hr>
-								<p class='p-p'>
-									{{ comment.comment}}
-								</p>
-								<div class='comment-line-2'></div>
+					{% else %}
+					<div class='col-12 mt-4 mb-4'>
+						<div class='row'>
+							<div class='col-12 comment-sub-box'> 
+								<div class="comment-content" >
+									<h1 class='h1-1'>
+										{{ comment.user_id }}
+									</h1>
+									<hr>
+									<p class='p-p'>
+										{{ comment.comment}}
+									</p>
+									<div class='comment-line-2'></div>
+								</div>
 							</div>
 						</div>
 					</div>
+					{% endif %}
+					{% endfor %}
 				</div>
-				{% endif %}
-				{% endfor %}
 			</div>
 		</div>
 	</div>

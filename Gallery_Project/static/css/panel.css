@@ -96,6 +96,7 @@ html {
 
 .p-2 {
   font-size:var(--p);
+  font-weight: normal;
   color: var(--text-color-secondary);
 }
 

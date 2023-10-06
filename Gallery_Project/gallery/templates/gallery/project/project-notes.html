@@ -3,13 +3,13 @@
 {% block content %}
 {% load static %}
 <div class='row'>
-	<div class='col-12'>
-		<div class='sections form-fit mt-4 mb-4'>
+	<div class='col-6'>
+		<div class='sections mt-4 mb-4'>
 
 			<div class='col-12 text-center mt-4 mb-4'>
-			<h1 class='h1-1'>Project Cost and Outline</h1>
-			<hr>
-			<p class='p-p'></p>
+				<h1 class='h1-1'>Project Cost and Outline</h1>
+				<hr>
+				<p class='p-p'></p>
 			</div>
 
 
@@ -50,73 +50,122 @@
 				</div>
 			</div>
 
-
-			<h1 class='h1-1 mt-4'>Session Outline</h1>
-			<hr>
+			<div class='col-12 mt-4'>
+				<h1 class='h1-1 mt-4'>Session Outline</h1>
+				<hr>
+			</div>
+			<div class='col-12 mt-4'>
 			<div class='sections-2'>
-				<div class='col-12 mt-4 mb-4'>
-						
-						<p class='p-p'>{{project_terms.services}}</p>
+					<div class='col-12 mt-4 mb-4'>
+							
+							<p class='p-p'>{{project_terms.services}}</p>
+					</div>
 				</div>
 			</div>
-
-			</div>
 		</div>
-	</div>
 
-	<div class='col-12'>
-		<div class='sections form-fit mt-4 mb-4'>
+		<div class='sections mt-4 mb-4'>
 			<h1 class='h1-1'>
 				Request Thread
 			</h1>
 			<hr>
 			<p class='p-p'>
-				<a class="btn-cust" data-bs-toggle="collapse" href="#collapseComments" role="button" aria-expanded="false" aria-controls="collapse1">
+				<a class="btn-cust" data-bs-toggle="collapse" href="#collapseComments" role="button" aria-expanded="false" aria-controls="notes1">
 					Project Request Thread
 				</a>
 			</p>
 		  
-	
-			<div class='row'>
-				<div class="collapse" id="collapseComments" style='width:100%'>
-	
-				{% for comment in request_reply %}
-				{% if comment.user_id == user %}
-				<div class='col-12 mt-4 mb-4'>
-					<div class='row'>
-						<div class='col-12 comment-sub-box'> 
-							<div class="user-content" >
-								<h1 class='user-box h1-1'>
-									{{ comment.user_id }}
-								</h1>
-								<hr>
-								<p class='p-p'>
-									{{ comment.comment}}
-								</p>
-								<div class='comment-line-3'></div>
+		
+				<div class='row'>
+					<div class="collapse" id="collapseComments" style='width:100%'>
+					<div class='overflow-auto sections-2 scroll-menu'>
+						{% for comment in request_reply %}
+						{% if comment.user_id == user %}
+						<div class='col-12 mt-4 mb-4'>
+							<div class='row'>
+								<div class='col-12 mt-4 comment-sub-box'> 
+									<div class="user-content" >
+										<h1 class='user-box h1-1'>
+											{{ comment.user_id }}
+										</h1>
+										<hr>
+										<p class='p-p'>
+											{{ comment.comment}}
+										</p>
+										<div class='comment-line-3'></div>
+									</div>
+								</div>
 							</div>
 						</div>
-					</div>
-				</div>
-				{% else %}
-				<div class='col-12 mt-4 mb-4'>
-					<div class='row'>
-						<div class='col-12 comment-sub-box'> 
-							<div class="comment-content" >
-								<h1 class='h1-1'>
-									{{ comment.user_id }}
-								</h1>
-								<hr>
-								<p class='p-p'>
-									{{ comment.comment}}
-								</p>
-								<div class='comment-line-2'></div>
+						{% else %}
+						<div class='col-12 mt-4 mb-4'>
+							<div class='row'>
+								<div class='col-12 comment-sub-box'> 
+									<div class="comment-content" >
+										<h1 class='h1-1'>
+											{{ comment.user_id }}
+										</h1>
+										<hr>
+										<p class='p-p'>
+											{{ comment.comment}}
+										</p>
+										<div class='comment-line-2'></div>
+									</div>
+								</div>
 							</div>
 						</div>
+						{% endif %}
+						{% endfor %}
 					</div>
 				</div>
-				{% endif %}
-				{% endfor %}
+			</div>
+		</div>
+	</div>
+
+	<div class='col-6'>
+		<div class="sections-small mt-4 mb-4 form-group">
+			<p class='p-p'>
+				<a class="btn-cust" data-bs-toggle="collapse" href="#notes1" role="button" aria-expanded="false" aria-controls="notes1">
+					New Note
+				</a>
+			</p>
+
+			<div class="collapse" id="notes1" style='width:100%'>
+				<form class='sections-2' method=POST>
+					{% csrf_token %}
+					<p>
+						<label for="id_note">New Note:</label>
+						<textarea name="note"
+						rows="5" maxlength="3000" 
+						class='form-control'
+						required="" id="id_note"></textarea>
+					  </p>
+					<button class="btn-cust">
+						Submit
+					</button>
+				</form>
+			</div>
+		</div>
+
+		<div class="sections-small mt-4 mb-4 form-group">
+			<p class='p-p'>
+				<a class="btn-cust" data-bs-toggle="collapse" href="#notes2" role="button" aria-expanded="false" aria-controls="notes2">
+					Current Notes
+				</a>
+			</p>
+
+			<div class="collapse" id="notes2" style='width:100%'>
+				<div class='overflow-auto sections-2 scroll-menu'>
+					{% for note in notes %}
+					<div class='col-12 mt-4 comment-sub-box'> 
+						<div class="comment-content" >
+							<p class='p-2'>{{note.date_posted}}</p>
+							<hr>
+							{{note.note}}
+						</div>
+					</div>
+					{% endfor %}
+				</div>
 			</div>
 		</div>
 	</div>

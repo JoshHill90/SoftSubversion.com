@@ -8,9 +8,9 @@ from django.db.models import Q
 from django.conf import settings
 from django.urls import reverse_lazy
 from django.contrib import messages
-from .models import Image, Print, Project, ProjectEvents
+from .models import Image, Print, Project, ProjectEvents, Note
 from clients.models import ProjectRequest, RequestReply
-from .forms import ImageForms, PrintForms, ProjectForms, CreatImageForm, ProjectEventForms
+from .forms import ImageForms, PrintForms, ProjectForms, NotesForm, CreatImageForm, ProjectEventForms
 from clients.forms import ProjectTermsForm
 from Gallery_Project.env.app_Logic.photo_layer import col3_col6_col3
 from Gallery_Project.env.cloudflare_API.CFAPI import APICall, Encode_Metadata
@@ -405,13 +405,33 @@ def project_gallery(request, id):
 
 def project_notes(request, id):
     project_terms = ProjectTerms.objects.get(project_id=id)
+    project = Project.objects.get(id=id)
     project_request = ProjectRequest.objects.get(id=project_terms.project_request_id.id)
     request_reply = RequestReply.objects.filter(Q(project_request_id=project_request.id))
+    
+        
+    notes = Note.objects.filter(project_id=project_terms.project_id.id)
+    new_note = None
+    if request.method == 'POST':
+        note_form = NotesForm(data=request.POST)
+        if note_form.is_valid():
+            user_info = request.user
+            new_note = note_form.save(commit=False)
+            new_note.user_id = user_info
+            new_note.project_id = project
+            new_note.save()
+
+            return redirect('project-notes', id)
+
+    else:
+        note_form = NotesForm()
 
     return render(request, 'gallery/project/project-notes.html', {
         'request_reply': request_reply,
         'project_terms':project_terms,
-        'project_request': project_request
+        'project_request': project_request,
+        'notes': notes,
+        'note_form': note_form
     })
 #---------------------------------------------------------------------------------------------------------#
 # Calendar
@@ -420,7 +440,6 @@ def project_notes(request, id):
 class ProjectEventsCreate(CreateView):
     model = ProjectEvents
     form_class = ProjectEventForms
-
     template_name = 'gallery/project/project-events/new-event.html'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -467,6 +486,29 @@ def clandar(request, year, month):
 class ProjectEventsDetails(DetailView):
     model = ProjectEvents
     template_name = 'gallery/project/project-events/event-details.html' 
+class ProjectEventsDelete(DeleteView):
+    model = ProjectEvents
+    template_name = 'gallery/project/project-events/event-delete.html' 
+    
+class ProjectEventsEdit(UpdateView):
+    model = ProjectEvents
+    form_class = ProjectEventForms
+    template_name = 'gallery/project/project-events/event-edit.html'    
+    def get_context_data(self, **kwargs):
+        event_id = self.object.id
+        context = super().get_context_data(**kwargs)
+        context['project'] = Project.objects.exclude(name='Soft Subversion')
+        context['project_event'] = ProjectEvents.objects.get(id=event_id)
+        return context
+    def form_invalid(self, form):
+        self.objects = form.save(commit=False)
+        date = form.cleaned_data.get('date',)
+        new_date = calendar.date(date, '%Y-%M-%d')
+        print(new_date, 'herre')
+        form.save()
+        year, month, day = str(new_date).split('-')
+        return redirect('project-calendar', year=year, month=month) 
+
 
 
 #---------------------------------------------------------------------------------------------------------#

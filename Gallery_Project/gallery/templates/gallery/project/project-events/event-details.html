@@ -1,5 +1,5 @@
 {% extends 'panel.html' %}
-{% block title %}Projects{% endblock %}
+{% block title %}Project Event{% endblock %}
 {% block content %}
 {% load static %}
 {% if user.is_authenticated %}
@@ -8,12 +8,11 @@
 <div class='row mt-4 mb-4'>
 	<div class='col-12 mt-4 mb-4'>
 		<div class='sections form-fit'>
-			<h1 class='h1-1 text-center'>Project Event Details</h1>
+			<h1 class='h1-1 text-center'>Project Event</h1>
 			<hr>
-			<div class='row mt-4 mb-4'>
-				<div class='col-6'>
-
-					<div class='sections-2 h-100'>
+			<div class='sections-2 h-100'>
+				<div class='row mt-4 mb-4'>
+					<div class='col-6'>
 						<div class='row '>
 							<div class='col-4'>
 								<p class='p-2'>Subject</p>
@@ -42,10 +41,7 @@
 							</div>
 						</div>
 					</div>
-				</div>
-				<div class='col-6'>
-
-					<div class='sections-2 h-100'>
+					<div class='col-6'>
 						<div class='row '>
 							<div class='col-4'>
 								<p class='p-2'>Type</p>
@@ -53,6 +49,7 @@
 							<div class='col-8'>
 								<p class='p-p'> {{projectevents.event_type|title}}</p>
 							</div>
+							{% if projectevents.payment_id %}
 							<div class='col-4'>
 								<p class='p-2'>Status</p>
 							</div>
@@ -65,9 +62,13 @@
 							<div class='col-8'>
 								<p class='p-p'>${{projectevents.payment_id.amount|floatformat:2}}</p>
 							</div>
+							{% endif %}
 						</div>
 					</div>
 				</div>
+			</div>
+
+			<div class='col-12 mt-4 mb-4'>
 				<div class='col-12 mt-4 mb-4'>
 					<div class='sections-2 mt-4 mb-4 h-100'>
 						<p class='p-2'>Event Details</p>
@@ -97,10 +98,20 @@
 							</div>
 						</div>
 					</div>
+					{% if projectevents.payment_id %}
 					<div class='col-12 text-center mt-4'>
-						<button class='btn-cust'>Edit Event</button>
-						<button class='btn-cust'>Cancel Event</button>
+						<p class='p-2'>
+							Events associated with payments can only be modified by editing the 
+							invoice linked to the event. Similarly, 
+							deleting the event is possible only by marking the invoice as void.
+						</p>
 					</div>
+					{% else %}
+					<div class='col-12 text-center mt-4'>
+						<button class='btn-cust' onClick="window.location.href='{% url 'edit-event' projectevents.id %}'">Edit Event</button>
+						<button class='btn-cust' onClick="window.location.href='{% url 'delete-event' projectevents.id %}'">Cancel Event</button>
+					</div>
+					{% endif %}
 				</div>
 			</div>
 		</div>

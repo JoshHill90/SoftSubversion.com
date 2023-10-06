@@ -438,7 +438,7 @@ def request_approval(request, id):
             )
             
             # creates new payment/invoice for project cost
-            Payments.objects.create(
+            project_payment = Payments.objects.create(
                 billing_id=new_billing,
                 amount=project_amount,
                 receipt="Project Cost",
@@ -449,8 +449,6 @@ def request_approval(request, id):
                 due_date=date_setter(client_request.date)
             )
             
-            
-            
             ProjectEvents.objects.create(
                 title='Deposit Reminder',
                 payment_id=deposit_payment,
@@ -459,7 +457,19 @@ def request_approval(request, id):
                 start=datetime.strptime("5:00 pm", "%I:%M %p").time(),
                 end=datetime.strptime("5:00 pm", "%I:%M %p").time(),
                 event_type='Deposit Reminder',
-                details='Event for Deposit reminder'
+                details='Event for deposit reminder'
+            )
+            
+            
+            ProjectEvents.objects.create(
+                title='Project Payment',
+                payment_id=project_payment,
+                project_id=new_project,
+                date=project_payment.due_date,
+                start=datetime.strptime("5:00 pm", "%I:%M %p").time(),
+                end=datetime.strptime("5:00 pm", "%I:%M %p").time(),
+                event_type='Project Payment',
+                details='Event for project payment'
             )
             project_link = f"https://SoftSubversion.com/client-portal/project-binder/{new_project.id}/details"
             invoice_link = f"https://SoftSubversion.com/client-portal/billing/invoice/{deposit_payment.id}/"
@@ -472,7 +482,7 @@ def request_approval(request, id):
             #saving form at the end after everything is done.
             new_template.save()
             
-            return redirect('projects')
+            return redirect('project-details', new_project.id)
 
     else:
         terms_form = ProjectTermsForm()
