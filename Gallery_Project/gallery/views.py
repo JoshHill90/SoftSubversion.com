@@ -324,30 +324,43 @@ class ProjectDeleteView(DeleteView):
     success_url = reverse_lazy('print')
     
 def project_owner_view(request, pk):
-    project = Project.objects.get(Q(id=pk))
+    billing_total = 0
+    billing_paid = 0
+    project_deposit = 0.00
+    project = Project.objects.get(id=pk)
     project_events = ProjectEvents.objects.filter(project_id=project).order_by('date')
-    project_terms = ProjectTerms.objects.get(Q(project_id__id=pk))
+    project_terms = ProjectTerms.objects.get(project_id__id=pk)
     client = Client.objects.get(user_id=project.user_id)
-    billing_info = Billing.objects.get(project_id=project)
-    payment_list = Payments.objects.filter(billing_id=billing_info)
+    billing_list = Billing.objects.filter(project_id=project)
+    
+    for invoice in billing_list:
+        billing_total += invoice.billed
+        billing_paid += invoice.paid
+        if invoice.payment_type == "Deposit":
+            project_deposit = float(invoice.billed)
+        
     images = Image.objects.filter(project_id=project)
     
     active_nodes = 0
     project_progress = []
     for event in project_events:
 
+
          # deposit/consulation check
-        if event.payment_id and event.event_type == "Deposit Reminder":
-            for payment in payment_list:
-                if payment.receipt == 'Deposit Cost' and payment == event.payment_id:
-                    deposit = '$' + str(payment.amount) + ' Due ' + str(payment.due_date)
+        if event.billing_id and event.title == "Deposit Reminder":
+            
+            for invoice in billing_list:
+               
+                if invoice.payment_type == 'Deposit':
+                    print("in")
+                    deposit = 'Deposit Due ' + str(invoice.due_date)
                     project_progress.append(deposit)
-                    if payment.status == 'paid':
+                    if invoice.status == 'paid':
                         active_nodes +=1
 
                             
         # event check without payment   
-        if not event.payment_id:
+        if not event.billing_id:
             event_type = str(event.event_type) + ' on ' + str(event.date)
             project_progress.append(event_type)
             event_passed = date_passed_check(event.date)
@@ -355,10 +368,10 @@ def project_owner_view(request, pk):
                 active_nodes +=1
                                      
         # event check with payment check
-        if event.payment_id and event.event_type == "Other Payment":
-            for event_payment in payment_list:
-                if event_payment == event.payment_id:
-                    payment_due = '$' + str(event_payment.amount)  + ' Due ' +  str(event_payment.due_date)
+        if event.billing_id and event.event_type == "Other Payment":
+            for event_payment in billing_list:
+                if event_payment == event.billing_id:
+                    payment_due ='Payment Due ' +  str(event_payment.due_date)
                     
                     project_progress.append(payment_due)
                     
@@ -366,21 +379,21 @@ def project_owner_view(request, pk):
                         active_nodes +=1
 
     
-        if event.payment_id and event.event_type == "Project Payment":
-            for event_payment in payment_list:
-                if event_payment == event.payment_id:
-                    project_payment = '$' + str(event_payment.amount) + ' Due ' + str(event_payment.due_date)
+        if event.billing_id and event.event_type == "Project Payment":
+            for event_payment in billing_list:
+                if event_payment == event.billing_id:
+                    project_payment = 'Payment Due ' + str(event_payment.due_date)
                     project_progress.append(project_payment)
                     if event_payment.status == 'paid':
                         active_nodes +=1
 
-                
+        billing_set = {'billing_total': billing_total, 'project_deposit':project_deposit, "billing_paid": billing_paid }        
     print(active_nodes, project_progress)
     return render(request, 'gallery/project/project-details.html', {
         'project': project,
         'project_events': project_events,
-        'billing_info': billing_info,
-        'payment_list': payment_list,
+        'billing_list': billing_list,
+        'billing_set': billing_set,
         'client': client,
         'project_terms': project_terms,
         'project_progress': project_progress,

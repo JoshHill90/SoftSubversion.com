@@ -63,14 +63,41 @@
 			<form method=POST class='p-p row'>
 				{% csrf_token %}
 
+
 				
 				<div class='col-6 mt-4 mb-4'>
-						<label for="id_project_cost">Project cost:</label>
-						<input type="text" name="project_cost" value="600.00" class="form-control" required="" id="id_project_cost">
+					<div class="form-check form-switch">
+						<input class="form-check-input"  type="checkbox" data-bs-toggle="collapse" data-bs-target="#projectCostCollapse" aria-expanded="false" aria-controls="projectCostCollapse">
+						<label for="id_deposit" class=' mt-2'>
+							Add Project Cost
+						</label>
+					</div>
 
-						<label for="id_deposit" class=' mt-2'>Deposit:</label>
-						<input type="text" name="deposit" value="0.00" class="form-control" required="" id="id_deposit">
+					<div class="form-check form-switch">
+					<input class="form-check-input"  type="checkbox" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+						<label for="id_deposit" class=' mt-2'>	
+							Add Deposit
+						</label>
+					</div>
+
+					<div class="collapse" id="projectCostCollapse">
+						<div class=" mt-4">
+							<label for="id_project_cost">Project cost:</label>
+							<input type="text" name="project_cost" value="0.00" class="form-control" required="" id="id_project_cost">
+						</div>
+					</div>
+
+
+					<div class="collapse" id="collapseExample">
+						<div class="mt-4">
+
+							<label for="id_deposit" class=' mt-2'>Deposit:</label>
+							<input type="text" name="deposit" value="0.00" class="form-control" required="" id="id_deposit">
+						</div>
+					</div>
 				</div>
+
+				
 				<div class='col-6 text-center mt-4 mb-4'>
 					<div class='sections-small'>
 						<h1 class='h1-1'>

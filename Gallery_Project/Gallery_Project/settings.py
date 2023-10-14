@@ -63,8 +63,7 @@ INSTALLED_APPS = [
     'clients',
     'bootstrap5',
     'ckeditor',
-    'user_payments.apps.UserPaymentsConfig',
-
+    'log_app',
 ]
 
 MIDDLEWARE = [

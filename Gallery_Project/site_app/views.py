@@ -44,3 +44,6 @@ class ContactView(FormView):
     
 class ContactSuccess(TemplateView):
     template_name = 'success/contact-success.html'
+    
+class BackendIssue(TemplateView):
+    template_name = 'error_page/issue.html'

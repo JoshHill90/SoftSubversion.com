@@ -59,15 +59,19 @@ class credit(models.Model):
 
 class Billing(models.Model):
 
-    invoice = models.CharField(max_length=100)
+    invoice_id = models.CharField(max_length=100, blank=True)
     billed = models.FloatField(default=0.00)
     paid = models.FloatField(default=0.00)
+    details = models.TextField(max_length=500)
     fufiled = models.BooleanField(default=False)
     due_date = models.DateField(blank=True, default=date_stamp())
     open_date = models.DateField(auto_now=True)
-    project_id = models.OneToOneField('gallery.Project', on_delete=models.CASCADE)
-    cupon_id = models.ForeignKey(Coupon, null=True, on_delete=models.SET_NULL)
-    credit_id = models.ForeignKey(credit, null=True, on_delete=models.SET_NULL)
+    status = models.CharField(max_length=30, default='draft')
+    project_id = models.ForeignKey('gallery.Project', on_delete=models.CASCADE)
+    cupon_id = models.ForeignKey(Coupon,blank=True, null=True, on_delete=models.SET_NULL)
+    credit_id = models.ForeignKey(credit,blank=True, null=True, on_delete=models.SET_NULL)
+    payment_link = models.URLField(blank=True, null=True)
+    payment_type = models.CharField(max_length=30)
     
     def __str__(self):
         ret_str = str(self.id)
@@ -83,18 +87,14 @@ class Payments(models.Model):
     amount = models.FloatField(default=5.00) 
     receipt = models.CharField(max_length=400, blank=True)
     time_stamp = models.DateField(auto_created=True)
-    due_date = models.DateField(blank=True, null=True)
-    status = models.CharField(max_length=30, default='due')
-    payment_link = models.URLField(blank=True, null=True)
-    invoice_id = models.CharField(max_length=400, blank=True)
+    item_id = models.CharField(max_length=400, blank=True)
     
     def __str__(self):
-        num_str = str(self.id)
-        amount_str = str(self.amount) 
-        return num_str + ' # - $' + amount_str
+
+        return str(self.item_id)
 
     def get_absolute_url(self):
-        return reverse("payments", args=(str(self.id)))
+        return reverse("payment-details", kwargs=(str(self.item_id)))
     
 
     

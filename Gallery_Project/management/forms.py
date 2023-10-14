@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.models import Group
 from phonenumber_field.modelfields import PhoneNumberField
 from django import forms
-from .models import Billing
+from .models import Billing, Payments
 
 reg_contact_method = [
     'Email',
@@ -81,9 +81,28 @@ class BillingForm(forms.ModelForm):
 
     class Meta:
         model = Billing
-        fields = ('billed', 'paid', 'project_id')
+        fields = ('due_date', 'billed', 'project_id', 'details', 'payment_type')
         widgets = {
+            'due_date': forms.DateInput(attrs={'class': 'form-control'}),  
             'billed': forms.TextInput(attrs={'class': 'form-control'}),
-            'paid': forms.TextInput(attrs={'class': 'form-control'}),
-            'project_id': forms.Select(attrs={'class': 'form-control'}),                              
+            'project_id': forms.Select(attrs={'class': 'form-control'}),
+            'details': forms.Textarea(attrs={'class': 'form-control'}),  
+            'payment_type': forms.Select(attrs={'class': 'form-control'}),  
+                                         
+        }
+        
+class PaymentForm(forms.ModelForm):
+
+    class Meta:
+        model = Payments
+        fields = (
+            'billing_id',
+            'amount',
+            'receipt',
+        )
+        
+        widgets = {
+            'billing_id': forms.Select(attrs={'class': 'form-control'}),
+            'amount': forms.TextInput(attrs={'class': 'form-control'}),
+            'receipt': forms.Select(attrs={'class': 'form-control'}),                   
         }

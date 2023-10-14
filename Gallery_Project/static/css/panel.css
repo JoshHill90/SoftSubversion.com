@@ -21,11 +21,12 @@
   --first-color-light: #000000;          
   --white-color: #7933FC;                           
   --z-fixed: 100;
-  --lingrand: linear-gradient(123deg, #7933FC 05%, #2b6ce4 35%, #26ccb3 70%, #7933FC 95%);
+  --lingrand: linear-gradient(123deg, #7933FC 05%, #2b6ce4 35%, #26ccb3 50%, #91c72e 62%, #26ccb3 70%, #2b6ce4 85%, #7933FC 95%);
+  --lingrand-bar: linear-gradient(to right, #7933fc, #007aff, #00a4ff, #00c4ff, #00dfff, 
+    #00ecf4, #00f7de, #3dffbf, #58ffa3, #76ff84, #96ff60, #b6fc33);
   --line-border-fill: #7933FC;
   --line-border-empty: #131313c0;
 }
-
 
 /* --------------------------------
 Topography
@@ -34,7 +35,7 @@ html {
   scroll-behavior: smooth;
 }
 
-.hidden-nav {
+.hidden-nav, .hidden-item {
   display: none;
 }
 
@@ -132,6 +133,60 @@ hr {
   }
   
 }
+/* --------------------------------
+toggle
+--------------------------------*/
+.switch {
+  font-size: 17px;
+  position: relative;
+  display: inline-block;
+  width: 4.5em;
+  height: 2em;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  box-shadow: inset 1px 2px 5px 1px rgba(0, 0, 0, 0.329);
+  transition: .4s;
+  border-radius: 30px;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 1.4em;
+  width: 1.4em;
+  border-radius: 20px;
+  left: 0.3em;
+  bottom: 0.3em;
+  background-color: rgb(255, 255, 255);
+  transition: .4s;
+}
+
+.switch input:checked + .slider {
+  background-color: #59c76b;
+}
+
+.switch input:focus + .slider {
+  box-shadow: inset 3px 2px 4px rgba(22, 22, 22, 0.253);
+}
+
+.switch input:checked + .slider:before {
+  transform: translateX(2.5em);
+}
+
+
 
 /* --------------------------------
 loader
@@ -395,7 +450,7 @@ js parts
   overflow: visible;
   background-position: fixed;
   transform: 300ms;
-  background-image:var(--lingrand);
+  background-image:var(--lingrand-bar);
 }
 
 
@@ -676,7 +731,7 @@ calendar
   border-radius: 20px;
   padding: 1px;
   box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-  background-image:var(--lingrand);
+  background-image:var(--lingrand-bar);
   z-index: 2;
 }
 
@@ -767,7 +822,7 @@ calendar
   border-radius: 20px;
   padding: 1px;
   box-shadow: rgba(151, 65, 252, 0.2) 0 15px 30px -5px;
-  background-image:var(--lingrand);
+  background-image:var(--lingrand-bar);
   z-index: 2;
 }
 
@@ -876,6 +931,7 @@ project progress
   position: relative;
   cursor: not-allowed;
   scale: 0.7;
+  cursor: default;
 }
 
 .sections-sepc {

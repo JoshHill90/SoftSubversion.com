@@ -1,25 +1,156 @@
 {% extends 'panel.html' %}
-{% block title %}Upload Link{% endblock %}
+{% block title %}Crate Invoice{% endblock %}
 {% block content %}
+{% load static %}
 
 
 
 {% if user.is_authenticated %}
 
 
-    <div class="sections p-p form-group">
-        <h1 class='h1-1'>Upload your image and get an image link</h1>
-        <form method=POST enctype="multipart/form-data">
+<div class="sections p-p form-group">
+    <h1 class='h1-1'>Create a new invoice</h1>
+    <hr>
+        
+    <form method=POST enctype="multipart/form-data" id='invoiceForm'>
+        <div class='sections-2'>
             {% csrf_token %}
-            {{form.media}}
-            {{form.as_p}}
-            <button class="btn btn-primary">
-                Submit
-            </button>
-        </form>
-    </div>
+            {{form.media}} 
+
+            <div class="row">
+                <div class='col-6'>
+                    <p class='p-p'>Billing status</p>
+                    <hr>
+                    <div class="row">
+                        <div class='col-6'>
+                            <div class=" form-check form-switch">
+                                <label class="form-check-label" for="id_open">Open</label>
+                                <input class="form-check-input" type="checkbox" name="open" id="id_open" value='yes'>
+                            </div>
+                        </div>
+                        <div class='col-6'>
+                            <div class="form-check form-switch">
+                                <label class="form-check-label" for="id_paidCash">Paid</label>
+                                <input class="form-check-input" type="checkbox" name="paidCash" id="id_paidCash" value='yes'>
+                            </div>
+                        </div>
+                        <div class='col-6'>
+                            <i class="btn-icon fa-solid fa-circle-info" type="button" data-bs-toggle="collapse" data-bs-target="#openInfo" aria-expanded="false" aria-controls="openInfo">
+                            </i>
 
 
+                        </div>
+                        <div class='col-6'>
+                            <i class="btn-icon fa-solid fa-circle-info" type="button" data-bs-toggle="collapse" data-bs-target="#paidInfo" aria-expanded="false" aria-controls="paidInfo">
+                            </i>
+                        </div>  
+                        <div class='col-12'>
+                            <div class="collapse" id="paidInfo" style='width:100%'>
+                                <p class='p-p mt-4  mb-4'>Was this paid in cash or outside of this site, if so toggle <b>Paid</b> to <b>On</b>. Doing so will show this item as paid.</p>
+                            </div>
+                            <div class="collapse" id="openInfo" style='width:100%'>
+                                <p class='p-p mt-4 mb-4'>
+                                    By defualt all invoices are marked as <b>Drafts</b>, 
+                                    to mark the invoice as <b>Open</b> toggle open to <b>On</b>. 
+                                    Doing so will send the invoice to the customer.
+                                </p>
+                            </div>
+                        </div>  
+                    </div> 
+                </div> 
+
+                <div class='col-6'>
+                    <p class='p-p'>Billing status</p>
+                    <hr>
+                    <div class="row">
+                        <div class='col-6'>
+
+                            <label for="id_due_date">Due date:</label>
+                            <input type="date" name="due_date" value="2023-10-11" class="form-control" id="id_due_date">
+                            <label class='mt-4' for="id_project_id">Project id:</label>
+                            <select name="project_id" class="form-control" required="" id="id_project_id">
+                                <option value="" selected="">---------</option>
+                                {% for projects in project %}
+                                <option value="" selected="{{projects.id}}">{{projects}}</option>
+                                {% endfor %}
+                            </select>
+                            <label class='mt-4' for="id_payment_type">Payment type:</label>
+                            <select name="payment_type" class="form-control" maxlength="30" id="id_payment_type">
+                                <option value="" selected="">---------</option>
+        
+                                <option value="106">Project Invoice</option>
+                                <option value="145">Item Invoice</option>
+                                <option value="145">Travle Cost</option>
+                                <option value="145">Overnight Stayt Cost</option>
+                            </select>
+                        </div>
+                        <div class='col-6'>
+                            <label for="id_details">Details:</label>
+                            <textarea name="details" cols="40" rows="4" class="form-control" maxlength="500" required="" id="id_details"></textarea>
+                        </div>     
+                    </div>
+                </div>
+            </div>
+        </div>
+            
+        <h1 class='h1-1 mt-4'>Create line items for invoice</h1>
+        <hr>
+        <div class='sections-2'>
+            <div class="row">
+                <div class='col-12'>
+                    <div class="row">
+                        <div class='col-1'>
+                            <i type="button" class='btn-icon fa-solid fa-plus mb-4' onclick="newItem()" ></i>
+                        </div>  
+                        <div class='col-11'>
+                            <p class='p-p'>Add Line Items</p>
+                        </div> 
+                        <hr>   
+                    </div>
+                   
+                    <div class="row">
+                        <div class='col-12'>
+                            <div class='sections-2 overflow-auto scroll-menu' id='itemSection'>
+                                <div class="row" id='lineItems'>
+                                    <div class="col-5">
+                                        <p class='p-p'>
+                                            Line item amount
+                                        </p>
+                                    </div>
+                                    <div class="col-5">
+                                        <p class='p-p'>
+                                            Line item description
+                                        </p>
+                                    </div>
+                                    <div class="col-2 text-center">
+                                        <p class='p-p'>
+                                            Remove
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class='col-12 mt-4'>
+                    <p class='p-p'>Total Billed Amount</p>
+                    <hr>
+                    <input type="text" name="billed" value="0.00" class="form-control" required="" id="id_billed">
+                </div>
+                <div class='col-12 mt-4'>
+                    <button class="btn-cust" onclick="delayedRedirect('{% url 'billing' %}')">
+                        Submit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </form>
+
+</div>
+
+<script src="{% static 'js/invoice.js' %}"></script>
 
 {% endif %}
 

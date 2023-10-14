@@ -1,3 +1,4 @@
+from typing import Any
 from django.forms.models import BaseModelForm 
 from django.http import HttpResponse, JsonResponse
 from django.views import generic
@@ -10,14 +11,34 @@ from django.conf import settings
 from pathlib import Path
 from .models import Billing, Payments
 from clients.models import Client
-from .forms import RegForm, ProfileForm, LoginForm, BillingForm
-from gallery.models import Image, Print, Project
+from .forms import RegForm, ProfileForm, LoginForm, BillingForm, PaymentForm
+from gallery.models import Image, Print, Project, ProjectEvents
 from clients.models import Client, Invite
-from django.shortcuts import render, redirect
 from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate 
-import os
+from datetime import datetime
 import json
-import requests
+import secrets
+from django.shortcuts import render, redirect, get_object_or_404
+import stripe
+from pathlib import Path
+import os
+from dotenv import load_dotenv
+from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
+from log_app.logging_config import logging
+from Gallery_Project.env.app_Logic.MailerDJ import AutoReply
+from Gallery_Project.env.app_Logic.stripe.quick_stripe import QuickStripe, DateFunction, Hexer
+
+qs = QuickStripe()
+df = DateFunction()
+hexer = Hexer()
+smtp_request = AutoReply
+
+current_dir = Path(__file__).resolve().parent
+ven = current_dir / "../.env"
+load_dotenv(ven)
+stripe.api_key = os.getenv("STRIPE_KEY")
+
+
 
 dataQ = DataSetUpdate()
 
@@ -29,7 +50,7 @@ def billing_panel(request):
     client_list = Client.objects.all()
     image_list = Image.objects.all()
     billing_info = Billing.objects.all()
-    project_list = Project.objects.all()
+    project_list = Project.objects.exclude(name="Soft Subversion")
     project_invoice = ['']
     project_invoice.clear()
     bal_due = 0
@@ -60,20 +81,19 @@ def billing_panel(request):
 
     # Apply filters
     if project_query:
-        billing_info = billing_info.filter(Q(project_id__name=project_query))
+        billing_info = billing_info.filter(project_id__name=project_query)
+
     if client_query:
-        project_list = project_list.filter(Q(name__icontains=project_query))
-        project_clients = project_list.values_list('client_id',)
-        billing_info = billing_info.filter(client_id__in=project_clients)
-        
+        billing_info = billing_info.filter(project_id__client_id__name=client_query)
+
     if number_query:
-        billing_info = billing_info.filter(Q(invoice__icontains=number_query))
+        billing_info = billing_info.filter(invoice__icontains=number_query)
 
     # Apply completion status filter
     if completed_query == 'open':
-        billing_info = billing_info.filter(Q(fufiled=False))
+        billing_info = billing_info.filter(fufiled=False)
     elif completed_query == 'closed':
-        billing_info = billing_info.filter(Q(fufiled=True))
+        billing_info = billing_info.filter(fufiled=True)
         
     if order_set == 'Oldest':
         billing_info = billing_info.order_by('id')
@@ -92,39 +112,74 @@ def billing_panel(request):
                         project_images.append(image_set)
                 project_details = {
                     "project": project.name, 
-                    'invoice': bill.invoice,
+                    'invoice': bill.invoice_id,
                     'billed': bill.billed,
                     'paid': bill.paid,
                     'client': client_billed,
                     'images': project_images,
                                 }
                 project_invoice.append({'billID': bill.id, 'project_details': project_details})
-                
-    return render(request, 'billing/billing.html', 
-                  {
-                      'invoice': project_invoice,
-                      'totalDue': bal_due,
-                      'totalPaid': bal_paid,
-                      'totalEarned': bal_ern,
-                      #'outstanding': bal_out,
-                      'project_list': project_list,
-                      'client_list': client_list
-        })          
+                billing_totals = {
+                    'totalDue': bal_due,
+                    'totalPaid': bal_paid,
+                    'totalEarned': bal_ern,
+                    'outstanding': bal_out,
+                    }
+    return render(
+        request, 'billing/billing.html', 
+        {
+            'invoice': project_invoice,
+            'billing_totals':billing_totals,
+            'project_list': project_list,
+            'client_list': client_list
+            }
+        )          
                 
 class BillCreateView(CreateView):
     template_name = 'billing/billing-create.html'
+    form_class = BillingForm
+    project_list = Project.objects.all()
     model = Billing
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['project'] = self.project_list
+        return context
     
     def form_valid(self, form):
+        converted_to_cents = lambda dollar_amount: int(
+            str(
+                '{:.2f}'.format(
+                    float(dollar_amount))).replace('.','')
+        )
         self.object = form.save()
-        obj_bill = self.object
+        cash_paid = self.request.POST.get('paidCash')
+        invoice_form = self.object
         
-        system_id = obj_bill.id
-        invc_num = "BIN:" + str(system_id)
-        obj_bill.invoice = invc_num
-        obj_bill.save()
+        date = form.cleaned_data.get('due_date',)
+        billed = form.cleaned_data.get('billed',)
+        project_id = form.cleaned_data.get('project_id',)
+        details = form.cleaned_data.get('details')
+        payment_type = form.cleaned_data.get('payment_type',)
         
-        return redirect('billing-details', system_id)
+        invoice_total = billed
+        
+        selected_project = self.project_list.filter(id=project_id)
+        stripe_id = selected_project.stripe_id
+        deposit_date = df.date_distance(date)
+        deposit_details = f'Payment for photography project:{new_project_model.name}'
+        deposit = converted_to_cents(deposit_amount)
+        deposit_invoice = qs.create_stripe_invoice(stripe_id, deposit_date, deposit_details)
+
+        
+        deposit_lineitem = qs.create_stripe_line_item(deposit, 'Deposit Cost', deposit_invoice, stripe_id)
+        payment_link, deposit_invoice_update = qs.send_stripe_invoice(deposit_invoice.id)
+
+        print(cash_paid, 'here')
+
+        invoice_form.save()
+        
+        return redirect('billing-details', invoice_form.id)
 
 class BillEditView(UpdateView):
     model = Billing
@@ -140,8 +195,7 @@ class BillDeleteView(DeleteView):
     
 def billing_details(request, id):
     invoice = Billing.objects.get(id=id)
-    
-        # Calculate balances
+    line_items = Payments.objects.filter(billing_id=invoice)
 
     bal_due = float(invoice.billed)
 
@@ -158,6 +212,7 @@ def billing_details(request, id):
         
 
     return render(request, 'billing/billing-details.html', {'invoice':invoice,
+                                                            'line_items':line_items,
                                                             'due': bal_due,
                                                             'paid': bal_paid,
                                                             'ratio':bal_due_ratio,
@@ -274,8 +329,6 @@ def notebook(request):
         'project_list': project_list,
         'client_list': client_list
     })
-    
-    
     
     
 class PaymentsDetailView(DeleteView):

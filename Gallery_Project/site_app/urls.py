@@ -9,4 +9,5 @@ urlpatterns = [
     path('social/', views.social_page, name='social'),
     path('contact/', ContactView.as_view(), name='contact'),
     path('contact/success', ContactSuccess.as_view(), name='contact-success'),      
+    path('error/backend', BackendIssue.as_view(), name='issue-backend'),     
 ] 

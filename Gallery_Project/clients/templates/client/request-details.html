@@ -17,26 +17,33 @@
 					Project Scope:
 				</h1>
 				<hr>
-				<div class='col-3'>
-					<p class='p-p'>Project-Type:</p>
-					<p class='p-p'>Desired Date:</p>
-					<p class='p-p'>Location type:</p>
-				</div>
-				<div class='col-7'>
-					<p class='p-p'>{{projectrequest.scope}}</p> 
-					<p class='p-p'>{{projectrequest.date}}</p> 
-					<p class='p-p'>{{projectrequest.location}}</p> 
-				</div>
-			</div>
+				<div class='col-12'>
+					<div class='sections-2'>
+						<div class='row'>
+							<div class='col-3'>
+								<p class='p-p'>Project-Type:</p>
+								<p class='p-p'>Desired Date:</p>
+								<p class='p-p'>Location type:</p>
+							</div>
+							<div class='col-7'>
+								<p class='p-p'>{{projectrequest.scope}}</p> 
+								<p class='p-p'>{{projectrequest.date}}</p> 
+								<p class='p-p'>{{projectrequest.location}}</p> 
+							</div>
+						</div>
+					</div>
+					<div class='col-12 mt-4'>
+						<div class='text-center'>
+							<button class="btn-cust" onclick="window.location.href='{% url 'approval' projectrequest.id %}'">
+								Approve Terms <i class="fa-solid fa-circle-check"></i>
+							</button>
 
-			<div class='sections-2 text-center'>
-				<button class="btn-cust" onclick="window.location.href='{% url 'approval' projectrequest.id %}'">
-					Approve Terms <i class="fa-solid fa-circle-check"></i>
-				</button>
-
-				<button class="btn-cust">
-					Decline Offer <i class="fa-solid fa-circle-xmark"></i>
-				</button>
+							<button class="btn-cust">
+								Decline Offer <i class="fa-solid fa-circle-xmark"></i>
+							</button>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 		<div class='col-6 mt-4 mb-4'>

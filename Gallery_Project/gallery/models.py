@@ -38,8 +38,8 @@ DISPLAY_PEACE = [
     ('subgal2', 'subgal2'),
     ('subgal3', 'subgal3'),
     ('subgal4', 'subgal4'),
-    ('project', 'project'),
-    ('client', 'client',)]
+    ('project', 'project')
+]
 
 ASPECT_RATIO = [    
     ('portrait', 'portrait'),
@@ -100,7 +100,7 @@ class Print(models.Model):
     
 class ProjectEvents(models.Model):
     title = models.CharField(max_length=255)
-    payment_id = models.ForeignKey('management.Payments', on_delete=models.CASCADE, blank=True, null=True)
+    billing_id = models.ForeignKey('management.Billing', on_delete=models.CASCADE, blank=True, null=True)
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE)
     date = models.DateField(default=date_stamp())
     start = models.TimeField(blank=True, null=True)

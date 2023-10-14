@@ -10,20 +10,20 @@
 			<div class='row text-center'>
 				<div class='col-4'>
 					<h1 class='h1-1'>Deposit Amount</h1>
-					{% for deposit in payment_list %}
-					{% if deposit.receipt == "Deposit Cost" %}
+					{% for deposit in billing_list %}
+					{% if deposit.payment_type == "Deposit" %}
 					
-					<p class='nums'>${{ deposit.amount|floatformat:2 }}</p>
+					<p class='nums'>${{ billing_set.project_deposit|floatformat:2 }}</p>
 					{% endif %}
 					{% endfor %}
 				</div>
 				<div class='col-4'>
 					<h1 class='h1-1'>Total Cost</h1>
-					<p class='nums'>${{ billing_info.billed|floatformat:2 }}</p>
+					<p class='nums'>${{ billing_set.billing_total|floatformat:2 }}</p>
 				</div>
 				<div class='col-4'>
 					<h1 class='h1-1'>Paid</h1>
-					<p class='nums'>${{ billing_info.paid|floatformat:2}}</p>
+					<p class='nums'>${{ billing_set.billing_paid|floatformat:2}}</p>
 				</div>
 			</div>
 			<div class='sections-2'>
@@ -136,23 +136,23 @@
 			</div>
 			<div class='col-12 mb-4'>
 				<div class='sections mt-4 mb-4' style='height:50vh'>
-					<h1 class='h1-1'>Payments</h1>
+					<h1 class='h1-1'>Invoices</h1>
 					<hr>
 					<div class="overflow-auto">
-						{% for payment in payment_list %}
+						{% for payment in billing_list %}
 						<div class='row' style='width:95%'>
 							<div class='col-5'>
 								<p class='p-p'>
-									{{ payment.status|title }} <br> {{ payment.receipt|title }} 
+									{{ payment.status|title }} <br> {{ payment.payment_type|title }} 
 								</p>
 							</div>
 							<div class='col-5'>
 								<p class='p-p'>
-									Amount: ${{ payment.amount|floatformat:2 }}
+									Amount: ${{ payment.billed|floatformat:2 }}
 								</p>
 							</div>
 							<div class='col-2'>
-								<button class='btn-icon' onclick="window.location.href='{% url 'payment-details' payment.id %}'">
+								<button class='btn-icon' onclick="window.location.href='{% url 'billing-details' payment.id %}'">
 									<i class="fa-solid fa-file-invoice"></i>
 								</button>
 							</div>
@@ -184,7 +184,7 @@
 					<button class='w-100 btn-cust' onclick="window.location.href='{% url 'new-event' %}'">Add Event</button>
 				</div>
 				<div class='col-3'>
-					<button class='w-100 btn-cust ' onclick="window.location.href='{% url 'billing-details' billing_info.id %}'">Billing Details</button>
+					<button class='w-100 btn-cust ' onclick="window.location.href='{% url 'billing' %}'">Billing Details</button>
 				</div>
 
 				<div class='col-3'>

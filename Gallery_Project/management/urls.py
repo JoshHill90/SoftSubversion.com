@@ -10,14 +10,13 @@ urlpatterns = [
     path('edit_profile/', UserEditView.as_view(), name='edit-profile'),
     path('login/', UserLoginView.as_view(), name='login'),
     
-    path('billing/', views.billing_panel, name='billing'),
-    path('billing/<int:id>/details', views.billing_details, name='billing-details'),
-    path('billing/create', BillCreateView.as_view(), name='billing-create'),
-    path('billing/<int:pk>/edit', BillEditView.as_view(), name='billing-edit'),
-    path('billing/<int:pk>/delete', BillDeleteView.as_view(), name='billing-delete'),
+    path('invoice/', views.billing_panel, name='billing'),
+    path('invoice/<int:id>/details', views.billing_details, name='billing-details'),
+    path('invoice/create', BillCreateView.as_view(), name='billing-create'),
+    path('invoice/<int:pk>/edit', BillEditView.as_view(), name='billing-edit'),
+    path('invoice/<int:pk>/delete', BillDeleteView.as_view(), name='billing-delete'),
     
-    path('billing/invoice/<int:pk>/details', PaymentsDetailView.as_view(), name='payment-details'),
-    path('billing/invoice/create', views.create_invoice, name='payment-create'),
+    path('invoice/line_item/<int:pk>/details', PaymentsDetailView.as_view(), name='payment-details'),
     
     path('<int:user_id>/change-password/', auth_views.PasswordChangeView.as_view(template_name='registration/change-password.html'),
      name='change-password')

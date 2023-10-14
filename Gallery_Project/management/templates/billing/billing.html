@@ -130,7 +130,7 @@
 			<div class='sections-2'>
 				<div class='row mt-4 mb-4'>
 					<div class='col-6 mt-4'>
-						<div class='bookcard text-center'>
+						<div class='bookcard text-center' onclick="window.location.href='{%url 'billing-create' %}'">
 							<i class="fa-solid fa-file-invoice fa-2xl"></i>
 							<p class='mt-2'>Create Invoice</p>
 						</div>
@@ -158,19 +158,19 @@
 			<div class='row mt-4 text-center mb-4'>
 				<div class='col-6'>
 					<h1 class='h1-1'>Total Due</h1>
-					<p class='nums'>${{ totalDue }}</p>
+					<p class='nums'>${{ billing_totals.totalDue|floatformat:2 }}</p>
 				</div>
 				<div class='col-6'>
 					<h1 class='h1-1'>Total paid</h1>
-					<p class='nums'>${{ totalPaid }}</p>
+					<p class='nums'>${{ billing_totals.totalPaid|floatformat:2 }}</p>
 				</div>
 				<div class='col-6'>
 					<h1 class='h1-1'>Outstand</h1>
-					<p class='nums'>${{ outstanding }}</p>
+					<p class='nums'>${{ billing_totals.outstanding|floatformat:2 }}</p>
 				</div>
 				<div class='col-6'>
 					<h1 class='h1-1'>Earned</h1>
-					<p class='nums'>${{ totalEarned }}</p>
+					<p class='nums'>${{ billing_totals.totalEarned|floatformat:2 }}</p>
 				</div>
 			</div>
 		</div>

@@ -14,13 +14,13 @@
 					{{payments.billing_id}}
 				</h1>
 				<p class='p-2'>
-				Invoice ID # {{payments.invoice_id}}
+					Line Item  ID # {{payments.item_id}}
 				</p>
 			</div>
 			<hr>
 			<div class='col-12 text-center'>
 				<p class='p-p'>
-					Invoice Details 
+					Line Item Details 
 				</p>
 			</div>
 			<div class='col-12'>
@@ -55,7 +55,7 @@
 								{{payments.billing_id.project_id|title}}
 							</p>						
 							<p class='p-p'>
-								Due Date: {{payments.due_date}}
+								Due Date: {{payments.billing_id.due_date}}
 							</p>
 							<p class='p-p'>
 								Invoice For: {{payments.receipt|title}}
@@ -87,35 +87,30 @@
 					</div>
 					<div class="row">
 
-						<div class='col-12 mt-4 mb-4 text-center'>
-							
-								<p class='p-2'>
-									Status
-								</p>
-							<div class="sections-2">
-								<div class="loader-box">
-									<div class="intern">
-										<p class='nums'>
-											{{payments.status}}
-										</p>
-									</div>
-									<div class="external-shadow">
-										<div class="sections-sepc spec1">
-										</div>
-									</div>
-								</div>
-							</div>
-						</div>
+
 					</div>
 				</div>
 				<div class="row mb-4">
 					<div class='col-12 text-center'>
-						<button class='btn-cust'>
-							Edit
-						</button>
-						<button class='btn-cust'>
-							Delete
-						</button>
+					{% if payments.billing_id.status == "draft" %}
+
+					<button class='btn-cust'>
+						Edit
+					</button>
+					<button class='btn-cust'>
+						Delete
+					</button>
+
+					{% else %}
+					<div class='col-12 text-center mt-4'>
+						<p class='p-2'>
+							Line items on invoices that are not in draft status cannot be modified. 
+							However, you have the option to either apply a credit to reduce 
+							the balance or void the invoice to remove the payment.
+						</p>
+					</div>
+					
+					{% endif %}
 					</div>
 				</div>
 			</div>

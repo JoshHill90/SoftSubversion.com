@@ -21,8 +21,8 @@ urlpatterns = [
     path('client/comment_success', CommentSuccessView.as_view(), name='comment-success'),
     path('client/invite/success', SuccessInvite.as_view(), name='invite-success'),
     
-    path('client/invite/failed', SuccessInvite.as_view(), name='invite-failed'),
+    path('binder/comment-success', ClientCommentSuccessView.as_view(), name='client-comment-success'),
     
-    path('requests/event', views.request_event, name='request-event'),
+    path('client/invite/failed', SuccessInvite.as_view(), name='invite-failed'),
     
 ]
