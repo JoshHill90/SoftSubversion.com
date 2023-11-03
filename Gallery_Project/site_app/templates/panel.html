@@ -11,6 +11,8 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel='stylesheet' href="{% static 'css/panel.css' %}">
+	<link rel='stylesheet' href="{% static 'css/window_load.css' %}">
+	<link rel='stylesheet' href="{% static 'css/animation.css' %}">
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <script src='https://cdn.jsdelivr.net/npm/chart.js'></script>
 
@@ -34,28 +36,28 @@
 <div class="l-navbar" id="nav-bar">
 	<nav class="nav">
 		<div> 
-			<a href="/" class="nav_logo"> 
+			<a href="/" class="nav_logo addLoader"> 
 				<i class="fa-solid fa-house-chimney fa-xl home-i"></i>
 				<span class="nav_logo-name">Soft Subversion</span>
 			</a>
 			<div class="nav_list"> 
-				<a href="{% url 'o_main' %}" class="nav_link active"> 
+				<a href="{% url 'o_main' %}" class="nav_link addLoader"> 
 					<i class="fa-solid fa-gauge-high fa-xl"></i>
 					<span class="nav_name">Dashboard</span> 
 				</a> 
-				<a href="{% url 'notebook' %}" class="nav_link">
+				<a href="{% url 'notebook' %}" class="nav_link addLoader">
 					<i class="fa-solid fa-book fa-xl"></i>
 					<span class="nav_name">Notebook</span> 
 				</a> 
-				<a href="{% url 'image-upload' %}" class="nav_link"> 
+				<a href="{% url 'image-upload' %}" class="nav_link addLoader"> 
 					<i class="fa-solid fa-photo-film fa-xl"></i>
 					<span class="nav_name">Images</span>
 				</a> 
-				<a href="#" class="nav_link"> 
+				<a href="#" class="nav_link addLoader"> 
 					<i class="fa-solid fa-camera-retro fa-xl"></i>
 					<span class="nav_name">Gallery</span> 
 				</a>
-				<a href="#" class="nav_link"> 
+				<a href="#" class="nav_link addLoader" > 
 					<i class="fa-solid fa-money-bill-trend-up fa-xl"></i>
 					<span class="nav_name">Marketing</span>
 				</a> 
@@ -71,9 +73,14 @@
 	<!--									-->
 
 	<div class='container'>
+		<div id='main' class='fade-in'>
 		{% block content %}
 
 		{% endblock %}
+		</div>
+		<div id='windowLoader' class="windowLoader" style="display:none;">
+			<span></span>
+		  </div>
 	</div>
 
 	<!--									-->
@@ -89,6 +96,7 @@
 {% endfor %}
 {% endif %}
 <script src={% static 'js/panelNav.js' %}></script>
+<script src={% static 'js/float_in.js' %}></script>
 <script src="https://kit.fontawesome.com/00f4d71521.js" crossorigin="anonymous"></script>
 
 </body>

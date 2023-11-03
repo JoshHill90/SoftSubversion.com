@@ -23,7 +23,7 @@ class RegForm(UserCreationForm):
     last_name = forms.CharField(max_length=255)
     phone = forms.CharField()
     hexkey = forms.CharField(max_length=255)
-    contact_method = forms.CharField()
+
     address_1 = forms.CharField(max_length=255)
     address_2 = forms.CharField(max_length=255)
     city = forms.CharField(max_length=255)
@@ -32,7 +32,7 @@ class RegForm(UserCreationForm):
     
     class Meta:
         model = User
-        fields = ('username', 'hexkey','contact_method','phone','address_1','address_2','city', 'state', 'zip_code','first_name', 'last_name', 'email', 'password1', 'password2')
+        fields = ('username', 'hexkey','phone','address_1','address_2','city', 'state', 'zip_code','first_name', 'last_name', 'email', 'password1', 'password2')
 
     def __init__(self, *args, **kwargs):
         super(RegForm, self).__init__(*args, **kwargs)
@@ -44,7 +44,6 @@ class RegForm(UserCreationForm):
         self.fields['email'].widget.attrs['class'] = 'form-control'
         self.fields['password1'].widget.attrs['class'] = 'form-control'
         self.fields['password2'].widget.attrs['class'] = 'form-control'
-        self.fields['contact_method'].widget.attrs['class'] = 'form-select'
         self.fields['phone'].widget.attrs['class'] = 'form-control'
         self.fields['address_1'].widget.attrs['class'] = 'form-control'
         self.fields['address_2'].widget.attrs['class'] = 'form-control'
@@ -81,10 +80,9 @@ class BillingForm(forms.ModelForm):
 
     class Meta:
         model = Billing
-        fields = ('due_date', 'billed', 'project_id', 'details', 'payment_type')
+        fields = ('due_date', 'project_id', 'details', 'payment_type')
         widgets = {
             'due_date': forms.DateInput(attrs={'class': 'form-control'}),  
-            'billed': forms.TextInput(attrs={'class': 'form-control'}),
             'project_id': forms.Select(attrs={'class': 'form-control'}),
             'details': forms.Textarea(attrs={'class': 'form-control'}),  
             'payment_type': forms.Select(attrs={'class': 'form-control'}),  

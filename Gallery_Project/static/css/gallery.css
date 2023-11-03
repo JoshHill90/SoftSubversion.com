@@ -196,9 +196,11 @@ Gallery
   position: relative;
   height: 100vh;
 }
+
 .sub-height{
   margin: auto;
 }
+
 .item-gal4{
   top:20%;
   width: 300px;

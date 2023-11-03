@@ -2,7 +2,7 @@ const floaters = document.querySelectorAll('.float-in');
 const floaters2 = document.querySelectorAll('.float-in-sec');
 const sliders = document.querySelectorAll('#slide-in');
 const faders = document.querySelectorAll('.fade-in');
-
+const loaderBlocks = document.querySelectorAll('.windowLoader');
 document.addEventListener("mousemove", parallax);
 
 
@@ -52,6 +52,10 @@ faders.forEach(fader => {
     appearOnScroll.observe(fader);
 });
 
+loaderBlocks.forEach(loaderBlock => {
+  appearOnScroll.observe(loaderBlock);
+});
+
 
 function parallax(e){
     if (!document.body.classList.contains("scrolling"))
@@ -64,3 +68,4 @@ function parallax(e){
         });
     }
 };
+

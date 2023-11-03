@@ -19,3 +19,19 @@ document.addEventListener("DOMContentLoaded", function(event) {
 
     linkColor.forEach(l => l.addEventListener('click', colorLink));
 });
+
+var buttons = document.getElementsByClassName('addLoader');
+
+const mainWindow = document.getElementById('main');
+const loaderWindow = document.getElementById('windowLoader');
+
+for (var i = 0; i < buttons.length; i++) {
+  buttons[i].onclick = clickedHide;
+}
+
+function clickedHide() {
+  loaderWindow.style.display = 'block';
+  mainWindow.style.display = 'none';
+}
+
+    

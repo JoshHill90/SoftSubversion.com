@@ -24,9 +24,10 @@ from pathlib import Path
 import os
 from dotenv import load_dotenv
 from Gallery_Project.env.app_Logic.json_utils import DataSetUpdate
-from log_app.logging_config import logging
 from Gallery_Project.env.app_Logic.MailerDJ import AutoReply
 from Gallery_Project.env.app_Logic.stripe.quick_stripe import QuickStripe, DateFunction, Hexer
+from log_app.logging_config import logging
+import time
 
 qs = QuickStripe()
 df = DateFunction()
@@ -56,7 +57,7 @@ def billing_panel(request):
     bal_due = 0
     bal_paid = 0
     bal_ern = 0
-    
+    bal_out = 0
     # Get query parameters
     project_query = request.GET.get('project')
     client_query = request.GET.get('client')
@@ -75,6 +76,15 @@ def billing_panel(request):
             bal_out = bal_due - bal_paid
         else:
             bal_ern += bill.paid
+            bal_paid += bill.paid
+    
+    billing_totals = {
+        'totalDue': bal_due,
+        'totalPaid': bal_paid,
+        'totalEarned': bal_ern,
+        'outstanding': bal_out,
+        }
+
 
     # Initial query set
     billing_info = Billing.objects.all()
@@ -91,9 +101,13 @@ def billing_panel(request):
 
     # Apply completion status filter
     if completed_query == 'open':
-        billing_info = billing_info.filter(fufiled=False)
-    elif completed_query == 'closed':
-        billing_info = billing_info.filter(fufiled=True)
+        billing_info = billing_info.filter(status='open')
+    elif completed_query == 'paid':
+        billing_info = billing_info.filter(status='paid')
+    elif completed_query == 'draft':
+        billing_info = billing_info.filter(status='draft')
+    elif completed_query == 'void':
+        billing_info = billing_info.filter(status='void')
         
     if order_set == 'Oldest':
         billing_info = billing_info.order_by('id')
@@ -115,16 +129,13 @@ def billing_panel(request):
                     'invoice': bill.invoice_id,
                     'billed': bill.billed,
                     'paid': bill.paid,
+                    'status': bill.status,
                     'client': client_billed,
                     'images': project_images,
                                 }
                 project_invoice.append({'billID': bill.id, 'project_details': project_details})
-                billing_totals = {
-                    'totalDue': bal_due,
-                    'totalPaid': bal_paid,
-                    'totalEarned': bal_ern,
-                    'outstanding': bal_out,
-                    }
+
+
     return render(
         request, 'billing/billing.html', 
         {
@@ -135,57 +146,129 @@ def billing_panel(request):
             }
         )          
                 
-class BillCreateView(CreateView):
-    template_name = 'billing/billing-create.html'
-    form_class = BillingForm
-    project_list = Project.objects.all()
-    model = Billing
+def BillCreateView(request):
+    try:
+        template_name = 'billing/billing-create.html'
+        form_class = BillingForm
+        project_list = Project.objects.exclude(name='Soft Subversion')
+        model = Billing
+        invoice_details = {}
+        line_items_cost = {}
+        line_items_receipt = {}
+        invoice_total = 0
+        if request.method == 'POST':
+            terms_form = request.POST
+        
+            if terms_form:
+                #lambda converter 
+                converted_to_cents = lambda dollar_amount: int(
+                    str(
+                        '{:.2f}'.format(
+                            float(dollar_amount))).replace('.','')
+                )
+                # pulls request data from the from submitted and creates dicts 
+                for key, value in zip(request.POST.keys(), request.POST.values()):
+                    if 'line_item_cost' in key:
+                        line_items_cost['C' + key[-1]] = value
+                        invoice_total += float(value)
+                        
+                    elif 'line_item_receipt' in key:
+                        line_items_receipt['R' + key[-1]] = value
+                    else:
+                        invoice_details[key] = value
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['project'] = self.project_list
-        return context
-    
-    def form_valid(self, form):
-        converted_to_cents = lambda dollar_amount: int(
-            str(
-                '{:.2f}'.format(
-                    float(dollar_amount))).replace('.','')
-        )
-        self.object = form.save()
-        cash_paid = self.request.POST.get('paidCash')
-        invoice_form = self.object
-        
-        date = form.cleaned_data.get('due_date',)
-        billed = form.cleaned_data.get('billed',)
-        project_id = form.cleaned_data.get('project_id',)
-        details = form.cleaned_data.get('details')
-        payment_type = form.cleaned_data.get('payment_type',)
-        
-        invoice_total = billed
-        
-        selected_project = self.project_list.filter(id=project_id)
-        stripe_id = selected_project.stripe_id
-        deposit_date = df.date_distance(date)
-        deposit_details = f'Payment for photography project:{new_project_model.name}'
-        deposit = converted_to_cents(deposit_amount)
-        deposit_invoice = qs.create_stripe_invoice(stripe_id, deposit_date, deposit_details)
+                
+                        
+                # sets vars for frrom data
+                
+                selected_project = project_list.get(id=invoice_details.get('project_id'))
+                stripe_date = df.date_distance(invoice_details.get('due_date'))
+                set_payment_type = invoice_details.get('payment_type')
+                set_details = f"{set_payment_type} for photography project:{selected_project.name}"
+                
+                # Get strip ID from client            
+                stripe_id = selected_project.client_id.strip_id
+                
+                # strip invoice and project billing 
+                set_invoice = qs.create_stripe_invoice(stripe_id, stripe_date, set_details)
+                new_billing = model.objects.create(
+                        project_id=selected_project,
+                        invoice_id=set_invoice.id,
+                        billed = invoice_total,
+                        details=set_details,
+                        due_date=df.number_to_days(stripe_date),
+                        payment_type=set_payment_type
+                )
+                # checks for and creates line item and billing payments 
+                if line_items_cost:
+                    for cost, receipt in zip(line_items_cost.values(), line_items_receipt.values()):
+                        
+                        stripe_cost = converted_to_cents(cost)
+                        set_lineitem = qs.create_stripe_line_item(stripe_cost, receipt, set_invoice, stripe_id)
+                        Payments.objects.create(
+                            billing_id=new_billing,
+                            amount=cost,
+                            receipt=receipt,
+                            time_stamp=df.date_now(),
+                            item_id=set_lineitem.id,
+                        )
 
-        
-        deposit_lineitem = qs.create_stripe_line_item(deposit, 'Deposit Cost', deposit_invoice, stripe_id)
-        payment_link, deposit_invoice_update = qs.send_stripe_invoice(deposit_invoice.id)
+                        time.sleep(5)
+                
+                if invoice_details.get('open'):
+                    payment_link, invoice_update = qs.send_stripe_invoice(set_invoice.id)
+                    new_billing.payment_link = payment_link
+                    new_billing.status = invoice_update.status
+                    new_billing.save()
+                    ProjectEvents.objects.create(
+                        title='Deposit Reminder',
+                        project_id=selected_project,
+                        billing_id=new_billing,
+                        date=new_billing.due_date,
+                        start=df.payment_time(),
+                        end=df.payment_time(),
+                        event_type='Payment Reminder',
+                        details=f'Event for deposit reminder for project{selected_project}'
+                    )
 
-        print(cash_paid, 'here')
+                if invoice_details.get('paidCash'):
+                    invoice_update = qs.stripe_cash_payment(set_invoice.id)
+                    new_billing.status = invoice_update.status
+                    new_billing.paid = invoice_total
+                    new_billing.fufiled = True
+                    new_billing.save()
 
-        invoice_form.save()
-        
-        return redirect('billing-details', invoice_form.id)
+                return redirect('billing-details', new_billing.id)
+            
+        return render(request, template_name, {
+            'form_class': form_class,
+            'project_list': project_list,
+            'model': model
+        })
+            
+    except Exception as e:
+        logging.error("Stripe invoice create operation failed: %s", str(e))
+        return redirect('issue-backend')
 
 class BillEditView(UpdateView):
+    
     model = Billing
     template_name = 'billing/billing-edit.html'
     form_class = BillingForm
-    success_url = reverse_lazy('billing')
+        
+    def form_valid(self, form):
+        try:
+            self.object = form.save()
+            self.object.save()
+            date = form.cleaned_data.get('due_date')
+            services = form.cleaned_data.get('details')
+            due_date = df.date_distance(date) 
+            qs.stripe_update_invoice(self.object.invoice_id, due_date, services)
+            success_url = redirect('billing-details', self.object.id)
+            return success_url
+        except Exception as e:
+            logging.error("Stripe invoice update operation failed: %s", str(e))
+            return redirect('issue-backend')
 
 class BillDeleteView(DeleteView):
     model = Billing
@@ -196,28 +279,83 @@ class BillDeleteView(DeleteView):
 def billing_details(request, id):
     invoice = Billing.objects.get(id=id)
     line_items = Payments.objects.filter(billing_id=invoice)
-
-    bal_due = float(invoice.billed)
-
-    bal_paid = float(invoice.paid)
-
-    bal_due_ratio = (bal_paid / bal_due)* 100
-    bal_due_ratio = int(bal_due_ratio)
-    print(bal_due_ratio)
     
-    if bal_due != bal_paid:
-        bal_out = bal_due - bal_paid
+    if invoice.billed:
+        bal_due = float(invoice.billed)
+
+        bal_paid = float(invoice.paid)
+
+        bal_due_ratio = (bal_paid / bal_due)* 100
+        bal_due_ratio = int(bal_due_ratio)
+        
+        print(bal_due_ratio)
+        
+        if bal_due != bal_paid:
+            bal_out = bal_due - bal_paid
+        else:
+            bal_out = 0
     else:
         bal_out = 0
+        bal_due = 0
+        bal_paid = 0
+        bal_due_ratio = None
         
-
-    return render(request, 'billing/billing-details.html', {'invoice':invoice,
-                                                            'line_items':line_items,
-                                                            'due': bal_due,
-                                                            'paid': bal_paid,
-                                                            'ratio':bal_due_ratio,
-                                                            'out': bal_out
-                                                            })
+    if request.method == 'POST' and 'delete' in request.POST:
+        try:
+            if invoice.status == "draft":
+                qs.delete_stripe_draft(invoice.invoice_id)
+                invoice.delete()
+                
+            if invoice.status =='open':
+                void_invoice = qs.void_stripe_invoice(invoice.invoice_id)
+                invoice.status = void_invoice.status
+                invoice.save()
+                
+            invoice.delete()
+            return redirect('billing')
+        
+        except Exception as e:
+            logging.error("Stripe invoice void operation failed: %s", str(e))
+            return redirect('issue-backend')
+    if request.method == 'POST' and 'open' in request.POST:
+        try:
+            if invoice.status == "draft":
+                payment_link, invoice_update = qs.send_stripe_invoice(invoice.invoice_id)
+                invoice.payment_link = payment_link
+                invoice.status = invoice_update.status
+                invoice.save()
+            if invoice.status =='open':
+                qs.resend_invoice(invoice.project_id.user_id,invoice.project_id, invoice)
+                
+            
+            return redirect('billing-details', id=invoice.id)
+            
+        except Exception as e:
+            logging.error("Stripe invoice send operation failed: %s", str(e))
+            return redirect('issue-backend')
+        
+    if request.method == 'POST' and 'cash' in request.POST:
+        try:
+            invoice_update = qs.stripe_cash_payment(invoice.invoice_id)
+            invoice.fufiled = True
+            invoice.paid = bal_due
+            invoice.status = invoice_update.status
+            invoice.save()
+            
+            return redirect('billing-details', id=invoice.id)
+            
+        except Exception as e:
+            logging.error("Stripe invoice send operation failed: %s", str(e))
+            return redirect('issue-backend')
+    
+    return render(request, 'billing/billing-details.html', {
+        'invoice':invoice,
+        'line_items':line_items,
+        'due': bal_due,
+        'paid': bal_paid,
+        'ratio':bal_due_ratio,
+        'out': bal_out
+    })
 
 #-------------------------------------------------------------------------------------------------------#
 # Registration views

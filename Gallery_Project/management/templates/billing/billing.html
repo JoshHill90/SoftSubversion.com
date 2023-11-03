@@ -9,39 +9,52 @@
 				<h1 class='h1-1 mb-2'>Search and Filter</h1>
 				<form method="GET" action="." class='form-group'>
 					<div class='row'>
-						<div class='col-12 mb-2'>
-							<input class="form-control" type="search" name="number" placeholder="Invoice Number">
+						<div class='col-8 mb-2'>	
+							<div class='row'>
+								<div class='col-12 mb-2'>
+									<input class="form-control" type="search" name="number" placeholder="Invoice Number">
+								</div>
+							</div>
+							<div class='row'>
+								<div class='col-12 mb-2'>
+									<input class="form-control" list="project-list" type="search" name="project" placeholder="Project">
+									<datalist id="project-list">
+									{% for project in project_list %}
+										<option value="{{ project.name }}"></option>
+									{% endfor %}
+									</datalist>
+								</div>
+								<div class='col-12 mb-2'>
+									<input class="form-control" list="client-list" type="search" name="client" placeholder="Client">
+									<datalist id="client-list">
+									{% for client in client_list %}
+										<option value="{{ client.name }}"></option>
+									{% endfor %}
+									</datalist>
+								</div>
+							</div>
 						</div>
-					</div>
-					<div class='row'>
-						<div class='col-12 mb-2'>
-							<input class="form-control" list="project-list" type="search" name="project" placeholder="Project">
-							<datalist id="project-list">
-							{% for project in project_list %}
-								<option value="{{ project.name }}"></option>
-							{% endfor %}
-							</datalist>
-						</div>
-						<div class='col-12 mb-2'>
-							<input class="form-control" list="client-list" type="search" name="client" placeholder="Client">
-							<datalist id="client-list">
-							{% for client in client_list %}
-								<option value="{{ client.name }}"></option>
-							{% endfor %}
-							</datalist>
-						</div>
-						<div class='col-12'>
+
+						<div class='col-2 text-center'>
 							<div class="form-check">
 								<input class="form-check-input" value="all" type="radio" name="fufiled" id="fufiled1" checked>
 								<label class="form-check-label p-p" for="fufiled1">All</label>
 							</div>
 							<div class="form-check">
-								<input class="form-check-input" value='open' type="radio" name="fufiled" id="fufiled2">
-								<label class="form-check-label p-p" for="fufiled2">Open</label>
+								<input class="form-check-input" value='draft' type="radio" name="fufiled" id="fufiled2">
+								<label class="form-check-label p-p" for="fufiled2">Draft</label>
 							</div>
 							<div class="form-check">
-								<input class="form-check-input" value='closed' type="radio" name="fufiled" id="fufiled3">
-								<label class="form-check-label p-p" for="fufiled3">Closed</label>
+								<input class="form-check-input" value='open' type="radio" name="fufiled" id="fufiled3">
+								<label class="form-check-label p-p" for="fufiled3">Open</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" value='paid' type="radio" name="fufiled" id="fufiled4">
+								<label class="form-check-label p-p" for="fufiled4">Paid</label>
+							</div>
+							<div class="form-check">
+								<input class="form-check-input" value='void' type="radio" name="fufiled" id="fufiled5">
+								<label class="form-check-label p-p" for="fufiled5">Void</label>
 							</div>
 						</div>
 					</div>
@@ -76,7 +89,7 @@
 									<p class="p-p"> Client</p>
 								</div>
 								<div class='col-1'>
-									<p class="p-p">Images</p>
+									<p class="p-p">Status</p>
 								</div>
 								<div class='col-2'>
 									<p class="p-p">Billed</p>
@@ -100,7 +113,7 @@
 										<p class="p-p">{{ inv.project_details.client }}</p>
 									</div>
 									<div class='col-1'>
-										<p class="p-p">{{ inv.project_details.images|length }}</p>
+										<p class="p-p">{{ inv.project_details.status }}</p>
 									</div>
 									<div class='col-2'>
 										<p class="p-p">${{ inv.project_details.billed|floatformat:2}}</p>

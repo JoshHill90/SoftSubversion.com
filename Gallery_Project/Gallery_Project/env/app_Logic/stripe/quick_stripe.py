@@ -7,6 +7,8 @@ from management.models import Billing, Payments
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+from django.shortcuts import render, redirect, get_object_or_404
+from log_app.logging_config import logging
 
 current_dir = Path(__file__).resolve().parent
 ven = current_dir / "../.env"
@@ -32,7 +34,14 @@ class DateFunction:
 	def date_distance(self, desired_date):
 		due_in = ''
 		desired_date_str = str(desired_date)
-		requested_date = datetime.strptime(desired_date_str, "%Y-%m-%d").date()
+		date_sets = ["%d-%m-%Y", "%Y-%m-%d", "%m-%d-%Y", "%d-%m-%y", "%y-%m-%d", "%m-%d-%y", "%M-%d-%y", "%M-%d-%y"]
+		for date_format in date_sets:
+			try:
+				requested_date = datetime.strptime(desired_date_str, date_format).date()
+    
+			except ValueError as e:
+				pass
+				
 		date_and_time = datetime.now()
 		dates = date_and_time.date()
 		
@@ -144,6 +153,28 @@ class QuickStripe:
 			invoice=stripe_invoice.id,
 			customer=stripe_id
 		)
+	def stripe_cash_payment(self, stripe_invoice_id):
+		return stripe.Invoice.pay(
+			stripe_invoice_id,
+			paid_out_of_band=True
+		)
+  
+	def stripe_update_invoice(self, stripe_invoice, due_date,services ):
+		return stripe.Invoice.modify(
+			stripe_invoice,
+   			days_until_due=due_date,
+			description=services
+		)
+  
+	def delete_stripe_draft(self, stripe_invoice_id):
+		return stripe.Invoice.delete(
+			stripe_invoice_id
+		)
+  
+	def void_stripe_invoice(self, stripe_invoice_id):
+		return stripe.Invoice.void_invoice(
+			stripe_invoice_id
+		)
   
 	def send_stripe_invoice (self, invoice_id):
 		# send the invoice and pulls the payment link and the new invoice data 
@@ -162,3 +193,13 @@ class QuickStripe:
 			project_link,
 			invoice_link
 		)   
+  
+	def resend_invoice(self, user_info, project, invoice):
+		project_link = f"https://SoftSubversion.com/client-portal/project-binder/{project.id}/details"
+		invoice_link = f"https://SoftSubversion.com/client-portal/billing/{invoice.id}/"
+		smtp_request.new_project_and_invoice(user_info.email,
+			user_info.first_name,
+			invoice.payment_link,
+			project_link,
+			invoice_link
+		) 

@@ -158,6 +158,7 @@ def client_request(request):
 class CleintDeleteView(DeleteView):
     model = Client
     template_name = 'client/client-delete.html'
+    success_url = 'client.html'
 
 def request_approval(request, id):
     try:

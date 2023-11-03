@@ -50,8 +50,8 @@ ASPECT_RATIO = [
 class Project(models.Model):
     name = models.CharField(max_length=255)
     status = models.CharField(max_length=255, default='Pending Deposit')
-    client_id = models.ForeignKey('clients.Client', null=True, on_delete=models.SET_NULL)
-    user_id = models.ForeignKey(User, null=True, on_delete=models.CASCADE)
+    client_id = models.ForeignKey('clients.Client',on_delete=models.CASCADE)
+    user_id = models.ForeignKey(User, blank=True, on_delete=models.CASCADE)
 
     def __str__(self):
         return str(self.name)
@@ -119,7 +119,7 @@ class ProjectEvents(models.Model):
     
 class Note(models.Model):
     project_id = models.ForeignKey(Project, on_delete=models.CASCADE, )
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE,)
+    user_id = models.ForeignKey(User, null=True, on_delete=models.CASCADE,)
     note = models.TextField(max_length=3000)
     date_posted = models.DateField(auto_now=True)
 

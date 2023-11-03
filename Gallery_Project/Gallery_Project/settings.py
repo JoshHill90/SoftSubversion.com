@@ -101,7 +101,7 @@ WSGI_APPLICATION = 'Gallery_Project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'SOFT_SUBVERSION_DB',
+        'NAME': 'sstest',
         'USER': sql_user_name,
         'PASSWORD': sql_password,
         'HOST': 'localhost',

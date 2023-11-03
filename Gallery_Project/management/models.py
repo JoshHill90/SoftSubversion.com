@@ -79,7 +79,7 @@ class Billing(models.Model):
         return ret_str + ' | ' + cust_str
 
     def get_absolute_url(self):
-        return reverse("client-details", args=(str(self.id)))
+        return reverse("billing-details", args=(self.id))
     
 class Payments(models.Model):
     

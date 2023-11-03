@@ -1,5 +1,7 @@
 let itemCounter = 0;
-const invoiceForm = document.getElementById("invoiceForm");
+const numberDisplayed = document.getElementById('total');
+var totalPaid = {};
+let liveTotal = 0;
 
 function newItem(){
 	const parentDiv = document.getElementById('lineItems')
@@ -7,20 +9,28 @@ function newItem(){
 	itemCounter +=1;
 
 	const itemCost = document.createElement('input');
-	itemCost.className = 'form-control';
+	itemCost.className = 'form-control mt-2 mb-4';
 	itemCost.name = 'line_item_cost' + itemCounter;
 	itemCost.type = 'number';
 	itemCost.placeholder = '0.00';
+	itemCost.required = true
 	itemCost.id = 'id_line_item_cost' + itemCounter;
 
+	itemCost.addEventListener('input', function() {
+		updateTotal(itemCost.id, itemCost.valueAsNumber);
+	});
+	
+
+
 	const itemReceipt = document.createElement('input');
-	itemReceipt.className = 'form-control';
+	itemReceipt.className = 'form-control mt-2 mb-4';
 	itemReceipt.name = 'line_item_receipt' + itemCounter;
 	itemReceipt.type = 'text';
+	itemReceipt.required = true
 	itemReceipt.id = 'id_line_item_receipt' + itemCounter;
 
 	const cancelItem = document.createElement('button');
-	cancelItem.className = 'fa-solid fa-xmark btn-icon';
+	cancelItem.className = 'fa-solid mt-4 mb-2 fa-xmark btn-icon';
 	cancelItem.type = 'button';
 	cancelItem.id = 'cancelItemBtn' + itemCounter;
 	
@@ -48,6 +58,7 @@ function newItem(){
 
 	cancelItem.addEventListener('click', function() {
 		removeItem(nestDiv1.id, nestDiv2.id, nestDiv3.id, nesthr.id);
+		deleteFromtotal(itemCost.id);
 	});
 
 };
@@ -71,12 +82,26 @@ function removeItem(itemID1, itemID2, itemID3, hrID) {
 	};
 };
 
-function delayedRedirect(url) {
-	getLineItems(function() {
+function updateLiveTotal() {
+	liveTotal = 0;
+	for (let item of Object.values(totalPaid)) {
 		
-		window.location.href = url;
-	}, 1000);
-};
+		liveTotal += item;
+	};
+	numberDisplayed.innerHTML = "$" + liveTotal;
+}
 
+function updateTotal(itmeId, cost) {
+	totalPaid[itmeId] = cost;
+	console.log(totalPaid)
+	updateLiveTotal();
+}
 
+function deleteFromtotal(itmeId) {
+	delete totalPaid[itmeId];
+	updateLiveTotal();
+}
 
+window.addEventListener("load", (event) => {
+	updateLiveTotal();
+});

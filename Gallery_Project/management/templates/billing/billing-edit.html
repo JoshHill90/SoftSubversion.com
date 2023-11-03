@@ -1,5 +1,5 @@
 {% extends 'panel.html' %}
-{% block title %}Upload Link{% endblock %}
+{% block title %}Edit Invoice{% endblock %}
 {% block content %}
 
 
@@ -7,13 +7,34 @@
 {% if user.is_authenticated %}
 
 
-    <div class="sections p-p form-group">
-        <h1 class='h1-1'>Upload your image and get an image link</h1>
+    <div class="sections p-p form-fit form-group">
+        <h1 class='h1-1'>Edit Invoice Details</h1>
         <form method=POST enctype="multipart/form-data">
             {% csrf_token %}
             {{form.media}}
-            {{form.as_p}}
-            <button class="btn btn-primary">
+
+            <label for="id_due_date">Due date:</label>
+            <input type="date" name="due_date" value="{{billing.due_date|date:'Y-m-d'}}" class="form-control" id="id_due_date">
+
+            <label for="id_project_id">Project id:</label>
+            <select name="project_id" class="form-control" required="" id="id_project_id">
+                <option value="">---------</option>
+                    <option value="{{ billing.project_id.id }}" selected="">{{ billing.project_id }}</option>
+            </select>
+
+            <label for="id_details">Details:</label>
+            <textarea name="details" cols="40" rows="10" class="form-control" maxlength="500" required="" id="id_details">{{ billing.details }}</textarea>
+
+            <label for="id_payment_type">Payment type:</label>
+            <select name="payment_type" class="form-control" maxlength="30" id="id_payment_type">
+                <option value="{{ billing.payment_type }}">{{ billing.payment_type }}</option>
+                <option value="Project Invoice">Project Invoice</option>
+                <option value="Item Invoice">Item Invoice</option>
+                <option value="Travle Cost">Travle Cost</option>
+                <option value="Overnight Stayt Cost">Overnight Stayt Cost</option>
+            </select>
+
+            <button class="btn-cust">
                 Submit
             </button>
         </form>

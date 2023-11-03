@@ -60,7 +60,7 @@
 				<div class='sections h-100'>
 					<h1 class='h1-1'>Project Event Dates</h1>
 					<hr>
-					<div class='sections-2 overflow-auto '>
+					<div class='overflow-auto sections-2 scroll-menu'>
 						<div class="row" style='height:30vh'>
 							{% for event in project_events %}
 							<div class='col-9'>	
@@ -138,12 +138,15 @@
 				<div class='sections mt-4 mb-4' style='height:50vh'>
 					<h1 class='h1-1'>Invoices</h1>
 					<hr>
-					<div class="overflow-auto">
+					<div class="overflow-auto sections-2 scroll-menu">
 						{% for payment in billing_list %}
 						<div class='row' style='width:95%'>
 							<div class='col-5'>
+								<p class='p-2'>
+									{{ payment.status|title }} 
+								</p>
 								<p class='p-p'>
-									{{ payment.status|title }} <br> {{ payment.payment_type|title }} 
+									{{ payment.payment_type|title }} 
 								</p>
 							</div>
 							<div class='col-5'>
